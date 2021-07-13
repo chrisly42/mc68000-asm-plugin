@@ -1,0 +1,76 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '0.7.2'
+    id 'org.jetbrains.kotlin.jvm' version '1.5.20'
+    id 'jacoco'
+    id 'com.github.kt3k.coveralls' version '2.11.0'
+}
+
+group = 'de.platon42'
+version = '0.1'
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+repositories {
+    mavenCentral()
+}
+
+/*
+  To run tests in IntelliJ use these VM Options for run configuration 
+  -ea -Didea.system.path=build/idea-sandbox/system-test -Didea.config.path=build/idea-sandbox/config-test -Didea.plugins.path=build/idea-sandbox/plugins-test
+ */
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    testImplementation "org.assertj:assertj-core:3.19.0"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.0-M1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.0-M1'
+    testImplementation "org.jetbrains.kotlin:kotlin-test"
+//    testImplementation "org.jetbrains.kotlin:kotlin-test-junit"
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+intellij {
+    version '2021.1.3' // LATEST-EAP-SNAPSHOT
+    updateSinceUntilBuild false
+    plugins = []
+}
+
+patchPluginXml {
+    changeNotes """
+  <h4>V0.1 (xx-Jun-21)</h4>
+    <ul>
+      <li>Initial.
+    </ul>
+  <p>Full changelog available at <a href="https://github.com/chrisly42/mc68000-asm-plugin#changelog">Github project site</a>.</p>
+"""
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+jacoco {
+    toolVersion = '0.8.7'
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        csv.required = false
+    }
+}
+
+publishPlugin {
+    token intellijPublishToken
+}

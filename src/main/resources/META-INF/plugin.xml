@@ -1,0 +1,23 @@
+<idea-plugin>
+    <id>de.platon42.m68k</id>
+    <name>MC68000 Assembly Language Support</name>
+    <vendor email="chrisly@platon42.de" url="https://github.com/chrisly42/mc68000-asm-plugin">Chris 'platon42' Hodges
+    </vendor>
+
+    <description><![CDATA[
+    MC68000-asm-plugin is a plugin to add language support for Motorola 68000 assembly language files.
+    <p>
+    <a href="https://github.com/chrisly42/mc68000-asm-plugin/blob/main/README.md">Full documentation here...</a>
+    ]]></description>
+    <idea-version since-build="192.4205.45"/>
+
+    <depends>com.intellij.modules.lang</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType name="M68k ASM File" implementationClass="de.platon42.intellij.plugins.m68k.M68kFileType"
+                  fieldName="INSTANCE" language="M68k" extensions="asm;ASM;s;S;i"/>
+    </extensions>
+
+    <actions>
+    </actions>
+</idea-plugin>
