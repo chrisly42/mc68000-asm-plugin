@@ -9,7 +9,7 @@ import javax.swing.Icon
 class M68kFileType private constructor() : LanguageFileType(M68kLanguage.INSTANCE, true) {
     @NonNls
     override fun getName(): String {
-        return "M68k ASM File"
+        return "M68k"
     }
 
     override fun getDescription(): String {

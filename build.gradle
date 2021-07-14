@@ -53,6 +53,8 @@ patchPluginXml {
 """
 }
 
+sourceSets.main.java.srcDirs 'src/main/gen'
+
 test {
     useJUnitPlatform()
     testLogging {

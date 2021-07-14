@@ -1,0 +1,278 @@
+{
+    parserClass="de.platon42.intellij.plugins.m68k.parser.M68kParser"
+    parserUtilClass="de.platon42.intellij.plugins.m68k.parser.M68kParserUtilBase"
+
+    extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+    psiClassPrefix="M68k"
+    psiImplClassSuffix="Impl"
+    psiPackage="de.platon42.intellij.plugins.m68k.psi"
+    psiImplPackage="de.platon42.intellij.plugins.m68k.psi.impl"
+
+//    elementTypeFactory="de.platon42.intellij.plugins.m68k.parser.M68kParserDefinition.createType"
+//    tokenTypeFactory="de.platon42.intellij.plugins.m68k.parser.M68kParserDefinition.createTokenType"
+
+    elementTypeHolderClass="de.platon42.intellij.plugins.m68k.psi.M68kTypes"
+    elementTypeClass="de.platon42.intellij.plugins.m68k.psi.M68kElementType"
+    tokenTypeClass="de.platon42.intellij.plugins.m68k.psi.M68kTokenType"
+
+    name(".*_expr")='expression'
+    extends(".*_expr")=expr
+
+    name(".*AddressingMode")='AddressingMode'
+    extends(".*AddressingMode")=AddressingMode
+
+    name(".*Register")='Register'
+
+    consumeTokenMethod(".*_expr|expr|.*AddressingMode")="consumeTokenFast"
+
+    tokens = [
+        EOL             = 'regexp:\R'
+        WHITE_SPACE     = 'regexp:\p{Blank}+'
+
+        EQU             = 'regexp:([eE][qQ][uU])'
+
+        EVEN_TAG        = 'regexp:((\p{Blank}+)?[eE][vV][eE][nN])'
+        CNOP_TAG        = 'regexp:((\p{Blank}+)?[cC][nN][oO][pP])'
+        SECTION_TAG     = 'regexp:((\p{Blank}+)?[sS][eE][cC][tT][iI][oO][nN])'
+
+        INCLUDE_TAG     = 'regexp:((\p{Blank}+)?[iI][nN][cC][lL][uU][dD][eE])'
+        INCBIN_TAG      = 'regexp:((\p{Blank}+)?[iI][nN][cC][bB][iI][nN])'
+
+        IF_TAG          = 'regexp:((\p{Blank}+)?[iI][fF]\p{Alpha}*)'
+        ELSE_TAG        = 'regexp:((\p{Blank}+)?[eE][lL][sS][eE])'
+        ENDC_TAG        = 'regexp:((\p{Blank}+)?[eE][nN][dD][cC])'
+        MACRO_TAG       = 'regexp:((\p{Blank}+)?[mM][aA][cC][rR][oO])'
+        MACRO_END_TAG   = 'regexp:((\p{Blank}+)?[eE][nN][dD][mM])'
+        REPT_TAG        = 'regexp:((\p{Blank}+)?[rR][eE][pP][tT])'
+        REPT_END_TAG    = 'regexp:((\p{Blank}+)?[eE][nN][dD][rR])'
+        FAIL_TAG        = 'regexp:((\p{Blank}+)?[fF][aA][iI][lL])'
+        END_TAG         = 'regexp:((\p{Blank}+)?[eE][nN][dD]).*'
+
+        AREG            = 'regexp:(([aA][0-7])|sp|SP)'
+        DREG            = 'regexp:([dD][0-7])'
+        PC              = 'regexp:([pP][cC])'
+        REG_CCR         = 'regexp:([cC][cC][rR])'
+        REG_SR          = 'regexp:([sS][rR])'
+        REG_USP         = 'regexp:([uU][sS][pP])'
+        REG_VBR         = 'regexp:([vV][bB][rR])'
+
+//        LOCAL_LABEL     = 'regexp:(!(\p{Blank}+)\.(\p{Alpha}|_)(\p{Alnum}|_)*:?)|(!(\p{Blank}+)(\p{Alpha}|_)(\p{Alnum}|_)*\$:?)|((\p{Blank}*)?\.(\p{Alpha}|_)(\p{Alnum}|_)*:)|((\p{Blank}*)?(\p{Alpha}|_)(\p{Alnum}|_)*\$:)|(\.(\p{Alpha}|_)(\p{Alnum}|_)*:)|((\p{Alpha}|_)(\p{Alnum}|_)*\$:)'
+//        GLOBAL_LABEL    = 'regexp:(!(\p{Blank}+)(\p{Alpha}|_)(\p{Alnum}|_)*:?:?)|((\p{Blank}*)?(\p{Alpha}|_)(\p{Alnum}|_)*::?)'
+
+//        MNEMONIC        = 'regexp:((\p{Alpha})+)'
+        SYMBOL          = 'regexp:((\p{Alpha}|_)(\p{Alnum}|_)*)'
+        OPSIZE_BS       = 'regexp:(\.([bB]|[sS]))'
+        OPSIZE_WL       = 'regexp:(\.([wW]|[lL]))'
+
+        BINARY          = 'regexp:(%[01]+)'
+        HEXADECIMAL     = 'regexp:(\$[0-9a-fA-F]+)'
+        OCTAL           = 'regexp:(@[0-7]+)'
+        DECIMAL         = 'regexp:([0-9]+)'
+
+        STRINGLIT       = "regexp:(`([^`\\]|\\.)*`|'([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")|<([^`\\]|\\.)*>"
+
+        COLON           = ':'
+        SEMICOLON       = ';'
+        SQUARE_L        = '['
+        SQUARE_R        = ']'
+        ROUND_L         = '('
+        ROUND_R         = ')'
+        SEPARATOR       = ','
+        DOT             = '.'
+        HASH            = '#'
+        DOLLAR          = '$'
+
+        OP_ASSIGN       = '='
+
+        OP_UNARY_NOT    = '!'
+        OP_UNARY_COMPL  = '~'
+
+        OP_PLUS         = '+'
+        OP_MINUS        = '-'
+        OP_AR_MUL       = '*'
+        OP_AR_DIV       = '/'
+        OP_AR_MOD       = '%'
+        OP_AR_SHIFT_L   = '<<'
+        OP_AR_SHIFT_R   = '>>'
+        OP_BITWISE_AND  = '&'
+        OP_BITWISE_OR   = '|'
+        OP_BITWISE_XOR  = '^'
+        OP_LOGICAL_AND  = '&&'
+        OP_LOGICAL_OR   = '||'
+
+        OP_CMP_EQ       = '=='
+        OP_CMP_LT       = '<'
+        OP_CMP_GT       = '>'
+        OP_CMP_GT_EQ    = '>='
+        OP_CMP_LT_EQ    = '<='
+        OP_CMP_NOT_EQ   = '!='
+        OP_CMP_NOT_EQ2  = '<>'
+
+        COMMENT         = 'regexp:(\p{Blank}*?[;*].*+)'//|(!\s#+.*+)'
+//        EOL_COMMENT     = 'regexp:((\p{Blank}+;.*?)|(\p{Blank}+\.*+))'
+    ]
+}
+
+M68kFile ::= line*
+
+private BlankLine ::= WHITE_SPACE?
+
+private line ::= !<<eof>> statement EOL
+
+statement ::= (Assignment
+            | PreprocessorDirective
+            | LabelInsts
+            | BlankLine)
+            {pin=1 recoverWhile=statement_recover};
+
+private statement_recover ::= !(EOL)
+
+Assignment ::= SYMBOL ((WHITE_SPACE? OP_ASSIGN WHITE_SPACE?)|(WHITE_SPACE EQU WHITE_SPACE)) expr
+
+private LabelInsts ::= LabelOnly|LabelWithInstruction|InstructionOnly
+
+private LabelOnly ::= Label
+private LabelWithInstruction ::= Label WHITE_SPACE Instruction
+private InstructionOnly ::= WHITE_SPACE Instruction
+
+LocalLabel ::= (!WHITE_SPACE ((DOT SYMBOL)|(SYMBOL DOLLAR)) COLON?)|(WHITE_SPACE? ((DOT SYMBOL)|(SYMBOL DOLLAR)) COLON)
+GlobalLabel ::= (!WHITE_SPACE SYMBOL (COLON? COLON?)?)|(WHITE_SPACE? SYMBOL COLON COLON?)
+//private Label ::= LocalLabel | GlobalLabel
+
+//private LabelInsts ::= Label|(Label? WHITE_SPACE Instruction)
+//
+//LocalLabel ::= LOCAL_LABEL {extends=Label}
+//GlobalLabel ::= GLOBAL_LABEL {extends=Label}
+Label ::= LocalLabel | GlobalLabel
+
+OperandSize ::= (OPSIZE_BS|OPSIZE_WL)
+AddressSize ::= OPSIZE_WL
+DataWidth ::= OPSIZE_WL
+
+AsmOp ::= SYMBOL OperandSize?
+
+PreprocessorDirective ::= SYMBOL?
+        (END_TAG
+        | EVEN_TAG
+        | CNOP_TAG
+        | SECTION_TAG
+        | INCLUDE_TAG
+        | INCBIN_TAG
+        | IF_TAG
+        | ELSE_TAG
+        | ENDC_TAG
+        | MACRO_TAG
+        | MACRO_END_TAG
+        | REPT_TAG
+        | REPT_END_TAG
+        | FAIL_TAG)
+        (WHITE_SPACE PreprocessorOperands)?
+
+MacroCall ::= SYMBOL PreprocessorOperands?
+AsmInstruction ::= AsmOp (WHITE_SPACE AsmOperands)?
+//Instruction ::= AsmInstruction | MacroCall
+external Instruction ::= parseMacroCallOrAsmInstruction
+
+AsmOperands ::= FirstAsmOperand (SEPARATOR NextAsmOperand)*
+
+private FirstAsmOperand ::= AddressingMode
+
+private NextAsmOperand ::= AddressingMode
+
+private PreprocessorOperands ::= PreprocessorOperand (SEPARATOR PreprocessorOperand)*
+
+private PreprocessorOperand ::= expr
+
+DataRegister ::= DREG {extends=Register}
+AddressRegister ::= AREG {extends=Register}
+SpecialRegister ::= REG_CCR | REG_SR | REG_USP | REG_VBR {extends=Register}
+
+Register ::= DataRegister | AddressRegister | SpecialRegister
+
+private DataOrAddressRegister ::= DataRegister | AddressRegister
+
+AddressingMode ::= AbsoluteAddressAddressingMode
+                | SpecialRegisterDirectAddressingMode
+                | DataRegisterDirectAddressingMode
+                | AddressRegisterDirectAddressingMode
+                | AddressRegisterIndirectAddressingMode
+                | AddressRegisterIndirectWithDisplacementOldAddressingMode
+                | ProgramCounterIndirectWithDisplacementOldAddressingMode
+                | AddressRegisterIndirectWithIndexOldAddressingMode
+                | ProgramCounterIndirectWithIndexOldAddressingMode
+                | AddressRegisterIndirectWithDisplacementNewAddressingMode
+                | ProgramCounterIndirectWithDisplacementNewAddressingMode
+                | AddressRegisterIndirectWithIndexNewAddressingMode
+                | ProgramCounterIndirectWithIndexNewAddressingMode
+                | AddressRegisterIndirectPreDecAddressingMode
+                | AddressRegisterIndirectPostIncAddressingMode
+                | ImmediateData
+
+SpecialRegisterDirectAddressingMode ::= SpecialRegister
+DataRegisterDirectAddressingMode ::= DataRegister
+AddressRegisterDirectAddressingMode ::= AddressRegister
+AddressRegisterIndirectAddressingMode ::= ROUND_L AddressRegister ROUND_R !OP_PLUS
+AddressRegisterIndirectPostIncAddressingMode ::= ROUND_L AddressRegister ROUND_R OP_PLUS
+AddressRegisterIndirectPreDecAddressingMode ::= OP_MINUS ROUND_L AddressRegister ROUND_R
+AddressRegisterIndirectWithDisplacementOldAddressingMode ::= expr ROUND_L AddressRegister ROUND_R
+AddressRegisterIndirectWithDisplacementNewAddressingMode ::= ROUND_L expr SEPARATOR AddressRegister ROUND_R
+AddressRegisterIndirectWithIndexOldAddressingMode ::= expr ROUND_L AddressRegister SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
+AddressRegisterIndirectWithIndexNewAddressingMode ::= ROUND_L expr SEPARATOR AddressRegister SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
+ProgramCounterIndirectWithDisplacementOldAddressingMode ::= expr ROUND_L PC ROUND_R
+ProgramCounterIndirectWithDisplacementNewAddressingMode ::= ROUND_L expr SEPARATOR PC ROUND_R
+ProgramCounterIndirectWithIndexOldAddressingMode ::= expr ROUND_L PC SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
+ProgramCounterIndirectWithIndexNewAddressingMode ::= ROUND_L expr SEPARATOR PC SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
+AbsoluteAddressAddressingMode ::= expr AddressSize? !ROUND_L
+ImmediateData ::= HASH expr {extends=AddressingMode}
+
+expr ::= binary_logical_or_expr
+        | binary_logical_and_expr
+        | binary_cmp_eq_ne_group
+        | binary_cmp_diff_group
+        | binary_addsub_group
+        | binary_muldiv_group
+        | binary_bitwise_or_expr
+        | binary_bitwise_xor_expr
+        | binary_bitwise_and_expr
+        | binary_shift_group
+        | unary_group
+        | primary_group
+//        | macrobrace_expr
+
+// private rules to define operators with the same priority
+private unary_group ::= unary_plus_expr|unary_minus_expr|unary_not_expr|unary_compl_expr
+private binary_shift_group ::= binary_shift_l_expr|binary_shift_r_expr
+private binary_muldiv_group ::= binary_mul_expr|binary_div_expr|binary_mod_expr
+private binary_addsub_group ::= binary_add_expr|binary_sub_expr
+private binary_cmp_diff_group ::= binary_cmp_lt_expr|binary_cmp_le_expr|binary_cmp_gt_expr|binary_cmp_ge_expr
+private binary_cmp_eq_ne_group ::= binary_cmp_eq_expr|binary_cmp_ne_expr
+private primary_group ::= ref_expr|literal_expr|paren_expr
+
+unary_plus_expr ::= OP_PLUS expr
+unary_minus_expr ::= OP_MINUS expr
+unary_not_expr ::= OP_UNARY_NOT expr
+unary_compl_expr ::= OP_UNARY_COMPL expr
+binary_shift_l_expr ::= expr OP_AR_SHIFT_L expr
+binary_shift_r_expr ::= expr OP_AR_SHIFT_R expr
+binary_bitwise_and_expr ::= expr OP_BITWISE_AND expr
+binary_bitwise_xor_expr ::= expr OP_BITWISE_XOR expr
+binary_bitwise_or_expr ::= expr (OP_BITWISE_OR|OP_UNARY_NOT) expr
+binary_mul_expr ::= expr OP_AR_MUL expr
+binary_div_expr ::= expr OP_AR_DIV expr
+binary_mod_expr ::= expr OP_AR_MOD expr
+binary_add_expr ::= expr OP_PLUS expr
+binary_sub_expr ::= expr OP_MINUS expr
+binary_cmp_lt_expr ::= expr OP_CMP_LT expr
+binary_cmp_le_expr ::= expr OP_CMP_LT_EQ expr
+binary_cmp_gt_expr ::= expr OP_CMP_GT expr
+binary_cmp_ge_expr ::= expr OP_CMP_GT_EQ expr
+binary_cmp_eq_expr ::= expr OP_CMP_EQ expr
+binary_cmp_ne_expr ::= expr (OP_CMP_NOT_EQ|OP_CMP_NOT_EQ2) expr
+binary_logical_and_expr ::= expr OP_LOGICAL_AND expr
+binary_logical_or_expr ::= expr OP_LOGICAL_OR expr
+
+//macrobrace_expr ::= OP_CMP_LT expr OP_CMP_GT
+paren_expr ::= ROUND_L expr ROUND_R //{pin=1 recoverWhile=statement_recover}
+ref_expr ::= SYMBOL
+literal_expr ::= BINARY|DECIMAL|HEXADECIMAL|OCTAL|STRINGLIT
