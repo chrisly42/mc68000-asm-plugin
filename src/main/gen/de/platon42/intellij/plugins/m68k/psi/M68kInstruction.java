@@ -2,15 +2,14 @@
 package de.platon42.intellij.plugins.m68k.psi;
 
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface M68kAsmInstruction extends PsiElement {
-
-    @NotNull
-    M68kAsmOp getAsmOp();
+public interface M68kInstruction extends PsiElement {
 
     @Nullable
-    M68kAsmOperands getAsmOperands();
+    M68kAsmInstruction getAsmInstruction();
+
+    @Nullable
+    M68kMacroCall getMacroCall();
 
 }

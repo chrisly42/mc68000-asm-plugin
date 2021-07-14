@@ -2,14 +2,11 @@
 package de.platon42.intellij.plugins.m68k.psi.impl;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import de.platon42.intellij.plugins.m68k.psi.M68kExpr;
 import de.platon42.intellij.plugins.m68k.psi.M68kProgramCounterIndirectWithDisplacementOldAddressingMode;
 import de.platon42.intellij.plugins.m68k.psi.M68kVisitor;
 import org.jetbrains.annotations.NotNull;
-
-import static de.platon42.intellij.plugins.m68k.psi.M68kTypes.PC;
 
 public class M68kProgramCounterIndirectWithDisplacementOldAddressingModeImpl extends M68kAddressingModeImpl implements M68kProgramCounterIndirectWithDisplacementOldAddressingMode {
 
@@ -32,12 +29,6 @@ public class M68kProgramCounterIndirectWithDisplacementOldAddressingModeImpl ext
     @NotNull
     public M68kExpr getExpr() {
         return findNotNullChildByClass(M68kExpr.class);
-    }
-
-    @Override
-    @NotNull
-    public PsiElement getPc() {
-        return findNotNullChildByType(PC);
     }
 
 }

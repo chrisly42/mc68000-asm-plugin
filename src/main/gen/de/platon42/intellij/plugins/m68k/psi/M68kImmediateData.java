@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface M68kImmediateData extends M68kAddressingMode {
 
-  @NotNull
-  M68kExpr getExpr();
+    @NotNull
+    M68kExpr getExpr();
 
 }

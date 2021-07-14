@@ -13,51 +13,9 @@ public interface M68kPreprocessorDirective extends PsiElement {
     List<M68kExpr> getExprList();
 
     @Nullable
-    PsiElement getCnopTag();
-
-    @Nullable
-    PsiElement getElseTag();
-
-    @Nullable
-    PsiElement getEndcTag();
-
-    @Nullable
-    PsiElement getEndTag();
-
-    @Nullable
-    PsiElement getEvenTag();
-
-    @Nullable
-    PsiElement getFailTag();
-
-    @Nullable
     PsiElement getIfTag();
 
     @Nullable
-    PsiElement getIncbinTag();
-
-    @Nullable
-    PsiElement getIncludeTag();
-
-    @Nullable
-    PsiElement getMacroEndTag();
-
-    @Nullable
-    PsiElement getMacroTag();
-
-    @Nullable
-    PsiElement getReptEndTag();
-
-    @Nullable
-    PsiElement getReptTag();
-
-    @Nullable
-    PsiElement getSectionTag();
-
-    @Nullable
     PsiElement getSymbol();
-
-    @Nullable
-    PsiElement getWhiteSpace();
 
 }

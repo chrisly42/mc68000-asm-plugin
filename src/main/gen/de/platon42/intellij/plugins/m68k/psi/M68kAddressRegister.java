@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface M68kAddressRegister extends M68kRegister {
 
-  @NotNull
-  PsiElement getAreg();
+    @NotNull
+    PsiElement getAreg();
 
 }

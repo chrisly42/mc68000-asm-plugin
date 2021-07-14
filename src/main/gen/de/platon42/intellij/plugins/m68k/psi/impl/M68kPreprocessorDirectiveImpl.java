@@ -14,7 +14,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static de.platon42.intellij.plugins.m68k.psi.M68kTypes.*;
+import static de.platon42.intellij.plugins.m68k.psi.M68kTypes.IF_TAG;
+import static de.platon42.intellij.plugins.m68k.psi.M68kTypes.SYMBOL;
 
 public class M68kPreprocessorDirectiveImpl extends ASTWrapperPsiElement implements M68kPreprocessorDirective {
 
@@ -40,98 +41,14 @@ public class M68kPreprocessorDirectiveImpl extends ASTWrapperPsiElement implemen
 
     @Override
     @Nullable
-    public PsiElement getCnopTag() {
-        return findChildByType(CNOP_TAG);
-    }
-
-    @Override
-    @Nullable
-    public PsiElement getElseTag() {
-        return findChildByType(ELSE_TAG);
-    }
-
-    @Override
-    @Nullable
-    public PsiElement getEndcTag() {
-        return findChildByType(ENDC_TAG);
-    }
-
-    @Override
-    @Nullable
-    public PsiElement getEndTag() {
-        return findChildByType(END_TAG);
-    }
-
-    @Override
-    @Nullable
-    public PsiElement getEvenTag() {
-        return findChildByType(EVEN_TAG);
-    }
-
-    @Override
-    @Nullable
-    public PsiElement getFailTag() {
-        return findChildByType(FAIL_TAG);
-    }
-
-    @Override
-    @Nullable
     public PsiElement getIfTag() {
         return findChildByType(IF_TAG);
     }
 
     @Override
     @Nullable
-    public PsiElement getIncbinTag() {
-        return findChildByType(INCBIN_TAG);
-    }
-
-    @Override
-    @Nullable
-    public PsiElement getIncludeTag() {
-        return findChildByType(INCLUDE_TAG);
-    }
-
-    @Override
-    @Nullable
-    public PsiElement getMacroEndTag() {
-        return findChildByType(MACRO_END_TAG);
-    }
-
-    @Override
-    @Nullable
-    public PsiElement getMacroTag() {
-        return findChildByType(MACRO_TAG);
-    }
-
-    @Override
-    @Nullable
-    public PsiElement getReptEndTag() {
-        return findChildByType(REPT_END_TAG);
-    }
-
-    @Override
-    @Nullable
-    public PsiElement getReptTag() {
-        return findChildByType(REPT_TAG);
-    }
-
-    @Override
-    @Nullable
-    public PsiElement getSectionTag() {
-        return findChildByType(SECTION_TAG);
-    }
-
-    @Override
-    @Nullable
     public PsiElement getSymbol() {
         return findChildByType(SYMBOL);
-    }
-
-    @Override
-    @Nullable
-    public PsiElement getWhiteSpace() {
-        return findChildByType(WHITE_SPACE);
     }
 
 }

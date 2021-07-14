@@ -3,7 +3,6 @@ package de.platon42.intellij.plugins.m68k.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import de.platon42.intellij.plugins.m68k.psi.M68kAsmInstruction;
 import de.platon42.intellij.plugins.m68k.psi.M68kAsmOp;
@@ -11,8 +10,6 @@ import de.platon42.intellij.plugins.m68k.psi.M68kAsmOperands;
 import de.platon42.intellij.plugins.m68k.psi.M68kVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import static de.platon42.intellij.plugins.m68k.psi.M68kTypes.WHITE_SPACE;
 
 public class M68kAsmInstructionImpl extends ASTWrapperPsiElement implements M68kAsmInstruction {
 
@@ -40,12 +37,6 @@ public class M68kAsmInstructionImpl extends ASTWrapperPsiElement implements M68k
     @Nullable
     public M68kAsmOperands getAsmOperands() {
         return findChildByClass(M68kAsmOperands.class);
-    }
-
-    @Override
-    @Nullable
-    public PsiElement getWhiteSpace() {
-        return findChildByType(WHITE_SPACE);
     }
 
 }

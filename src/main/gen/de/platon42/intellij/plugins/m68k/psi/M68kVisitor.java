@@ -84,7 +84,7 @@ public class M68kVisitor extends PsiElementVisitor {
     }
 
     public void visitGlobalLabel(@NotNull M68kGlobalLabel o) {
-        visitPsiElement(o);
+        visitLabel(o);
     }
 
     public void visitImmediateData(@NotNull M68kImmediateData o) {
@@ -96,7 +96,7 @@ public class M68kVisitor extends PsiElementVisitor {
     }
 
     public void visitLocalLabel(@NotNull M68kLocalLabel o) {
-        visitPsiElement(o);
+        visitLabel(o);
     }
 
     public void visitMacroCall(@NotNull M68kMacroCall o) {
@@ -129,6 +129,10 @@ public class M68kVisitor extends PsiElementVisitor {
 
     public void visitRegister(@NotNull M68kRegister o) {
         visitPsiElement(o);
+    }
+
+    public void visitRegisterListAddressingMode(@NotNull M68kRegisterListAddressingMode o) {
+        visitAddressingMode(o);
     }
 
     public void visitSpecialRegister(@NotNull M68kSpecialRegister o) {

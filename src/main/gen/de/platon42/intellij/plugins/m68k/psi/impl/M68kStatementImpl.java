@@ -3,13 +3,10 @@ package de.platon42.intellij.plugins.m68k.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import de.platon42.intellij.plugins.m68k.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import static de.platon42.intellij.plugins.m68k.psi.M68kTypes.WHITE_SPACE;
 
 public class M68kStatementImpl extends ASTWrapperPsiElement implements M68kStatement {
 
@@ -29,6 +26,12 @@ public class M68kStatementImpl extends ASTWrapperPsiElement implements M68kState
 
     @Override
     @Nullable
+    public M68kAsmInstruction getAsmInstruction() {
+        return findChildByClass(M68kAsmInstruction.class);
+    }
+
+    @Override
+    @Nullable
     public M68kAssignment getAssignment() {
         return findChildByClass(M68kAssignment.class);
     }
@@ -41,14 +44,14 @@ public class M68kStatementImpl extends ASTWrapperPsiElement implements M68kState
 
     @Override
     @Nullable
-    public M68kPreprocessorDirective getPreprocessorDirective() {
-        return findChildByClass(M68kPreprocessorDirective.class);
+    public M68kMacroCall getMacroCall() {
+        return findChildByClass(M68kMacroCall.class);
     }
 
     @Override
     @Nullable
-    public PsiElement getWhiteSpace() {
-        return findChildByType(WHITE_SPACE);
+    public M68kPreprocessorDirective getPreprocessorDirective() {
+        return findChildByClass(M68kPreprocessorDirective.class);
     }
 
 }

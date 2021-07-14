@@ -19,7 +19,6 @@ import org.jetbrains.annotations.NotNull;
 public class M68kParserDefinition implements ParserDefinition {
     public static final TokenSet STRING_LITERALS = TokenSet.create(M68kTypes.STRINGLIT);
     public static final TokenSet COMMENTS = TokenSet.create(M68kTypes.COMMENT);
-    public static final TokenSet WHITE_SPACE = TokenSet.create(M68kTypes.WHITE_SPACE);
 
     public M68kParserDefinition() {
     }
@@ -38,11 +37,6 @@ public class M68kParserDefinition implements ParserDefinition {
     public @NotNull IFileElementType getFileNodeType() {
         return M68kFileElementType.INSTANCE;
     }
-
-//    @Override
-//    public @NotNull TokenSet getWhitespaceTokens() {
-//        return WHITE_SPACE;
-//    }
 
     @Override
     public @NotNull TokenSet getCommentTokens() {

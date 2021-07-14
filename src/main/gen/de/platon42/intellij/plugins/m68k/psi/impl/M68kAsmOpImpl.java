@@ -11,7 +11,7 @@ import de.platon42.intellij.plugins.m68k.psi.M68kVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static de.platon42.intellij.plugins.m68k.psi.M68kTypes.SYMBOL;
+import static de.platon42.intellij.plugins.m68k.psi.M68kTypes.MNEMONIC;
 
 public class M68kAsmOpImpl extends ASTWrapperPsiElement implements M68kAsmOp {
 
@@ -37,8 +37,8 @@ public class M68kAsmOpImpl extends ASTWrapperPsiElement implements M68kAsmOp {
 
     @Override
     @NotNull
-    public PsiElement getSymbol() {
-        return findNotNullChildByType(SYMBOL);
+    public PsiElement getMnemonic() {
+        return findNotNullChildByType(MNEMONIC);
     }
 
 }

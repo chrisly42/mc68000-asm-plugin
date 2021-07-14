@@ -6,10 +6,10 @@ import org.jetbrains.annotations.Nullable;
 
 public interface M68kAbsoluteAddressAddressingMode extends M68kAddressingMode {
 
-  @Nullable
-  M68kAddressSize getAddressSize();
+    @Nullable
+    M68kAddressSize getAddressSize();
 
-  @NotNull
-  M68kExpr getExpr();
+    @NotNull
+    M68kExpr getExpr();
 
 }

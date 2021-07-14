@@ -7,10 +7,10 @@ import org.jetbrains.annotations.Nullable;
 
 public interface M68kAsmOp extends PsiElement {
 
-  @Nullable
-  M68kOperandSize getOperandSize();
+    @Nullable
+    M68kOperandSize getOperandSize();
 
-  @NotNull
-  PsiElement getSymbol();
+    @NotNull
+    PsiElement getMnemonic();
 
 }

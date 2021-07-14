@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface M68kAsmOperands extends PsiElement {
 
-  @NotNull
-  List<M68kAddressingMode> getAddressingModeList();
+    @NotNull
+    List<M68kAddressingMode> getAddressingModeList();
 
 }

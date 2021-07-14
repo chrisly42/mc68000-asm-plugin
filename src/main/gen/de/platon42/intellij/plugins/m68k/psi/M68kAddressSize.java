@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface M68kAddressSize extends PsiElement {
 
-  @NotNull
-  PsiElement getOpsizeWl();
+    @NotNull
+    PsiElement getOpsizeWl();
 
 }

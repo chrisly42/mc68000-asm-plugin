@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface M68kDataRegisterDirectAddressingMode extends M68kAddressingMode {
 
-  @NotNull
-  M68kDataRegister getDataRegister();
+    @NotNull
+    M68kDataRegister getDataRegister();
 
 }

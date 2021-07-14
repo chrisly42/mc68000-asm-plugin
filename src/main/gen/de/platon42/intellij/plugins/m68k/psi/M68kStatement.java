@@ -7,15 +7,18 @@ import org.jetbrains.annotations.Nullable;
 public interface M68kStatement extends PsiElement {
 
     @Nullable
+    M68kAsmInstruction getAsmInstruction();
+
+    @Nullable
     M68kAssignment getAssignment();
 
     @Nullable
     M68kLabel getLabel();
 
     @Nullable
-    M68kPreprocessorDirective getPreprocessorDirective();
+    M68kMacroCall getMacroCall();
 
     @Nullable
-    PsiElement getWhiteSpace();
+    M68kPreprocessorDirective getPreprocessorDirective();
 
 }

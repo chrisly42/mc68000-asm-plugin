@@ -5,10 +5,10 @@ import org.jetbrains.annotations.NotNull;
 
 public interface M68kAddressRegisterIndirectWithDisplacementOldAddressingMode extends M68kAddressingMode {
 
-  @NotNull
-  M68kAddressRegister getAddressRegister();
+    @NotNull
+    M68kAddressRegister getAddressRegister();
 
-  @NotNull
-  M68kExpr getExpr();
+    @NotNull
+    M68kExpr getExpr();
 
 }

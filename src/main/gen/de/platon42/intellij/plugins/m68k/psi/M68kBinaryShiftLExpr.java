@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface M68kBinaryShiftLExpr extends M68kExpr {
 
-  @NotNull
-  List<M68kExpr> getExprList();
+    @NotNull
+    List<M68kExpr> getExprList();
 
 }

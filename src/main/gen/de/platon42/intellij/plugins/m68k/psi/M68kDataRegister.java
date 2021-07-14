@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface M68kDataRegister extends M68kRegister {
 
-  @NotNull
-  PsiElement getDreg();
+    @NotNull
+    PsiElement getDreg();
 
 }

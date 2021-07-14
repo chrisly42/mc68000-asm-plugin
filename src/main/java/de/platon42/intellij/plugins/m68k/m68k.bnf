@@ -30,43 +30,44 @@
         EOL             = 'regexp:\R'
         WHITE_SPACE     = 'regexp:\p{Blank}+'
 
-        EQU             = 'regexp:([eE][qQ][uU])'
+        EQU             = 'equ'
 
-        EVEN_TAG        = 'regexp:((\p{Blank}+)?[eE][vV][eE][nN])'
-        CNOP_TAG        = 'regexp:((\p{Blank}+)?[cC][nN][oO][pP])'
-        SECTION_TAG     = 'regexp:((\p{Blank}+)?[sS][eE][cC][tT][iI][oO][nN])'
+        EVEN_TAG        = 'even'
+        CNOP_TAG        = 'cnop'
+        SECTION_TAG     = 'section'
 
-        INCLUDE_TAG     = 'regexp:((\p{Blank}+)?[iI][nN][cC][lL][uU][dD][eE])'
-        INCBIN_TAG      = 'regexp:((\p{Blank}+)?[iI][nN][cC][bB][iI][nN])'
+        INCLUDE_TAG     = 'include'
+        INCBIN_TAG      = 'incbin'
 
-        IF_TAG          = 'regexp:((\p{Blank}+)?[iI][fF]\p{Alpha}*)'
-        ELSE_TAG        = 'regexp:((\p{Blank}+)?[eE][lL][sS][eE])'
-        ENDC_TAG        = 'regexp:((\p{Blank}+)?[eE][nN][dD][cC])'
-        MACRO_TAG       = 'regexp:((\p{Blank}+)?[mM][aA][cC][rR][oO])'
-        MACRO_END_TAG   = 'regexp:((\p{Blank}+)?[eE][nN][dD][mM])'
-        REPT_TAG        = 'regexp:((\p{Blank}+)?[rR][eE][pP][tT])'
-        REPT_END_TAG    = 'regexp:((\p{Blank}+)?[eE][nN][dD][rR])'
-        FAIL_TAG        = 'regexp:((\p{Blank}+)?[fF][aA][iI][lL])'
-        END_TAG         = 'regexp:((\p{Blank}+)?[eE][nN][dD]).*'
+        IF_TAG          = 'regexp:(if\p{Alpha}*)'
+        ELSE_TAG        = 'else'
+        ENDC_TAG        = 'endc'
+        MACRO_TAG       = 'macro'
+        MACRO_END_TAG   = 'endm'
+        REPT_TAG        = 'rept'
+        REPT_END_TAG    = 'endr'
+        FAIL_TAG        = 'fail'
+        END_TAG         = 'end'
 
-        AREG            = 'regexp:(([aA][0-7])|sp|SP)'
-        DREG            = 'regexp:([dD][0-7])'
-        PC              = 'regexp:([pP][cC])'
-        REG_CCR         = 'regexp:([cC][cC][rR])'
-        REG_SR          = 'regexp:([sS][rR])'
-        REG_USP         = 'regexp:([uU][sS][pP])'
-        REG_VBR         = 'regexp:([vV][bB][rR])'
+        AREG            = 'regexp:((a[0-7])|sp)'
+        DREG            = 'regexp:(d[0-7])'
+        PC              = 'pc'
+        REG_CCR         = 'ccr'
+        REG_SR          = 'sr'
+        REG_USP         = 'usp'
+        REG_VBR         = 'vbr'
 
-//        LOCAL_LABEL     = 'regexp:(!(\p{Blank}+)\.(\p{Alpha}|_)(\p{Alnum}|_)*:?)|(!(\p{Blank}+)(\p{Alpha}|_)(\p{Alnum}|_)*\$:?)|((\p{Blank}*)?\.(\p{Alpha}|_)(\p{Alnum}|_)*:)|((\p{Blank}*)?(\p{Alpha}|_)(\p{Alnum}|_)*\$:)|(\.(\p{Alpha}|_)(\p{Alnum}|_)*:)|((\p{Alpha}|_)(\p{Alnum}|_)*\$:)'
-//        GLOBAL_LABEL    = 'regexp:(!(\p{Blank}+)(\p{Alpha}|_)(\p{Alnum}|_)*:?:?)|((\p{Blank}*)?(\p{Alpha}|_)(\p{Alnum}|_)*::?)'
+//        ASSIGNMENT      = 'regexp:((\p{Alpha}|_)(\p{Alnum}|_)*)((\p{Blank}+equ\p{Blank})|=)'
+//        LOCAL_LABEL_OC  = 'regexp:(!(\p{Blank}+)\.(\p{Alpha}|_)(\p{Alnum}|_)*:?)|(!(\p{Blank}+)(\p{Alpha}|_)(\p{Alnum}|_)*\$:?)|((\p{Blank}*)?\.(\p{Alpha}|_)(\p{Alnum}|_)*:)|((\p{Blank}*)?(\p{Alpha}|_)(\p{Alnum}|_)*\$:)|(\.(\p{Alpha}|_)(\p{Alnum}|_)*:)|((\p{Alpha}|_)(\p{Alnum}|_)*\$:)'
+//        GLOBAL_LABEL_OC = 'regexp:(!(\p{Blank}+)(\p{Alpha}|_)(\p{Alnum}|_)*:?:?)|((\p{Blank}*)?(\p{Alpha}|_)(\p{Alnum}|_)*::?)'
 
-//        MNEMONIC        = 'regexp:((\p{Alpha})+)'
+        MNEMONIC        = 'regexp:((\p{Alpha})+)'
         SYMBOL          = 'regexp:((\p{Alpha}|_)(\p{Alnum}|_)*)'
-        OPSIZE_BS       = 'regexp:(\.([bB]|[sS]))'
-        OPSIZE_WL       = 'regexp:(\.([wW]|[lL]))'
+        OPSIZE_BS       = 'regexp:(\.[bs])'
+        OPSIZE_WL       = 'regexp:(\.[wl])'
 
         BINARY          = 'regexp:(%[01]+)'
-        HEXADECIMAL     = 'regexp:(\$[0-9a-fA-F]+)'
+        HEXADECIMAL     = 'regexp:(\$[0-9a-f]+)'
         OCTAL           = 'regexp:(@[0-7]+)'
         DECIMAL         = 'regexp:([0-9]+)'
 
@@ -107,7 +108,7 @@
         OP_CMP_GT_EQ    = '>='
         OP_CMP_LT_EQ    = '<='
         OP_CMP_NOT_EQ   = '!='
-        OP_CMP_NOT_EQ2  = '<>'
+//        OP_CMP_NOT_EQ2  = '<>'
 
         COMMENT         = 'regexp:(\p{Blank}*?[;*].*+)'//|(!\s#+.*+)'
 //        EOL_COMMENT     = 'regexp:((\p{Blank}+;.*?)|(\p{Blank}+\.*+))'
@@ -116,41 +117,32 @@
 
 M68kFile ::= line*
 
-private BlankLine ::= WHITE_SPACE?
-
 private line ::= !<<eof>> statement EOL
 
 statement ::= (Assignment
             | PreprocessorDirective
-            | LabelInsts
-            | BlankLine)
+            | LabelInsts)
             {pin=1 recoverWhile=statement_recover};
 
 private statement_recover ::= !(EOL)
 
-Assignment ::= SYMBOL ((WHITE_SPACE? OP_ASSIGN WHITE_SPACE?)|(WHITE_SPACE EQU WHITE_SPACE)) expr
+Assignment ::= SYMBOLDEF (OP_ASSIGN|EQU) expr
 
 private LabelInsts ::= LabelOnly|LabelWithInstruction|InstructionOnly
 
 private LabelOnly ::= Label
-private LabelWithInstruction ::= Label WHITE_SPACE Instruction
-private InstructionOnly ::= WHITE_SPACE Instruction
+private LabelWithInstruction ::= Label Instruction
+private InstructionOnly ::= Instruction
 
-LocalLabel ::= (!WHITE_SPACE ((DOT SYMBOL)|(SYMBOL DOLLAR)) COLON?)|(WHITE_SPACE? ((DOT SYMBOL)|(SYMBOL DOLLAR)) COLON)
-GlobalLabel ::= (!WHITE_SPACE SYMBOL (COLON? COLON?)?)|(WHITE_SPACE? SYMBOL COLON COLON?)
-//private Label ::= LocalLabel | GlobalLabel
-
-//private LabelInsts ::= Label|(Label? WHITE_SPACE Instruction)
-//
-//LocalLabel ::= LOCAL_LABEL {extends=Label}
-//GlobalLabel ::= GLOBAL_LABEL {extends=Label}
+LocalLabel ::= LOCAL_LABEL_DEF {extends=Label}
+GlobalLabel ::= GLOBAL_LABEL_DEF {extends=Label}
 Label ::= LocalLabel | GlobalLabel
 
 OperandSize ::= (OPSIZE_BS|OPSIZE_WL)
 AddressSize ::= OPSIZE_WL
 DataWidth ::= OPSIZE_WL
 
-AsmOp ::= SYMBOL OperandSize?
+AsmOp ::= MNEMONIC OperandSize?
 
 PreprocessorDirective ::= SYMBOL?
         (END_TAG
@@ -167,12 +159,12 @@ PreprocessorDirective ::= SYMBOL?
         | REPT_TAG
         | REPT_END_TAG
         | FAIL_TAG)
-        (WHITE_SPACE PreprocessorOperands)?
+        PreprocessorOperands?
 
 MacroCall ::= SYMBOL PreprocessorOperands?
-AsmInstruction ::= AsmOp (WHITE_SPACE AsmOperands)?
-//Instruction ::= AsmInstruction | MacroCall
-external Instruction ::= parseMacroCallOrAsmInstruction
+AsmInstruction ::= AsmOp AsmOperands?
+private Instruction ::= AsmInstruction | MacroCall
+//external Instruction ::= parseMacroCallOrAsmInstruction
 
 AsmOperands ::= FirstAsmOperand (SEPARATOR NextAsmOperand)*
 
@@ -207,11 +199,12 @@ AddressingMode ::= AbsoluteAddressAddressingMode
                 | ProgramCounterIndirectWithIndexNewAddressingMode
                 | AddressRegisterIndirectPreDecAddressingMode
                 | AddressRegisterIndirectPostIncAddressingMode
+                | RegisterListAddressingMode
                 | ImmediateData
 
 SpecialRegisterDirectAddressingMode ::= SpecialRegister
-DataRegisterDirectAddressingMode ::= DataRegister
-AddressRegisterDirectAddressingMode ::= AddressRegister
+DataRegisterDirectAddressingMode ::= DataRegister !(OP_MINUS|OP_AR_DIV)
+AddressRegisterDirectAddressingMode ::= AddressRegister !(OP_MINUS|OP_AR_DIV)
 AddressRegisterIndirectAddressingMode ::= ROUND_L AddressRegister ROUND_R !OP_PLUS
 AddressRegisterIndirectPostIncAddressingMode ::= ROUND_L AddressRegister ROUND_R OP_PLUS
 AddressRegisterIndirectPreDecAddressingMode ::= OP_MINUS ROUND_L AddressRegister ROUND_R
@@ -224,6 +217,8 @@ ProgramCounterIndirectWithDisplacementNewAddressingMode ::= ROUND_L expr SEPARAT
 ProgramCounterIndirectWithIndexOldAddressingMode ::= expr ROUND_L PC SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
 ProgramCounterIndirectWithIndexNewAddressingMode ::= ROUND_L expr SEPARATOR PC SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
 AbsoluteAddressAddressingMode ::= expr AddressSize? !ROUND_L
+private RegisterRange ::= (DataOrAddressRegister OP_MINUS DataOrAddressRegister)
+RegisterListAddressingMode ::= (DataOrAddressRegister|RegisterRange) (OP_AR_DIV (DataOrAddressRegister|RegisterRange))*
 ImmediateData ::= HASH expr {extends=AddressingMode}
 
 expr ::= binary_logical_or_expr
@@ -268,7 +263,8 @@ binary_cmp_le_expr ::= expr OP_CMP_LT_EQ expr
 binary_cmp_gt_expr ::= expr OP_CMP_GT expr
 binary_cmp_ge_expr ::= expr OP_CMP_GT_EQ expr
 binary_cmp_eq_expr ::= expr OP_CMP_EQ expr
-binary_cmp_ne_expr ::= expr (OP_CMP_NOT_EQ|OP_CMP_NOT_EQ2) expr
+binary_cmp_ne_expr ::= expr OP_CMP_NOT_EQ expr
+//binary_cmp_ne_expr ::= expr (OP_CMP_NOT_EQ|OP_CMP_NOT_EQ2) expr
 binary_logical_and_expr ::= expr OP_LOGICAL_AND expr
 binary_logical_or_expr ::= expr OP_LOGICAL_OR expr
 

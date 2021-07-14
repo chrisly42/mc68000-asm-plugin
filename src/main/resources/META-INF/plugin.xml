@@ -14,7 +14,7 @@
     <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <fileType name="M68k" implementationClass="de.platon42.intellij.plugins.m68k.M68kFileType"
+        <fileType name="M68k Assembler" implementationClass="de.platon42.intellij.plugins.m68k.M68kFileType"
                   fieldName="INSTANCE" language="M68k" extensions="asm;ASM;s;S;i"/>
         <lang.parserDefinition language="M68k"
                                implementationClass="de.platon42.intellij.plugins.m68k.parser.M68kParserDefinition"/>
