@@ -37,9 +37,9 @@ public class M68kProgramCounterIndirectWithIndexOldAddressingModeImpl extends M6
     }
 
     @Override
-    @NotNull
+    @Nullable
     public M68kExpr getExpr() {
-        return findNotNullChildByClass(M68kExpr.class);
+        return findChildByClass(M68kExpr.class);
     }
 
 }

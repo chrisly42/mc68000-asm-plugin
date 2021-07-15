@@ -211,38 +211,55 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // ROUND_L expr SEPARATOR AddressRegister SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
+    // ROUND_L (expr SEPARATOR)? AddressRegister SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
     public static boolean AddressRegisterIndirectWithIndexNewAddressingMode(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "AddressRegisterIndirectWithIndexNewAddressingMode")) return false;
         if (!nextTokenIsFast(b, ROUND_L)) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NONE_, ADDRESS_REGISTER_INDIRECT_WITH_INDEX_NEW_ADDRESSING_MODE, "<AddressingMode>");
         r = consumeTokenFast(b, ROUND_L);
-        r = r && expr(b, l + 1, -1);
-        r = r && consumeToken(b, SEPARATOR);
+        r = r && AddressRegisterIndirectWithIndexNewAddressingMode_1(b, l + 1);
         r = r && AddressRegister(b, l + 1);
         r = r && consumeToken(b, SEPARATOR);
         r = r && DataOrAddressRegister(b, l + 1);
-        r = r && AddressRegisterIndirectWithIndexNewAddressingMode_6(b, l + 1);
+        r = r && AddressRegisterIndirectWithIndexNewAddressingMode_5(b, l + 1);
         r = r && consumeToken(b, ROUND_R);
         exit_section_(b, l, m, r, false, null);
         return r;
     }
 
+    // (expr SEPARATOR)?
+    private static boolean AddressRegisterIndirectWithIndexNewAddressingMode_1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "AddressRegisterIndirectWithIndexNewAddressingMode_1")) return false;
+        AddressRegisterIndirectWithIndexNewAddressingMode_1_0(b, l + 1);
+        return true;
+    }
+
+    // expr SEPARATOR
+    private static boolean AddressRegisterIndirectWithIndexNewAddressingMode_1_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "AddressRegisterIndirectWithIndexNewAddressingMode_1_0")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = expr(b, l + 1, -1);
+        r = r && consumeToken(b, SEPARATOR);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
     // DataWidth?
-    private static boolean AddressRegisterIndirectWithIndexNewAddressingMode_6(PsiBuilder b, int l) {
-        if (!recursion_guard_(b, l, "AddressRegisterIndirectWithIndexNewAddressingMode_6")) return false;
+    private static boolean AddressRegisterIndirectWithIndexNewAddressingMode_5(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "AddressRegisterIndirectWithIndexNewAddressingMode_5")) return false;
         DataWidth(b, l + 1);
         return true;
     }
 
     /* ********************************************************** */
-    // expr ROUND_L AddressRegister SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
+    // expr? ROUND_L AddressRegister SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
     public static boolean AddressRegisterIndirectWithIndexOldAddressingMode(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "AddressRegisterIndirectWithIndexOldAddressingMode")) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NONE_, ADDRESS_REGISTER_INDIRECT_WITH_INDEX_OLD_ADDRESSING_MODE, "<AddressingMode>");
-        r = expr(b, l + 1, -1);
+        r = AddressRegisterIndirectWithIndexOldAddressingMode_0(b, l + 1);
         r = r && consumeToken(b, ROUND_L);
         r = r && AddressRegister(b, l + 1);
         r = r && consumeToken(b, SEPARATOR);
@@ -251,6 +268,13 @@ public class M68kParser implements PsiParser, LightPsiParser {
         r = r && consumeToken(b, ROUND_R);
         exit_section_(b, l, m, r, false, null);
         return r;
+    }
+
+    // expr?
+    private static boolean AddressRegisterIndirectWithIndexOldAddressingMode_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "AddressRegisterIndirectWithIndexOldAddressingMode_0")) return false;
+        expr(b, l + 1, -1);
+        return true;
     }
 
     // DataWidth?
@@ -754,54 +778,100 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // expr ROUND_L PC ROUND_R
+    // (ROUND_L PC ROUND_R) | (expr ROUND_L PC ROUND_R)
     public static boolean ProgramCounterIndirectWithDisplacementOldAddressingMode(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "ProgramCounterIndirectWithDisplacementOldAddressingMode")) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NONE_, PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT_OLD_ADDRESSING_MODE, "<AddressingMode>");
-        r = expr(b, l + 1, -1);
-        r = r && consumeTokens(b, 0, ROUND_L, PC, ROUND_R);
+        r = ProgramCounterIndirectWithDisplacementOldAddressingMode_0(b, l + 1);
+        if (!r) r = ProgramCounterIndirectWithDisplacementOldAddressingMode_1(b, l + 1);
         exit_section_(b, l, m, r, false, null);
         return r;
     }
 
+    // ROUND_L PC ROUND_R
+    private static boolean ProgramCounterIndirectWithDisplacementOldAddressingMode_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "ProgramCounterIndirectWithDisplacementOldAddressingMode_0")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeTokens(b, 0, ROUND_L, PC, ROUND_R);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
+    // expr ROUND_L PC ROUND_R
+    private static boolean ProgramCounterIndirectWithDisplacementOldAddressingMode_1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "ProgramCounterIndirectWithDisplacementOldAddressingMode_1")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = expr(b, l + 1, -1);
+        r = r && consumeTokens(b, 0, ROUND_L, PC, ROUND_R);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
     /* ********************************************************** */
-    // ROUND_L expr SEPARATOR PC SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
+    // ROUND_L (expr SEPARATOR)? PC SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
     public static boolean ProgramCounterIndirectWithIndexNewAddressingMode(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "ProgramCounterIndirectWithIndexNewAddressingMode")) return false;
         if (!nextTokenIsFast(b, ROUND_L)) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NONE_, PROGRAM_COUNTER_INDIRECT_WITH_INDEX_NEW_ADDRESSING_MODE, "<AddressingMode>");
         r = consumeTokenFast(b, ROUND_L);
-        r = r && expr(b, l + 1, -1);
-        r = r && consumeTokens(b, 0, SEPARATOR, PC, SEPARATOR);
+        r = r && ProgramCounterIndirectWithIndexNewAddressingMode_1(b, l + 1);
+        r = r && consumeTokens(b, 0, PC, SEPARATOR);
         r = r && DataOrAddressRegister(b, l + 1);
-        r = r && ProgramCounterIndirectWithIndexNewAddressingMode_6(b, l + 1);
+        r = r && ProgramCounterIndirectWithIndexNewAddressingMode_5(b, l + 1);
         r = r && consumeToken(b, ROUND_R);
         exit_section_(b, l, m, r, false, null);
         return r;
     }
 
+    // (expr SEPARATOR)?
+    private static boolean ProgramCounterIndirectWithIndexNewAddressingMode_1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "ProgramCounterIndirectWithIndexNewAddressingMode_1")) return false;
+        ProgramCounterIndirectWithIndexNewAddressingMode_1_0(b, l + 1);
+        return true;
+    }
+
+    // expr SEPARATOR
+    private static boolean ProgramCounterIndirectWithIndexNewAddressingMode_1_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "ProgramCounterIndirectWithIndexNewAddressingMode_1_0")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = expr(b, l + 1, -1);
+        r = r && consumeToken(b, SEPARATOR);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
     // DataWidth?
-    private static boolean ProgramCounterIndirectWithIndexNewAddressingMode_6(PsiBuilder b, int l) {
-        if (!recursion_guard_(b, l, "ProgramCounterIndirectWithIndexNewAddressingMode_6")) return false;
+    private static boolean ProgramCounterIndirectWithIndexNewAddressingMode_5(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "ProgramCounterIndirectWithIndexNewAddressingMode_5")) return false;
         DataWidth(b, l + 1);
         return true;
     }
 
     /* ********************************************************** */
-    // expr ROUND_L PC SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
+    // expr? ROUND_L PC SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
     public static boolean ProgramCounterIndirectWithIndexOldAddressingMode(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "ProgramCounterIndirectWithIndexOldAddressingMode")) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NONE_, PROGRAM_COUNTER_INDIRECT_WITH_INDEX_OLD_ADDRESSING_MODE, "<AddressingMode>");
-        r = expr(b, l + 1, -1);
+        r = ProgramCounterIndirectWithIndexOldAddressingMode_0(b, l + 1);
         r = r && consumeTokens(b, 0, ROUND_L, PC, SEPARATOR);
         r = r && DataOrAddressRegister(b, l + 1);
         r = r && ProgramCounterIndirectWithIndexOldAddressingMode_5(b, l + 1);
         r = r && consumeToken(b, ROUND_R);
         exit_section_(b, l, m, r, false, null);
         return r;
+    }
+
+    // expr?
+    private static boolean ProgramCounterIndirectWithIndexOldAddressingMode_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "ProgramCounterIndirectWithIndexOldAddressingMode_0")) return false;
+        expr(b, l + 1, -1);
+        return true;
     }
 
     // DataWidth?
@@ -825,7 +895,7 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // (DataOrAddressRegister|RegisterRange) (OP_AR_DIV (DataOrAddressRegister|RegisterRange))*
+    // (DataOrAddressRegister|RegisterRange) ((OP_AR_DIV|OP_MINUS) (DataOrAddressRegister|RegisterRange))*
     public static boolean RegisterListAddressingMode(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "RegisterListAddressingMode")) return false;
         if (!nextTokenIsFast(b, AREG, DREG)) return false;
@@ -846,7 +916,7 @@ public class M68kParser implements PsiParser, LightPsiParser {
         return r;
     }
 
-    // (OP_AR_DIV (DataOrAddressRegister|RegisterRange))*
+    // ((OP_AR_DIV|OP_MINUS) (DataOrAddressRegister|RegisterRange))*
     private static boolean RegisterListAddressingMode_1(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "RegisterListAddressingMode_1")) return false;
         while (true) {
@@ -857,14 +927,23 @@ public class M68kParser implements PsiParser, LightPsiParser {
         return true;
     }
 
-    // OP_AR_DIV (DataOrAddressRegister|RegisterRange)
+    // (OP_AR_DIV|OP_MINUS) (DataOrAddressRegister|RegisterRange)
     private static boolean RegisterListAddressingMode_1_0(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "RegisterListAddressingMode_1_0")) return false;
         boolean r;
         Marker m = enter_section_(b);
-        r = consumeTokenFast(b, OP_AR_DIV);
+        r = RegisterListAddressingMode_1_0_0(b, l + 1);
         r = r && RegisterListAddressingMode_1_0_1(b, l + 1);
         exit_section_(b, m, null, r);
+        return r;
+    }
+
+    // OP_AR_DIV|OP_MINUS
+    private static boolean RegisterListAddressingMode_1_0_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "RegisterListAddressingMode_1_0_0")) return false;
+        boolean r;
+        r = consumeTokenFast(b, OP_AR_DIV);
+        if (!r) r = consumeTokenFast(b, OP_MINUS);
         return r;
     }
 

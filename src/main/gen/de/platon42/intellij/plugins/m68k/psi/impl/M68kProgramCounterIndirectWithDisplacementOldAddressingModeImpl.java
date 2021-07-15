@@ -7,6 +7,7 @@ import de.platon42.intellij.plugins.m68k.psi.M68kExpr;
 import de.platon42.intellij.plugins.m68k.psi.M68kProgramCounterIndirectWithDisplacementOldAddressingMode;
 import de.platon42.intellij.plugins.m68k.psi.M68kVisitor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class M68kProgramCounterIndirectWithDisplacementOldAddressingModeImpl extends M68kAddressingModeImpl implements M68kProgramCounterIndirectWithDisplacementOldAddressingMode {
 
@@ -26,9 +27,9 @@ public class M68kProgramCounterIndirectWithDisplacementOldAddressingModeImpl ext
     }
 
     @Override
-    @NotNull
+    @Nullable
     public M68kExpr getExpr() {
-        return findNotNullChildByClass(M68kExpr.class);
+        return findChildByClass(M68kExpr.class);
     }
 
 }

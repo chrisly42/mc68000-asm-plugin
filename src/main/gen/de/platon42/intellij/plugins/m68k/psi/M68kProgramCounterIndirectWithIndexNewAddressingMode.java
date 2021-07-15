@@ -12,7 +12,7 @@ public interface M68kProgramCounterIndirectWithIndexNewAddressingMode extends M6
     @NotNull
     M68kRegister getRegister();
 
-    @NotNull
+    @Nullable
     M68kExpr getExpr();
 
 }

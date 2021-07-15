@@ -15,7 +15,7 @@ public interface M68kAddressRegisterIndirectWithIndexNewAddressingMode extends M
     @NotNull
     M68kRegister getRegister();
 
-    @NotNull
+    @Nullable
     M68kExpr getExpr();
 
 }

@@ -206,15 +206,15 @@ AddressRegisterIndirectPostIncAddressingMode ::= ROUND_L AddressRegister ROUND_R
 AddressRegisterIndirectPreDecAddressingMode ::= OP_MINUS ROUND_L AddressRegister ROUND_R
 AddressRegisterIndirectWithDisplacementOldAddressingMode ::= expr ROUND_L AddressRegister ROUND_R
 AddressRegisterIndirectWithDisplacementNewAddressingMode ::= ROUND_L expr SEPARATOR AddressRegister ROUND_R
-AddressRegisterIndirectWithIndexOldAddressingMode ::= expr ROUND_L AddressRegister SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
-AddressRegisterIndirectWithIndexNewAddressingMode ::= ROUND_L expr SEPARATOR AddressRegister SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
-ProgramCounterIndirectWithDisplacementOldAddressingMode ::= expr ROUND_L PC ROUND_R
+AddressRegisterIndirectWithIndexOldAddressingMode ::= expr? ROUND_L AddressRegister SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
+AddressRegisterIndirectWithIndexNewAddressingMode ::= ROUND_L (expr SEPARATOR)? AddressRegister SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
+ProgramCounterIndirectWithDisplacementOldAddressingMode ::= (ROUND_L PC ROUND_R) | (expr ROUND_L PC ROUND_R)
 ProgramCounterIndirectWithDisplacementNewAddressingMode ::= ROUND_L expr SEPARATOR PC ROUND_R
-ProgramCounterIndirectWithIndexOldAddressingMode ::= expr ROUND_L PC SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
-ProgramCounterIndirectWithIndexNewAddressingMode ::= ROUND_L expr SEPARATOR PC SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
+ProgramCounterIndirectWithIndexOldAddressingMode ::= expr? ROUND_L PC SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
+ProgramCounterIndirectWithIndexNewAddressingMode ::= ROUND_L (expr SEPARATOR)? PC SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
 AbsoluteAddressAddressingMode ::= expr AddressSize? !ROUND_L
 private RegisterRange ::= (DataOrAddressRegister OP_MINUS DataOrAddressRegister)
-RegisterListAddressingMode ::= (DataOrAddressRegister|RegisterRange) (OP_AR_DIV (DataOrAddressRegister|RegisterRange))*
+RegisterListAddressingMode ::= (DataOrAddressRegister|RegisterRange) ((OP_AR_DIV|OP_MINUS) (DataOrAddressRegister|RegisterRange))*
 ImmediateData ::= HASH expr {extends=AddressingMode}
 
 expr ::= binary_logical_or_expr
