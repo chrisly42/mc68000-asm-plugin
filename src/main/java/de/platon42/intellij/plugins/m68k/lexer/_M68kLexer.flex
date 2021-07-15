@@ -25,11 +25,7 @@ import static de.platon42.intellij.plugins.m68k.lexer.LexerUtil.*;
 %ignorecase
 
 EOL=\R
-WHITE_SPACE=\s+
-
-EOL=\R
 WHITE_SPACE=\p{Blank}+
-IF_TAG=(if[:letter:]*)
 AREG=((a[0-7])|sp)
 DREG=(d[0-7])
 ASSIGNMENT=(([:letter:]|_)(([:letter:]|[:digit:])|_)*((\p{Blank}+equ\p{Blank}+)|(\p{Blank}+set\p{Blank}+)|\p{Blank}*=\p{Blank}*))
@@ -37,19 +33,21 @@ LOCAL_LABEL=(\.([:letter:]|_)(([:letter:]|[:digit:])|_)*:?)|(([:letter:]|_)(([:l
 LOCAL_LABEL_WC=(\.([:letter:]|_)(([:letter:]|[:digit:])|_)*:)|(([:letter:]|_)(([:letter:]|[:digit:])|_)*\$:)
 GLOBAL_LABEL=(([:letter:]|_)(([:letter:]|[:digit:])|_)*:?:?)
 GLOBAL_LABEL_WC=(([:letter:]|_)(([:letter:]|[:digit:])|_)*::?)
-MNEMONIC=(([:letter:])+)
+//MNEMONIC=(([:letter:])+)
 SYMBOL=(([:letter:]|_|\.)(([:letter:]|[:digit:])|[_\$])*)
+DIRECTIVE_KEYWORD=(([:letter:])(([:letter:]))*)(\..)?
 OPSIZE_BS=(\.[bs])
 OPSIZE_WL=(\.[wl])
 BINARY=(%[01]+)
 HEXADECIMAL=(\$[0-9a-f]+)
 OCTAL=(@[0-7]+)
 DECIMAL=([0-9]+)
-STRINGLIT=(`([^`\\]|\\.)*`|'([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")|<([^`\\]|\\.)*>
+STRINGLIT=(`([^`\\]|\\.)*`|'([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
+PLAINPARAM=(`([^`\\]|\\.)*`|'([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")|<([^>\\]|\\.)*>|([^,;\p{Blank}\r\n])+ // why does \R not work, I have no idea
 COMMENT=([;].*+)
 HASH_COMMENT=([#;*].*+)
 
-%state NOSOL,INSTRPART,ASMINSTR,ASMOPS,ASSIGNMENT,WAITEOL
+%state NOSOL,INSTRPART,ASMINSTR,ASMOPS,ASSIGNMENT,EXPR,MACROCALL,WAITEOL
 
 %%
 <YYINITIAL> {
@@ -67,9 +65,15 @@ HASH_COMMENT=([#;*].*+)
   {EOL}               { yybegin(YYINITIAL); return WHITE_SPACE; }
   {LOCAL_LABEL_WC}    { yybegin(INSTRPART); return LOCAL_LABEL_DEF; }
   {GLOBAL_LABEL_WC}   { yybegin(INSTRPART); return GLOBAL_LABEL_DEF; }
-  {MNEMONIC}          { if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; } else { yybegin(INSTRPART); return SYMBOL; } }
+  {DIRECTIVE_KEYWORD} {
+                        if(isAsmMnemonicWithSize(yytext())) { yybegin(ASMINSTR); yypushback(2); return MNEMONIC; }
+                        if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; }
+                        if(isDataDirective(yytext())) { yybegin(EXPR); return DATA_DIRECTIVE; }
+                        if(isOtherDirective(yytext())) { yybegin(EXPR); return OTHER_DIRECTIVE; }
+                        yybegin(INSTRPART); return SYMBOL;
+                      }
+//  {MNEMONIC}          { if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; } else { yybegin(INSTRPART); return SYMBOL; } }
   {SYMBOL}            { yybegin(INSTRPART); return SYMBOL; }
-
   {HASH_COMMENT}      { yybegin(YYINITIAL); return COMMENT; }
 }
 
@@ -77,23 +81,14 @@ HASH_COMMENT=([#;*].*+)
   {WHITE_SPACE}       { return WHITE_SPACE; }
   {EOL}               { yybegin(YYINITIAL); return EOL; }
 
-  "even"              { return EVEN_TAG; }
-  "cnop"              { return CNOP_TAG; }
-  "section"           { return SECTION_TAG; }
-  "include"           { return INCLUDE_TAG; }
-  "incbin"            { return INCBIN_TAG; }
-  "else"              { return ELSE_TAG; }
-  "endc"              { return ENDC_TAG; }
-  "macro"             { return MACRO_TAG; }
-  "endm"              { return MACRO_END_TAG; }
-  "rept"              { return REPT_TAG; }
-  "endr"              { return REPT_END_TAG; }
-  "fail"              { return FAIL_TAG; }
-  "end"               { return END_TAG; }
-
-  {IF_TAG}            { return IF_TAG; }
-
-  {MNEMONIC}          { if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; } else { return SYMBOL; } }
+  {DIRECTIVE_KEYWORD} {
+                        if(isAsmMnemonicWithSize(yytext())) { yybegin(ASMINSTR); yypushback(2); return MNEMONIC; }
+                        if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; }
+                        if(isDataDirective(yytext())) { yybegin(EXPR); return DATA_DIRECTIVE; }
+                        if(isOtherDirective(yytext())) { yybegin(EXPR); return OTHER_DIRECTIVE; }
+                        yybegin(INSTRPART); return SYMBOL;
+                      }
+//  {MNEMONIC}          { if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; } else { return SYMBOL; } }
   {SYMBOL}            { return SYMBOL; }
 
   {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
@@ -109,7 +104,29 @@ HASH_COMMENT=([#;*].*+)
   {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
 }
 
+<MACROCALL> {
+  {WHITE_SPACE}       { return WHITE_SPACE; } // FIXME space optionally introduces comment
+  {EOL}               { yybegin(YYINITIAL); return EOL; }
+
+  {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
+
+  ","                 { return SEPARATOR; }
+
+  {PLAINPARAM}        { return SYMBOL; }
+}
+
 <ASSIGNMENT> {
+  {WHITE_SPACE}       { return WHITE_SPACE; }
+  {EOL}               { yybegin(YYINITIAL); return EOL; }
+
+  "equ"|"set"         { yybegin(EXPR); return EQU; }
+
+  "="                 { yybegin(EXPR); return OP_ASSIGN; }
+
+  {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
+}
+
+<EXPR> {
   {WHITE_SPACE}       { return WHITE_SPACE; } // FIXME space optionally introduces comment
   {EOL}               { yybegin(YYINITIAL); return EOL; }
 
@@ -118,9 +135,6 @@ HASH_COMMENT=([#;*].*+)
   {OCTAL}             { return OCTAL; }
   {DECIMAL}           { return DECIMAL; }
   {STRINGLIT}         { return STRINGLIT; }
-
-  "equ"               { return EQU; }
-  "set"               { return EQU; }
 
   "<<"                { return OP_AR_SHIFT_L; }
   ">>"                { return OP_AR_SHIFT_R; }
@@ -140,6 +154,7 @@ HASH_COMMENT=([#;*].*+)
 //  ";"                 { return SEMICOLON; }
 //  "["                 { return SQUARE_L; }
 //  "]"                 { return SQUARE_R; }
+  ","                 { return SEPARATOR; }
   "("                 { return ROUND_L; }
   ")"                 { return ROUND_R; }
 //  "."                 { return DOT; }

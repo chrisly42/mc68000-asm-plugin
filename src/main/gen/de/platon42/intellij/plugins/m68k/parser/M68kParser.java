@@ -380,25 +380,21 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // AddressingMode (SEPARATOR AddressingMode)*
-    public static boolean AsmOperands(PsiBuilder b, int l) {
+    // AddressingMode (SEPARATOR AddressingMode)?
+    static boolean AsmOperands(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "AsmOperands")) return false;
         boolean r;
-        Marker m = enter_section_(b, l, _NONE_, ASM_OPERANDS, "<asm operands>");
+        Marker m = enter_section_(b);
         r = AddressingMode(b, l + 1);
         r = r && AsmOperands_1(b, l + 1);
-        exit_section_(b, l, m, r, false, null);
+        exit_section_(b, m, null, r);
         return r;
     }
 
-    // (SEPARATOR AddressingMode)*
+    // (SEPARATOR AddressingMode)?
     private static boolean AsmOperands_1(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "AsmOperands_1")) return false;
-        while (true) {
-            int c = current_position_(b);
-            if (!AsmOperands_1_0(b, l + 1)) break;
-            if (!empty_element_parsed_guard_(b, "AsmOperands_1", c)) break;
-        }
+        AsmOperands_1_0(b, l + 1);
         return true;
     }
 
@@ -648,21 +644,7 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // SYMBOL?
-    //         (END_TAG
-    //         | EVEN_TAG
-    //         | CNOP_TAG
-    //         | SECTION_TAG
-    //         | INCLUDE_TAG
-    //         | INCBIN_TAG
-    //         | IF_TAG
-    //         | ELSE_TAG
-    //         | ENDC_TAG
-    //         | MACRO_TAG
-    //         | MACRO_END_TAG
-    //         | REPT_TAG
-    //         | REPT_END_TAG
-    //         | FAIL_TAG)
+    // Label? (DATA_DIRECTIVE | OTHER_DIRECTIVE)
     //         PreprocessorOperands?
     public static boolean PreprocessorDirective(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "PreprocessorDirective")) return false;
@@ -675,44 +657,19 @@ public class M68kParser implements PsiParser, LightPsiParser {
         return r;
     }
 
-    // SYMBOL?
+    // Label?
     private static boolean PreprocessorDirective_0(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "PreprocessorDirective_0")) return false;
-        consumeToken(b, SYMBOL);
+        Label(b, l + 1);
         return true;
     }
 
-    // END_TAG
-    //         | EVEN_TAG
-    //         | CNOP_TAG
-    //         | SECTION_TAG
-    //         | INCLUDE_TAG
-    //         | INCBIN_TAG
-    //         | IF_TAG
-    //         | ELSE_TAG
-    //         | ENDC_TAG
-    //         | MACRO_TAG
-    //         | MACRO_END_TAG
-    //         | REPT_TAG
-    //         | REPT_END_TAG
-    //         | FAIL_TAG
+    // DATA_DIRECTIVE | OTHER_DIRECTIVE
     private static boolean PreprocessorDirective_1(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "PreprocessorDirective_1")) return false;
         boolean r;
-        r = consumeToken(b, END_TAG);
-        if (!r) r = consumeToken(b, EVEN_TAG);
-        if (!r) r = consumeToken(b, CNOP_TAG);
-        if (!r) r = consumeToken(b, SECTION_TAG);
-        if (!r) r = consumeToken(b, INCLUDE_TAG);
-        if (!r) r = consumeToken(b, INCBIN_TAG);
-        if (!r) r = consumeToken(b, IF_TAG);
-        if (!r) r = consumeToken(b, ELSE_TAG);
-        if (!r) r = consumeToken(b, ENDC_TAG);
-        if (!r) r = consumeToken(b, MACRO_TAG);
-        if (!r) r = consumeToken(b, MACRO_END_TAG);
-        if (!r) r = consumeToken(b, REPT_TAG);
-        if (!r) r = consumeToken(b, REPT_END_TAG);
-        if (!r) r = consumeToken(b, FAIL_TAG);
+        r = consumeToken(b, DATA_DIRECTIVE);
+        if (!r) r = consumeToken(b, OTHER_DIRECTIVE);
         return r;
     }
 

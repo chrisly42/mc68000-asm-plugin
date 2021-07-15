@@ -22,7 +22,6 @@ public interface M68kTypes {
     IElementType ADDRESS_SIZE = new M68kElementType("ADDRESS_SIZE");
     IElementType ASM_INSTRUCTION = new M68kElementType("ASM_INSTRUCTION");
     IElementType ASM_OP = new M68kElementType("ASM_OP");
-    IElementType ASM_OPERANDS = new M68kElementType("ASM_OPERANDS");
     IElementType ASSIGNMENT = new M68kElementType("ASSIGNMENT");
     IElementType BINARY_ADD_EXPR = new M68kElementType("BINARY_ADD_EXPR");
     IElementType BINARY_BITWISE_AND_EXPR = new M68kElementType("BINARY_BITWISE_AND_EXPR");
@@ -72,26 +71,16 @@ public interface M68kTypes {
 
     IElementType AREG = new M68kTokenType("AREG");
     IElementType BINARY = new M68kTokenType("BINARY");
-    IElementType CNOP_TAG = new M68kTokenType("CNOP_TAG");
     IElementType COMMENT = new M68kTokenType("COMMENT");
+    IElementType DATA_DIRECTIVE = new M68kTokenType("DATA_DIRECTIVE");
     IElementType DECIMAL = new M68kTokenType("DECIMAL");
     IElementType DREG = new M68kTokenType("DREG");
-    IElementType ELSE_TAG = new M68kTokenType("ELSE_TAG");
-    IElementType ENDC_TAG = new M68kTokenType("ENDC_TAG");
-    IElementType END_TAG = new M68kTokenType("END_TAG");
     IElementType EOL = new M68kTokenType("EOL");
     IElementType EQU = new M68kTokenType("EQU");
-    IElementType EVEN_TAG = new M68kTokenType("EVEN_TAG");
-    IElementType FAIL_TAG = new M68kTokenType("FAIL_TAG");
     IElementType GLOBAL_LABEL_DEF = new M68kTokenType("GLOBAL_LABEL_DEF");
     IElementType HASH = new M68kTokenType("HASH");
     IElementType HEXADECIMAL = new M68kTokenType("HEXADECIMAL");
-    IElementType IF_TAG = new M68kTokenType("IF_TAG");
-    IElementType INCBIN_TAG = new M68kTokenType("INCBIN_TAG");
-    IElementType INCLUDE_TAG = new M68kTokenType("INCLUDE_TAG");
     IElementType LOCAL_LABEL_DEF = new M68kTokenType("LOCAL_LABEL_DEF");
-    IElementType MACRO_END_TAG = new M68kTokenType("MACRO_END_TAG");
-    IElementType MACRO_TAG = new M68kTokenType("MACRO_TAG");
     IElementType MNEMONIC = new M68kTokenType("MNEMONIC");
     IElementType OCTAL = new M68kTokenType("OCTAL");
     IElementType OPSIZE_BS = new M68kTokenType("OPSIZE_BS");
@@ -117,16 +106,14 @@ public interface M68kTypes {
     IElementType OP_PLUS = new M68kTokenType("OP_PLUS");
     IElementType OP_UNARY_COMPL = new M68kTokenType("OP_UNARY_COMPL");
     IElementType OP_UNARY_NOT = new M68kTokenType("OP_UNARY_NOT");
+    IElementType OTHER_DIRECTIVE = new M68kTokenType("OTHER_DIRECTIVE");
     IElementType PC = new M68kTokenType("PC");
     IElementType REG_CCR = new M68kTokenType("REG_CCR");
     IElementType REG_SR = new M68kTokenType("REG_SR");
     IElementType REG_USP = new M68kTokenType("REG_USP");
     IElementType REG_VBR = new M68kTokenType("REG_VBR");
-    IElementType REPT_END_TAG = new M68kTokenType("REPT_END_TAG");
-    IElementType REPT_TAG = new M68kTokenType("REPT_TAG");
     IElementType ROUND_L = new M68kTokenType("ROUND_L");
     IElementType ROUND_R = new M68kTokenType("ROUND_R");
-    IElementType SECTION_TAG = new M68kTokenType("SECTION_TAG");
     IElementType SEPARATOR = new M68kTokenType("SEPARATOR");
     IElementType STRINGLIT = new M68kTokenType("STRINGLIT");
     IElementType SYMBOL = new M68kTokenType("SYMBOL");
@@ -161,8 +148,6 @@ public interface M68kTypes {
                 return new M68kAsmInstructionImpl(node);
             } else if (type == ASM_OP) {
                 return new M68kAsmOpImpl(node);
-            } else if (type == ASM_OPERANDS) {
-                return new M68kAsmOperandsImpl(node);
             } else if (type == ASSIGNMENT) {
                 return new M68kAssignmentImpl(node);
             } else if (type == BINARY_ADD_EXPR) {

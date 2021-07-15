@@ -3,10 +3,14 @@ package de.platon42.intellij.plugins.m68k.psi;
 
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public interface M68kPreprocessorDirective extends PsiElement {
+
+    @Nullable
+    M68kLabel getLabel();
 
     @NotNull
     List<M68kExpr> getExprList();

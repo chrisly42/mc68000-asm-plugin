@@ -144,21 +144,7 @@ DataWidth ::= OPSIZE_WL
 
 AsmOp ::= MNEMONIC OperandSize?
 
-PreprocessorDirective ::= SYMBOL?
-        (END_TAG
-        | EVEN_TAG
-        | CNOP_TAG
-        | SECTION_TAG
-        | INCLUDE_TAG
-        | INCBIN_TAG
-        | IF_TAG
-        | ELSE_TAG
-        | ENDC_TAG
-        | MACRO_TAG
-        | MACRO_END_TAG
-        | REPT_TAG
-        | REPT_END_TAG
-        | FAIL_TAG)
+PreprocessorDirective ::= Label? (DATA_DIRECTIVE | OTHER_DIRECTIVE)
         PreprocessorOperands?
 
 MacroCall ::= SYMBOL PreprocessorOperands?
@@ -166,7 +152,7 @@ AsmInstruction ::= AsmOp AsmOperands?
 private Instruction ::= AsmInstruction | MacroCall
 //external Instruction ::= parseMacroCallOrAsmInstruction
 
-AsmOperands ::= AddressingMode (SEPARATOR AddressingMode)*
+private AsmOperands ::= AddressingMode (SEPARATOR AddressingMode)?
 
 private PreprocessorOperands ::= PreprocessorOperand (SEPARATOR PreprocessorOperand)*
 

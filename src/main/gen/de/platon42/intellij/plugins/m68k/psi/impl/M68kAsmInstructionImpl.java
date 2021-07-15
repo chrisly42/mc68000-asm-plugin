@@ -4,12 +4,14 @@ package de.platon42.intellij.plugins.m68k.psi.impl;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
+import de.platon42.intellij.plugins.m68k.psi.M68kAddressingMode;
 import de.platon42.intellij.plugins.m68k.psi.M68kAsmInstruction;
 import de.platon42.intellij.plugins.m68k.psi.M68kAsmOp;
-import de.platon42.intellij.plugins.m68k.psi.M68kAsmOperands;
 import de.platon42.intellij.plugins.m68k.psi.M68kVisitor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class M68kAsmInstructionImpl extends ASTWrapperPsiElement implements M68kAsmInstruction {
 
@@ -29,14 +31,14 @@ public class M68kAsmInstructionImpl extends ASTWrapperPsiElement implements M68k
 
     @Override
     @NotNull
-    public M68kAsmOp getAsmOp() {
-        return findNotNullChildByClass(M68kAsmOp.class);
+    public List<M68kAddressingMode> getAddressingModeList() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, M68kAddressingMode.class);
     }
 
     @Override
-    @Nullable
-    public M68kAsmOperands getAsmOperands() {
-        return findChildByClass(M68kAsmOperands.class);
+    @NotNull
+    public M68kAsmOp getAsmOp() {
+        return findNotNullChildByClass(M68kAsmOp.class);
     }
 
 }

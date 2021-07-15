@@ -6,9 +6,11 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import de.platon42.intellij.plugins.m68k.psi.M68kExpr;
+import de.platon42.intellij.plugins.m68k.psi.M68kLabel;
 import de.platon42.intellij.plugins.m68k.psi.M68kPreprocessorDirective;
 import de.platon42.intellij.plugins.m68k.psi.M68kVisitor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -26,6 +28,12 @@ public class M68kPreprocessorDirectiveImpl extends ASTWrapperPsiElement implemen
     public void accept(@NotNull PsiElementVisitor visitor) {
         if (visitor instanceof M68kVisitor) accept((M68kVisitor) visitor);
         else super.accept(visitor);
+    }
+
+    @Override
+    @Nullable
+    public M68kLabel getLabel() {
+        return findChildByClass(M68kLabel.class);
     }
 
     @Override

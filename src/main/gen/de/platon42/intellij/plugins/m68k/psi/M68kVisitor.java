@@ -63,10 +63,6 @@ public class M68kVisitor extends PsiElementVisitor {
         visitPsiElement(o);
     }
 
-    public void visitAsmOperands(@NotNull M68kAsmOperands o) {
-        visitPsiElement(o);
-    }
-
     public void visitAssignment(@NotNull M68kAssignment o) {
         visitPsiElement(o);
     }

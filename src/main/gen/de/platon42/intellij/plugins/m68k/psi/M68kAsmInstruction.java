@@ -3,14 +3,15 @@ package de.platon42.intellij.plugins.m68k.psi;
 
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public interface M68kAsmInstruction extends PsiElement {
 
     @NotNull
-    M68kAsmOp getAsmOp();
+    List<M68kAddressingMode> getAddressingModeList();
 
-    @Nullable
-    M68kAsmOperands getAsmOperands();
+    @NotNull
+    M68kAsmOp getAsmOp();
 
 }

@@ -1,0 +1,9 @@
+Assembly File: a.asm
+  PsiWhiteSpace(' ')
+  M68kStatementImpl(STATEMENT)
+    M68kPreprocessorDirectiveImpl(PREPROCESSOR_DIRECTIVE)
+      PsiElement(M68kTokenType.OTHER_DIRECTIVE)('include')
+      PsiWhiteSpace(' ')
+      M68kLiteralExprImpl(LITERAL_EXPR)
+        PsiElement(M68kTokenType.STRINGLIT)('"exec/execbase.i"')
+  PsiElement(M68kTokenType.EOL)('\n')
