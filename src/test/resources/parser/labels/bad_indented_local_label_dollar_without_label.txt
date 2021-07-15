@@ -1,6 +1,5 @@
 Assembly File: a.asm
   PsiWhiteSpace('   ')
-  M68kStatementImpl(STATEMENT)
-    M68kMacroCallImpl(MACRO_CALL)
-      PsiElement(M68kTokenType.SYMBOL)('local_label$')
+  PsiErrorElement:'local_label$' unexpected
+    PsiElement(M68kTokenType.SYMBOL)('local_label$')
   PsiElement(M68kTokenType.EOL)('\n')

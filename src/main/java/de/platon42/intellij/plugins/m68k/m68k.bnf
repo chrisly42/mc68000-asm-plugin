@@ -147,7 +147,7 @@ AsmOp ::= MNEMONIC OperandSize?
 PreprocessorDirective ::= Label? (DATA_DIRECTIVE | OTHER_DIRECTIVE)
         PreprocessorOperands?
 
-MacroCall ::= SYMBOL PreprocessorOperands?
+MacroCall ::= MACRO_INVOKATION PlainOperands?
 AsmInstruction ::= AsmOp AsmOperands?
 private Instruction ::= AsmInstruction | MacroCall
 //external Instruction ::= parseMacroCallOrAsmInstruction
@@ -155,8 +155,9 @@ private Instruction ::= AsmInstruction | MacroCall
 private AsmOperands ::= AddressingMode (SEPARATOR AddressingMode)?
 
 private PreprocessorOperands ::= PreprocessorOperand (SEPARATOR PreprocessorOperand)*
-
 private PreprocessorOperand ::= expr
+
+private PlainOperands ::= STRINGLIT (SEPARATOR STRINGLIT)*
 
 DataRegister ::= DREG {extends=Register}
 AddressRegister ::= AREG {extends=Register}

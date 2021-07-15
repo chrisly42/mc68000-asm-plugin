@@ -70,10 +70,10 @@ HASH_COMMENT=([#;*].*+)
                         if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; }
                         if(isDataDirective(yytext())) { yybegin(EXPR); return DATA_DIRECTIVE; }
                         if(isOtherDirective(yytext())) { yybegin(EXPR); return OTHER_DIRECTIVE; }
-                        yybegin(INSTRPART); return SYMBOL;
+                        yybegin(MACROCALL); return MACRO_INVOKATION;
                       }
 //  {MNEMONIC}          { if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; } else { yybegin(INSTRPART); return SYMBOL; } }
-  {SYMBOL}            { yybegin(INSTRPART); return SYMBOL; }
+  {SYMBOL}            { yybegin(MACROCALL); return SYMBOL; }
   {HASH_COMMENT}      { yybegin(YYINITIAL); return COMMENT; }
 }
 
@@ -86,10 +86,10 @@ HASH_COMMENT=([#;*].*+)
                         if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; }
                         if(isDataDirective(yytext())) { yybegin(EXPR); return DATA_DIRECTIVE; }
                         if(isOtherDirective(yytext())) { yybegin(EXPR); return OTHER_DIRECTIVE; }
-                        yybegin(INSTRPART); return SYMBOL;
+                        yybegin(MACROCALL); return MACRO_INVOKATION;
                       }
 //  {MNEMONIC}          { if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; } else { return SYMBOL; } }
-  {SYMBOL}            { return SYMBOL; }
+  {SYMBOL}            { yybegin(MACROCALL); return MACRO_INVOKATION; }
 
   {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
 }
@@ -112,7 +112,7 @@ HASH_COMMENT=([#;*].*+)
 
   ","                 { return SEPARATOR; }
 
-  {PLAINPARAM}        { return SYMBOL; }
+  {PLAINPARAM}        { return STRINGLIT; }
 }
 
 <ASSIGNMENT> {

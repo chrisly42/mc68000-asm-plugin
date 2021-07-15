@@ -81,6 +81,7 @@ public interface M68kTypes {
     IElementType HASH = new M68kTokenType("HASH");
     IElementType HEXADECIMAL = new M68kTokenType("HEXADECIMAL");
     IElementType LOCAL_LABEL_DEF = new M68kTokenType("LOCAL_LABEL_DEF");
+    IElementType MACRO_INVOKATION = new M68kTokenType("MACRO_INVOKATION");
     IElementType MNEMONIC = new M68kTokenType("MNEMONIC");
     IElementType OCTAL = new M68kTokenType("OCTAL");
     IElementType OPSIZE_BS = new M68kTokenType("OPSIZE_BS");

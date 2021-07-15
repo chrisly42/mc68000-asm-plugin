@@ -10,17 +10,20 @@ import de.platon42.intellij.plugins.m68k.M68kIcons.FILE
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.AREG
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.BAD_CHARACTER
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.COMMENT
+import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.DATA_PREPROCESSOR
+import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.DATA_WIDTH
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.DREG
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.GLOBAL_LABEL
-import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.KEYWORD
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.LOCAL_LABEL
+import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.MACRO_CALL
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.MNEMONIC
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.NUMBER
-import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.PREPROCESSOR
+import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.OTHER_PREPROCESSOR
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.SEPARATOR
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.SPECIAL_REG
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.STRING
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.SYMBOL
+import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.SYMBOLDEF
 import org.jetbrains.annotations.NonNls
 import javax.swing.Icon
 
@@ -54,6 +57,9 @@ demo_init                       ; global label
         dbra    d7,.loop
         POPM
         rts
+
+hello:  dc.b   'Hello World!',10,0
+        even
 """
     }
 
@@ -75,19 +81,22 @@ demo_init                       ; global label
 
     companion object {
         private val DESCRIPTORS = arrayOf(
-                AttributesDescriptor("SEPARATOR", SEPARATOR),
-                AttributesDescriptor("GLOBAL_LABEL", GLOBAL_LABEL),
-                AttributesDescriptor("LOCAL_LABEL", LOCAL_LABEL),
-                AttributesDescriptor("SYMBOL", SYMBOL),
-                AttributesDescriptor("MNEMONIC", MNEMONIC),
-                AttributesDescriptor("KEYWORD", KEYWORD),
-                AttributesDescriptor("PREPROCESSOR", PREPROCESSOR),
-                AttributesDescriptor("STRING", STRING),
-                AttributesDescriptor("NUMBER", NUMBER),
-                AttributesDescriptor("AREG", AREG),
-                AttributesDescriptor("DREG", DREG),
-                AttributesDescriptor("SPECIAL_REG", SPECIAL_REG),
-                AttributesDescriptor("COMMENT", COMMENT),
-                AttributesDescriptor("BAD_CHARACTER", BAD_CHARACTER))
+                AttributesDescriptor("Global labels", GLOBAL_LABEL),
+                AttributesDescriptor("Local labels", LOCAL_LABEL),
+                AttributesDescriptor("Comma (separator)", SEPARATOR),
+                AttributesDescriptor("Symbol definition", SYMBOLDEF),
+                AttributesDescriptor("Symbol reference", SYMBOL),
+                AttributesDescriptor("Assembly mnemonic", MNEMONIC),
+                AttributesDescriptor("Macro invocation", MACRO_CALL),
+                AttributesDescriptor("Data/address width", DATA_WIDTH),
+                AttributesDescriptor("Data preprocessor directives", DATA_PREPROCESSOR),
+                AttributesDescriptor("Other preprocessor directives", OTHER_PREPROCESSOR),
+                AttributesDescriptor("Strings", STRING),
+                AttributesDescriptor("Numbers", NUMBER),
+                AttributesDescriptor("Address registers", AREG),
+                AttributesDescriptor("Data registers", DREG),
+                AttributesDescriptor("Special registers", SPECIAL_REG),
+                AttributesDescriptor("Comments", COMMENT),
+                AttributesDescriptor("Bad characters", BAD_CHARACTER))
     }
 }

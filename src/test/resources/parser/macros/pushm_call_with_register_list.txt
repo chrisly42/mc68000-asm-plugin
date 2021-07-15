@@ -1,0 +1,10 @@
+Assembly File: a.asm
+  PsiWhiteSpace(' ')
+  M68kStatementImpl(STATEMENT)
+    M68kMacroCallImpl(MACRO_CALL)
+      PsiElement(M68kTokenType.MACRO_INVOKATION)('PUSHM')
+      PsiWhiteSpace(' ')
+      PsiElement(M68kTokenType.STRINGLIT)('d0/d3/d5-d7/a0-a2/a4-a6')
+  PsiWhiteSpace(' ')
+  PsiComment(M68kTokenType.COMMENT)('; save a couple of registers')
+  PsiElement(M68kTokenType.EOL)('\n')

@@ -530,7 +530,7 @@ public class M68kParser implements PsiParser, LightPsiParser {
     // AsmInstruction | MacroCall
     static boolean Instruction(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "Instruction")) return false;
-        if (!nextTokenIs(b, "", MNEMONIC, SYMBOL)) return false;
+        if (!nextTokenIs(b, "", MACRO_INVOKATION, MNEMONIC)) return false;
         boolean r;
         r = AsmInstruction(b, l + 1);
         if (!r) r = MacroCall(b, l + 1);
@@ -611,22 +611,22 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // SYMBOL PreprocessorOperands?
+    // MACRO_INVOKATION PlainOperands?
     public static boolean MacroCall(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "MacroCall")) return false;
-        if (!nextTokenIs(b, SYMBOL)) return false;
+        if (!nextTokenIs(b, MACRO_INVOKATION)) return false;
         boolean r;
         Marker m = enter_section_(b);
-        r = consumeToken(b, SYMBOL);
+        r = consumeToken(b, MACRO_INVOKATION);
         r = r && MacroCall_1(b, l + 1);
         exit_section_(b, m, MACRO_CALL, r);
         return r;
     }
 
-    // PreprocessorOperands?
+    // PlainOperands?
     private static boolean MacroCall_1(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "MacroCall_1")) return false;
-        PreprocessorOperands(b, l + 1);
+        PlainOperands(b, l + 1);
         return true;
     }
 
@@ -640,6 +640,40 @@ public class M68kParser implements PsiParser, LightPsiParser {
         r = consumeToken(b, OPSIZE_BS);
         if (!r) r = consumeToken(b, OPSIZE_WL);
         exit_section_(b, l, m, r, false, null);
+        return r;
+    }
+
+    /* ********************************************************** */
+    // STRINGLIT (SEPARATOR STRINGLIT)*
+    static boolean PlainOperands(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "PlainOperands")) return false;
+        if (!nextTokenIs(b, STRINGLIT)) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeToken(b, STRINGLIT);
+        r = r && PlainOperands_1(b, l + 1);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
+    // (SEPARATOR STRINGLIT)*
+    private static boolean PlainOperands_1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "PlainOperands_1")) return false;
+        while (true) {
+            int c = current_position_(b);
+            if (!PlainOperands_1_0(b, l + 1)) break;
+            if (!empty_element_parsed_guard_(b, "PlainOperands_1", c)) break;
+        }
+        return true;
+    }
+
+    // SEPARATOR STRINGLIT
+    private static boolean PlainOperands_1_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "PlainOperands_1_0")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeTokens(b, 0, SEPARATOR, STRINGLIT);
+        exit_section_(b, m, null, r);
         return r;
     }
 

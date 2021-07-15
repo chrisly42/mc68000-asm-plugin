@@ -4,13 +4,9 @@ package de.platon42.intellij.plugins.m68k.psi.impl;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
-import de.platon42.intellij.plugins.m68k.psi.M68kExpr;
 import de.platon42.intellij.plugins.m68k.psi.M68kMacroCall;
 import de.platon42.intellij.plugins.m68k.psi.M68kVisitor;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class M68kMacroCallImpl extends ASTWrapperPsiElement implements M68kMacroCall {
 
@@ -26,12 +22,6 @@ public class M68kMacroCallImpl extends ASTWrapperPsiElement implements M68kMacro
     public void accept(@NotNull PsiElementVisitor visitor) {
         if (visitor instanceof M68kVisitor) accept((M68kVisitor) visitor);
         else super.accept(visitor);
-    }
-
-    @Override
-    @NotNull
-    public List<M68kExpr> getExprList() {
-        return PsiTreeUtil.getChildrenOfTypeAsList(this, M68kExpr.class);
     }
 
 }

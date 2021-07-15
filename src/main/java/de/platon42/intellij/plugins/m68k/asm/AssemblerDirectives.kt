@@ -29,7 +29,7 @@ object AssemblerDirectives {
             //"iif" // not supported
             "else", "endif", "endc",
 
-            "macro", "exitm", "mexit",
+            "macro", "exitm", "mexit", "endm",
 
             "extern", "nref", "xdef", "xref", "globl", "public", "weak",
 
