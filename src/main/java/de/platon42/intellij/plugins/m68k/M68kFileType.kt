@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NonNls
 import javax.swing.Icon
 
 @Suppress("unused")
-class M68kFileType private constructor() : LanguageFileType(M68kLanguage.INSTANCE, true) {
+class M68kFileType private constructor() : LanguageFileType(M68kLanguage.INSTANCE, false) {
     @NonNls
     override fun getName(): String {
         return "M68k Assembler"

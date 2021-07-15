@@ -13,7 +13,7 @@ Assembly File: a.asm
             PsiElement(M68kTokenType.DECIMAL)('4')
           M68kAddressSizeImpl(ADDRESS_SIZE)
             PsiElement(M68kTokenType.OPSIZE_WL)('.w')
-        PsiElement(M68kTokenType.,)(',')
+        PsiElement(M68kTokenType.SEPARATOR)(',')
         M68kAddressRegisterDirectAddressingModeImpl(ADDRESS_REGISTER_DIRECT_ADDRESSING_MODE)
           M68kAddressRegisterImpl(ADDRESS_REGISTER)
             PsiElement(M68kTokenType.AREG)('a6')

@@ -11,7 +11,7 @@ Assembly File: a.asm
         M68kDataRegisterDirectAddressingModeImpl(DATA_REGISTER_DIRECT_ADDRESSING_MODE)
           M68kDataRegisterImpl(DATA_REGISTER)
             PsiElement(M68kTokenType.DREG)('d0')
-        PsiElement(M68kTokenType.,)(',')
+        PsiElement(M68kTokenType.SEPARATOR)(',')
         M68kAddressRegisterDirectAddressingModeImpl(ADDRESS_REGISTER_DIRECT_ADDRESSING_MODE)
           M68kAddressRegisterImpl(ADDRESS_REGISTER)
             PsiElement(M68kTokenType.AREG)('a7')

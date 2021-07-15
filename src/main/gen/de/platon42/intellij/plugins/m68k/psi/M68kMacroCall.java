@@ -11,7 +11,4 @@ public interface M68kMacroCall extends PsiElement {
     @NotNull
     List<M68kExpr> getExprList();
 
-    @NotNull
-    PsiElement getSymbol();
-
 }

@@ -136,14 +136,14 @@ HASH_COMMENT=([#;*].*+)
   "&"                 { return OP_BITWISE_AND; }
   "|"                 { return OP_BITWISE_OR; }
   "^"                 { return OP_BITWISE_XOR; }
-  ":"                 { return COLON; }
-  ";"                 { return SEMICOLON; }
-  "["                 { return SQUARE_L; }
-  "]"                 { return SQUARE_R; }
+//  ":"                 { return COLON; }
+//  ";"                 { return SEMICOLON; }
+//  "["                 { return SQUARE_L; }
+//  "]"                 { return SQUARE_R; }
   "("                 { return ROUND_L; }
   ")"                 { return ROUND_R; }
-  "."                 { return DOT; }
-  "$"                 { return DOLLAR; }
+//  "."                 { return DOT; }
+//  "$"                 { return DOLLAR; }
   "="                 { return OP_ASSIGN; }
   "!"                 { return OP_UNARY_NOT; }
   "~"                 { return OP_UNARY_COMPL; }
@@ -193,16 +193,16 @@ HASH_COMMENT=([#;*].*+)
   "&"                 { return OP_BITWISE_AND; }
   "|"                 { return OP_BITWISE_OR; }
   "^"                 { return OP_BITWISE_XOR; }
-  ":"                 { return COLON; }
-  ";"                 { return SEMICOLON; }
-  "["                 { return SQUARE_L; }
-  "]"                 { return SQUARE_R; }
+//  ":"                 { return COLON; }
+//  ";"                 { return SEMICOLON; }
+//  "["                 { return SQUARE_L; }
+//  "]"                 { return SQUARE_R; }
   "("                 { return ROUND_L; }
   ")"                 { return ROUND_R; }
   ","                 { return SEPARATOR; }
-  "."                 { return DOT; }
+//  "."                 { return DOT; }
   "#"                 { return HASH; }
-  "$"                 { return DOLLAR; }
+//  "$"                 { return DOLLAR; }
   "="                 { return OP_ASSIGN; }
   "!"                 { return OP_UNARY_NOT; }
   "~"                 { return OP_UNARY_COMPL; }

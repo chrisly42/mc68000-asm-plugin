@@ -3,15 +3,12 @@ package de.platon42.intellij.plugins.m68k.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import de.platon42.intellij.plugins.m68k.psi.M68kAsmOp;
 import de.platon42.intellij.plugins.m68k.psi.M68kOperandSize;
 import de.platon42.intellij.plugins.m68k.psi.M68kVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import static de.platon42.intellij.plugins.m68k.psi.M68kTypes.MNEMONIC;
 
 public class M68kAsmOpImpl extends ASTWrapperPsiElement implements M68kAsmOp {
 
@@ -33,12 +30,6 @@ public class M68kAsmOpImpl extends ASTWrapperPsiElement implements M68kAsmOp {
     @Nullable
     public M68kOperandSize getOperandSize() {
         return findChildByClass(M68kOperandSize.class);
-    }
-
-    @Override
-    @NotNull
-    public PsiElement getMnemonic() {
-        return findNotNullChildByType(MNEMONIC);
     }
 
 }

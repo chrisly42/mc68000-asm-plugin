@@ -3,15 +3,10 @@ package de.platon42.intellij.plugins.m68k.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import de.platon42.intellij.plugins.m68k.psi.M68kOperandSize;
 import de.platon42.intellij.plugins.m68k.psi.M68kVisitor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import static de.platon42.intellij.plugins.m68k.psi.M68kTypes.OPSIZE_BS;
-import static de.platon42.intellij.plugins.m68k.psi.M68kTypes.OPSIZE_WL;
 
 public class M68kOperandSizeImpl extends ASTWrapperPsiElement implements M68kOperandSize {
 
@@ -27,18 +22,6 @@ public class M68kOperandSizeImpl extends ASTWrapperPsiElement implements M68kOpe
     public void accept(@NotNull PsiElementVisitor visitor) {
         if (visitor instanceof M68kVisitor) accept((M68kVisitor) visitor);
         else super.accept(visitor);
-    }
-
-    @Override
-    @Nullable
-    public PsiElement getOpsizeBs() {
-        return findChildByType(OPSIZE_BS);
-    }
-
-    @Override
-    @Nullable
-    public PsiElement getOpsizeWl() {
-        return findChildByType(OPSIZE_WL);
     }
 
 }

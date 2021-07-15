@@ -18,6 +18,9 @@
                   fieldName="INSTANCE" language="M68k" extensions="asm;ASM;s;S;i"/>
         <lang.parserDefinition language="M68k"
                                implementationClass="de.platon42.intellij.plugins.m68k.parser.M68kParserDefinition"/>
+        <lang.syntaxHighlighterFactory language="M68k"
+                                       implementationClass="de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighterFactory"/>
+        <colorSettingsPage implementation="de.platon42.intellij.plugins.m68k.syntax.M68kColorSettingsPage"/>
     </extensions>
 
     <actions>
