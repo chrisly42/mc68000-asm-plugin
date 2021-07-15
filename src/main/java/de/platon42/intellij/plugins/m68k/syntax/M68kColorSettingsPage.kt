@@ -11,7 +11,9 @@ import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.BAD_CHARACTER
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.COMMENT
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.DATA_PREPROCESSOR
-import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.DATA_WIDTH
+import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.DATA_WIDTH_BS
+import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.DATA_WIDTH_L
+import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.DATA_WIDTH_W
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.DREG
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.GLOBAL_LABEL
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.LOCAL_LABEL
@@ -44,19 +46,21 @@ PIC_HEIGHT = 256
 
         include "../includes/hardware/custom.i"
 
-BLTHOGON MACRO
+BLTHOGON MACRO                  ; macro definition
         move.w	#DMAF_SETCLR|DMAF_BLITHOG,dmacon(a5)
         ENDM
 
 demo_init                       ; global label
-        PUSHM   d0-d7/a0-a6     ; this is a macro
-        lea     pd_ModViewTable(a4),a0
+        tst.w   d1
+        beq.s   .skip
+        PUSHM   d0-d7/a0-a6     ; this is a macro call
+        lea     pd_ModViewTable(a4,d1.w),a0
         moveq.l #0,d0
         move.w  #PIC_HEIGHT-1,d7
 .loop   move.l  d0,(a0)+        ; local label
         dbra    d7,.loop
         POPM
-        rts
+.skip   rts
 
 hello:  dc.b   'Hello World!',10,0
         even
@@ -88,7 +92,9 @@ hello:  dc.b   'Hello World!',10,0
                 AttributesDescriptor("Symbol reference", SYMBOL),
                 AttributesDescriptor("Assembly mnemonic", MNEMONIC),
                 AttributesDescriptor("Macro invocation", MACRO_CALL),
-                AttributesDescriptor("Data/address width", DATA_WIDTH),
+                AttributesDescriptor("Byte/short data width", DATA_WIDTH_BS),
+                AttributesDescriptor("Word data width", DATA_WIDTH_W),
+                AttributesDescriptor("Long data width", DATA_WIDTH_L),
                 AttributesDescriptor("Data preprocessor directives", DATA_PREPROCESSOR),
                 AttributesDescriptor("Other preprocessor directives", OTHER_PREPROCESSOR),
                 AttributesDescriptor("Strings", STRING),

@@ -5,7 +5,7 @@ Assembly File: a.asm
       M68kAsmOpImpl(ASM_OP)
         PsiElement(M68kTokenType.MNEMONIC)('movem')
         M68kOperandSizeImpl(OPERAND_SIZE)
-          PsiElement(M68kTokenType.OPSIZE_WL)('.l')
+          PsiElement(M68kTokenType.OPSIZE_L)('.l')
       PsiWhiteSpace(' ')
       M68kRegisterListAddressingModeImpl(REGISTER_LIST_ADDRESSING_MODE)
         M68kDataRegisterImpl(DATA_REGISTER)

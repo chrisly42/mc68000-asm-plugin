@@ -2,5 +2,5 @@ Assembly File: a.asm
   PsiWhiteSpace(' ')
   M68kStatementImpl(STATEMENT)
     M68kMacroCallImpl(MACRO_CALL)
-      PsiElement(M68kTokenType.MACRO_INVOKATION)('BLTHOGON')
+      PsiElement(M68kTokenType.MACRO_INVOKATION)('BLT_HOG_ON')
   PsiElement(M68kTokenType.EOL)('\n')

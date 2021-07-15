@@ -5,7 +5,7 @@ Assembly File: a.asm
       M68kAsmOpImpl(ASM_OP)
         PsiElement(M68kTokenType.MNEMONIC)('move')
         M68kOperandSizeImpl(OPERAND_SIZE)
-          PsiElement(M68kTokenType.OPSIZE_WL)('.l')
+          PsiElement(M68kTokenType.OPSIZE_L)('.l')
       PsiWhiteSpace(' ')
       M68kProgramCounterIndirectWithDisplacementNewAddressingModeImpl(PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT_NEW_ADDRESSING_MODE)
         PsiElement(M68kTokenType.ROUND_L)('(')

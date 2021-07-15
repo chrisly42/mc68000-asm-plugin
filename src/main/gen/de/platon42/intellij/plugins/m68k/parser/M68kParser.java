@@ -285,14 +285,15 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // OPSIZE_WL
+    // OPSIZE_W|OPSIZE_L
     public static boolean AddressSize(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "AddressSize")) return false;
-        if (!nextTokenIs(b, OPSIZE_WL)) return false;
+        if (!nextTokenIs(b, "<address size>", OPSIZE_L, OPSIZE_W)) return false;
         boolean r;
-        Marker m = enter_section_(b);
-        r = consumeToken(b, OPSIZE_WL);
-        exit_section_(b, m, ADDRESS_SIZE, r);
+        Marker m = enter_section_(b, l, _NONE_, ADDRESS_SIZE, "<address size>");
+        r = consumeToken(b, OPSIZE_W);
+        if (!r) r = consumeToken(b, OPSIZE_L);
+        exit_section_(b, l, m, r, false, null);
         return r;
     }
 
@@ -490,14 +491,15 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // OPSIZE_WL
+    // OPSIZE_W|OPSIZE_L
     public static boolean DataWidth(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "DataWidth")) return false;
-        if (!nextTokenIs(b, OPSIZE_WL)) return false;
+        if (!nextTokenIs(b, "<data width>", OPSIZE_L, OPSIZE_W)) return false;
         boolean r;
-        Marker m = enter_section_(b);
-        r = consumeToken(b, OPSIZE_WL);
-        exit_section_(b, m, DATA_WIDTH, r);
+        Marker m = enter_section_(b, l, _NONE_, DATA_WIDTH, "<data width>");
+        r = consumeToken(b, OPSIZE_W);
+        if (!r) r = consumeToken(b, OPSIZE_L);
+        exit_section_(b, l, m, r, false, null);
         return r;
     }
 
@@ -631,14 +633,14 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // OPSIZE_BS|OPSIZE_WL
+    // OPSIZE_BS|OPSIZE_W|OPSIZE_L
     public static boolean OperandSize(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "OperandSize")) return false;
-        if (!nextTokenIs(b, "<operand size>", OPSIZE_BS, OPSIZE_WL)) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NONE_, OPERAND_SIZE, "<operand size>");
         r = consumeToken(b, OPSIZE_BS);
-        if (!r) r = consumeToken(b, OPSIZE_WL);
+        if (!r) r = consumeToken(b, OPSIZE_W);
+        if (!r) r = consumeToken(b, OPSIZE_L);
         exit_section_(b, l, m, r, false, null);
         return r;
     }

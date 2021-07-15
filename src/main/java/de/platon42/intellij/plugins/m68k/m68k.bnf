@@ -138,9 +138,9 @@ LocalLabel ::= LOCAL_LABEL_DEF {extends=Label}
 GlobalLabel ::= GLOBAL_LABEL_DEF {extends=Label}
 Label ::= LocalLabel | GlobalLabel
 
-OperandSize ::= (OPSIZE_BS|OPSIZE_WL)
-AddressSize ::= OPSIZE_WL
-DataWidth ::= OPSIZE_WL
+OperandSize ::= (OPSIZE_BS|OPSIZE_W|OPSIZE_L)
+AddressSize ::= (OPSIZE_W|OPSIZE_L)
+DataWidth ::= (OPSIZE_W|OPSIZE_L)
 
 AsmOp ::= MNEMONIC OperandSize?
 

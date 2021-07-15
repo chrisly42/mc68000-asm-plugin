@@ -10,7 +10,7 @@ internal class MacroCallTest : AbstractParsingTest() {
 
     @Test
     internal fun standard_macrocall_without_parameters(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        testGoodSyntax(testCase, " BLTHOGON\n")
+        testGoodSyntax(testCase, " BLT_HOG_ON\n")
     }
 
     @Test

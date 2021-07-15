@@ -34,10 +34,12 @@ LOCAL_LABEL_WC=(\.([:letter:]|_)(([:letter:]|[:digit:])|_)*:)|(([:letter:]|_)(([
 GLOBAL_LABEL=(([:letter:]|_)(([:letter:]|[:digit:])|_)*:?:?)
 GLOBAL_LABEL_WC=(([:letter:]|_)(([:letter:]|[:digit:])|_)*::?)
 //MNEMONIC=(([:letter:])+)
-SYMBOL=(([:letter:]|_|\.)(([:letter:]|[:digit:])|[_\$])*)
+SYMBOL=(([:letter:]|_|\.)(([:letter:]|[:digit:]|[_\$]))*)
+MACRONAME=(([:letter:]|_)(([:letter:]|[:digit:]|_))*)
 DIRECTIVE_KEYWORD=(([:letter:])(([:letter:]))*)(\..)?
 OPSIZE_BS=(\.[bs])
-OPSIZE_WL=(\.[wl])
+OPSIZE_W=(\.w)
+OPSIZE_L=(\.l)
 BINARY=(%[01]+)
 HEXADECIMAL=(\$[0-9a-f]+)
 OCTAL=(@[0-7]+)
@@ -73,7 +75,7 @@ HASH_COMMENT=([#;*].*+)
                         yybegin(MACROCALL); return MACRO_INVOKATION;
                       }
 //  {MNEMONIC}          { if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; } else { yybegin(INSTRPART); return SYMBOL; } }
-  {SYMBOL}            { yybegin(MACROCALL); return SYMBOL; }
+  {MACRONAME}         { yybegin(MACROCALL); return MACRO_INVOKATION; }
   {HASH_COMMENT}      { yybegin(YYINITIAL); return COMMENT; }
 }
 
@@ -89,7 +91,7 @@ HASH_COMMENT=([#;*].*+)
                         yybegin(MACROCALL); return MACRO_INVOKATION;
                       }
 //  {MNEMONIC}          { if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; } else { return SYMBOL; } }
-  {SYMBOL}            { yybegin(MACROCALL); return MACRO_INVOKATION; }
+  {MACRONAME}         { yybegin(MACROCALL); return MACRO_INVOKATION; }
 
   {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
 }
@@ -99,7 +101,8 @@ HASH_COMMENT=([#;*].*+)
   {EOL}               { yybegin(YYINITIAL); return EOL; }
 
   {OPSIZE_BS}         { return OPSIZE_BS; }
-  {OPSIZE_WL}         { return OPSIZE_WL; }
+  {OPSIZE_W}          { return OPSIZE_W; }
+  {OPSIZE_L}          { return OPSIZE_L; }
 
   {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
 }
@@ -184,7 +187,8 @@ HASH_COMMENT=([#;*].*+)
   {STRINGLIT}         { return STRINGLIT; }
 
   {OPSIZE_BS}         { return OPSIZE_BS; }
-  {OPSIZE_WL}         { return OPSIZE_WL; }
+  {OPSIZE_W}          { return OPSIZE_W; }
+  {OPSIZE_L}          { return OPSIZE_L; }
 
   {AREG}              { return AREG; }
   {DREG}              { return DREG; }

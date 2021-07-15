@@ -5,7 +5,7 @@ Assembly File: a.asm
       M68kAsmOpImpl(ASM_OP)
         PsiElement(M68kTokenType.MNEMONIC)('moveq')
         M68kOperandSizeImpl(OPERAND_SIZE)
-          PsiElement(M68kTokenType.OPSIZE_WL)('.l')
+          PsiElement(M68kTokenType.OPSIZE_L)('.l')
       PsiWhiteSpace(' ')
       M68kImmediateDataImpl(IMMEDIATE_DATA)
         PsiElement(M68kTokenType.HASH)('#')

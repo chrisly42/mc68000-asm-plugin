@@ -85,7 +85,8 @@ public interface M68kTypes {
     IElementType MNEMONIC = new M68kTokenType("MNEMONIC");
     IElementType OCTAL = new M68kTokenType("OCTAL");
     IElementType OPSIZE_BS = new M68kTokenType("OPSIZE_BS");
-    IElementType OPSIZE_WL = new M68kTokenType("OPSIZE_WL");
+    IElementType OPSIZE_L = new M68kTokenType("OPSIZE_L");
+    IElementType OPSIZE_W = new M68kTokenType("OPSIZE_W");
     IElementType OP_AR_DIV = new M68kTokenType("OP_AR_DIV");
     IElementType OP_AR_MOD = new M68kTokenType("OP_AR_MOD");
     IElementType OP_AR_MUL = new M68kTokenType("OP_AR_MUL");
