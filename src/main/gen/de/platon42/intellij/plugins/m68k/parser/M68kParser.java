@@ -273,44 +273,44 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // AbsoluteAddressAddressingMode
-    //                 | SpecialRegisterDirectAddressingMode
-    //                 | DataRegisterDirectAddressingMode
-    //                 | AddressRegisterDirectAddressingMode
+    // ImmediateData
+    //                 | AddressRegisterIndirectPreDecAddressingMode
+    //                 | AddressRegisterIndirectPostIncAddressingMode
     //                 | AddressRegisterIndirectAddressingMode
-    //                 | AddressRegisterIndirectWithDisplacementOldAddressingMode
-    //                 | ProgramCounterIndirectWithDisplacementOldAddressingMode
-    //                 | AddressRegisterIndirectWithIndexOldAddressingMode
-    //                 | ProgramCounterIndirectWithIndexOldAddressingMode
     //                 | AddressRegisterIndirectWithDisplacementNewAddressingMode
     //                 | ProgramCounterIndirectWithDisplacementNewAddressingMode
     //                 | AddressRegisterIndirectWithIndexNewAddressingMode
     //                 | ProgramCounterIndirectWithIndexNewAddressingMode
-    //                 | AddressRegisterIndirectPreDecAddressingMode
-    //                 | AddressRegisterIndirectPostIncAddressingMode
+    //                 | AddressRegisterIndirectWithDisplacementOldAddressingMode
+    //                 | ProgramCounterIndirectWithDisplacementOldAddressingMode
+    //                 | AddressRegisterIndirectWithIndexOldAddressingMode
+    //                 | ProgramCounterIndirectWithIndexOldAddressingMode
+    //                 | SpecialRegisterDirectAddressingMode
+    //                 | DataRegisterDirectAddressingMode
+    //                 | AddressRegisterDirectAddressingMode
     //                 | RegisterListAddressingMode
-    //                 | ImmediateData
+    //                 | AbsoluteAddressAddressingMode
     public static boolean AddressingMode(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "AddressingMode")) return false;
         boolean r;
         Marker m = enter_section_(b, l, _COLLAPSE_, ADDRESSING_MODE, "<AddressingMode>");
-        r = AbsoluteAddressAddressingMode(b, l + 1);
-        if (!r) r = SpecialRegisterDirectAddressingMode(b, l + 1);
-        if (!r) r = DataRegisterDirectAddressingMode(b, l + 1);
-        if (!r) r = AddressRegisterDirectAddressingMode(b, l + 1);
+        r = ImmediateData(b, l + 1);
+        if (!r) r = AddressRegisterIndirectPreDecAddressingMode(b, l + 1);
+        if (!r) r = AddressRegisterIndirectPostIncAddressingMode(b, l + 1);
         if (!r) r = AddressRegisterIndirectAddressingMode(b, l + 1);
-        if (!r) r = AddressRegisterIndirectWithDisplacementOldAddressingMode(b, l + 1);
-        if (!r) r = ProgramCounterIndirectWithDisplacementOldAddressingMode(b, l + 1);
-        if (!r) r = AddressRegisterIndirectWithIndexOldAddressingMode(b, l + 1);
-        if (!r) r = ProgramCounterIndirectWithIndexOldAddressingMode(b, l + 1);
         if (!r) r = AddressRegisterIndirectWithDisplacementNewAddressingMode(b, l + 1);
         if (!r) r = ProgramCounterIndirectWithDisplacementNewAddressingMode(b, l + 1);
         if (!r) r = AddressRegisterIndirectWithIndexNewAddressingMode(b, l + 1);
         if (!r) r = ProgramCounterIndirectWithIndexNewAddressingMode(b, l + 1);
-        if (!r) r = AddressRegisterIndirectPreDecAddressingMode(b, l + 1);
-        if (!r) r = AddressRegisterIndirectPostIncAddressingMode(b, l + 1);
+        if (!r) r = AddressRegisterIndirectWithDisplacementOldAddressingMode(b, l + 1);
+        if (!r) r = ProgramCounterIndirectWithDisplacementOldAddressingMode(b, l + 1);
+        if (!r) r = AddressRegisterIndirectWithIndexOldAddressingMode(b, l + 1);
+        if (!r) r = ProgramCounterIndirectWithIndexOldAddressingMode(b, l + 1);
+        if (!r) r = SpecialRegisterDirectAddressingMode(b, l + 1);
+        if (!r) r = DataRegisterDirectAddressingMode(b, l + 1);
+        if (!r) r = AddressRegisterDirectAddressingMode(b, l + 1);
         if (!r) r = RegisterListAddressingMode(b, l + 1);
-        if (!r) r = ImmediateData(b, l + 1);
+        if (!r) r = AbsoluteAddressAddressingMode(b, l + 1);
         exit_section_(b, l, m, r, false, null);
         return r;
     }
@@ -356,18 +356,18 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // FirstAsmOperand (SEPARATOR NextAsmOperand)*
+    // AddressingMode (SEPARATOR AddressingMode)*
     public static boolean AsmOperands(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "AsmOperands")) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NONE_, ASM_OPERANDS, "<asm operands>");
-        r = FirstAsmOperand(b, l + 1);
+        r = AddressingMode(b, l + 1);
         r = r && AsmOperands_1(b, l + 1);
         exit_section_(b, l, m, r, false, null);
         return r;
     }
 
-    // (SEPARATOR NextAsmOperand)*
+    // (SEPARATOR AddressingMode)*
     private static boolean AsmOperands_1(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "AsmOperands_1")) return false;
         while (true) {
@@ -378,13 +378,13 @@ public class M68kParser implements PsiParser, LightPsiParser {
         return true;
     }
 
-    // SEPARATOR NextAsmOperand
+    // SEPARATOR AddressingMode
     private static boolean AsmOperands_1_0(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "AsmOperands_1_0")) return false;
         boolean r;
         Marker m = enter_section_(b);
         r = consumeToken(b, SEPARATOR);
-        r = r && NextAsmOperand(b, l + 1);
+        r = r && AddressingMode(b, l + 1);
         exit_section_(b, m, null, r);
         return r;
     }
@@ -482,12 +482,6 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // AddressingMode
-    static boolean FirstAsmOperand(PsiBuilder b, int l) {
-        return AddressingMode(b, l + 1);
-    }
-
-    /* ********************************************************** */
     // GLOBAL_LABEL_DEF
     public static boolean GlobalLabel(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "GlobalLabel")) return false;
@@ -543,12 +537,12 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // LabelOnly|LabelWithInstruction|InstructionOnly
+    // LabelWithInstruction | LabelOnly | InstructionOnly
     static boolean LabelInsts(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "LabelInsts")) return false;
         boolean r;
-        r = LabelOnly(b, l + 1);
-        if (!r) r = LabelWithInstruction(b, l + 1);
+        r = LabelWithInstruction(b, l + 1);
+        if (!r) r = LabelOnly(b, l + 1);
         if (!r) r = InstructionOnly(b, l + 1);
         return r;
     }
@@ -614,12 +608,6 @@ public class M68kParser implements PsiParser, LightPsiParser {
         if (!recursion_guard_(b, l, "MacroCall_1")) return false;
         PreprocessorOperands(b, l + 1);
         return true;
-    }
-
-    /* ********************************************************** */
-    // AddressingMode
-    static boolean NextAsmOperand(PsiBuilder b, int l) {
-        return AddressingMode(b, l + 1);
     }
 
     /* ********************************************************** */

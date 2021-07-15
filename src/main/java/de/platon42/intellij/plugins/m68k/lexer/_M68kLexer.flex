@@ -38,7 +38,7 @@ LOCAL_LABEL_WC=(\.([:letter:]|_)(([:letter:]|[:digit:])|_)*:)|(([:letter:]|_)(([
 GLOBAL_LABEL=(([:letter:]|_)(([:letter:]|[:digit:])|_)*:?:?)
 GLOBAL_LABEL_WC=(([:letter:]|_)(([:letter:]|[:digit:])|_)*::?)
 MNEMONIC=(([:letter:])+)
-SYMBOL=(([:letter:]|_|.)(([:letter:]|[:digit:])|_|\$)*)
+SYMBOL=(([:letter:]|_|\.)(([:letter:]|[:digit:])|[_\$])*)
 OPSIZE_BS=(\.[bs])
 OPSIZE_WL=(\.[wl])
 BINARY=(%[01]+)
@@ -49,7 +49,7 @@ STRINGLIT=(`([^`\\]|\\.)*`|'([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")|<([^`\\]|\\.)*>
 COMMENT=([;].*+)
 HASH_COMMENT=([#;*].*+)
 
-%state NOSOL,INSTRPART,ASMINSTR,ASMOPS,ASSIGNMENT
+%state NOSOL,INSTRPART,ASMINSTR,ASMOPS,ASSIGNMENT,WAITEOL
 
 %%
 <YYINITIAL> {
@@ -67,8 +67,8 @@ HASH_COMMENT=([#;*].*+)
   {EOL}               { yybegin(YYINITIAL); return WHITE_SPACE; }
   {LOCAL_LABEL_WC}    { yybegin(INSTRPART); return LOCAL_LABEL_DEF; }
   {GLOBAL_LABEL_WC}   { yybegin(INSTRPART); return GLOBAL_LABEL_DEF; }
-  {MNEMONIC}          { yybegin(ASMINSTR); return isAsmMnemonic(yytext()) ? MNEMONIC : SYMBOL; }
-  {SYMBOL}            { return SYMBOL; }
+  {MNEMONIC}          { if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; } else { yybegin(INSTRPART); return SYMBOL; } }
+  {SYMBOL}            { yybegin(INSTRPART); return SYMBOL; }
 
   {HASH_COMMENT}      { yybegin(YYINITIAL); return COMMENT; }
 }
@@ -93,10 +93,10 @@ HASH_COMMENT=([#;*].*+)
 
   {IF_TAG}            { return IF_TAG; }
 
-  {MNEMONIC}          { return isAsmMnemonic(yytext()) ? MNEMONIC : SYMBOL; }
+  {MNEMONIC}          { if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; } else { return SYMBOL; } }
   {SYMBOL}            { return SYMBOL; }
 
-  {COMMENT}           { yybegin(YYINITIAL); return COMMENT; }
+  {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
 }
 
 <ASMINSTR> {
@@ -106,7 +106,7 @@ HASH_COMMENT=([#;*].*+)
   {OPSIZE_BS}         { return OPSIZE_BS; }
   {OPSIZE_WL}         { return OPSIZE_WL; }
 
-  {COMMENT}           { yybegin(YYINITIAL); return COMMENT; }
+  {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
 }
 
 <ASSIGNMENT> {
@@ -155,7 +155,7 @@ HASH_COMMENT=([#;*].*+)
 
   {SYMBOL}            { return SYMBOL; }
 
-  {COMMENT}           { return COMMENT; }
+  {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
 }
 
 <ASMOPS> {
@@ -170,6 +170,14 @@ HASH_COMMENT=([#;*].*+)
 
   {OPSIZE_BS}         { return OPSIZE_BS; }
   {OPSIZE_WL}         { return OPSIZE_WL; }
+
+  {AREG}              { return AREG; }
+  {DREG}              { return DREG; }
+  "pc"                { return PC; }
+  "ccr"               { return REG_CCR; }
+  "sr"                { return REG_SR; }
+  "usp"               { return REG_USP; }
+  "vbr"               { return REG_VBR; }
 
   "<<"                { return OP_AR_SHIFT_L; }
   ">>"                { return OP_AR_SHIFT_R; }
@@ -204,18 +212,15 @@ HASH_COMMENT=([#;*].*+)
   "/"                 { return OP_AR_DIV; }
   "%"                 { return OP_AR_MOD; }
 
-  {AREG}              { return AREG; }
-  {DREG}              { return DREG; }
-  "pc"                { return PC; }
-  "ccr"               { return REG_CCR; }
-  "sr"                { return REG_SR; }
-  "usp"               { return REG_USP; }
-  "vbr"               { return REG_VBR; }
-
   {SYMBOL}            { return SYMBOL; }
 
-  {COMMENT}           { return COMMENT; }
+  {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
 
+}
+
+<WAITEOL>
+{
+  {EOL}               { yybegin(YYINITIAL); return EOL; }
 }
 
 [^] { return BAD_CHARACTER; }

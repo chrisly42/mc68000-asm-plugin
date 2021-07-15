@@ -1,0 +1,6 @@
+Assembly File: a.asm
+  PsiWhiteSpace('   ')
+  M68kStatementImpl(STATEMENT)
+    M68kGlobalLabelImpl(GLOBAL_LABEL)
+      PsiElement(M68kTokenType.GLOBAL_LABEL_DEF)('External_Label::')
+  PsiElement(M68kTokenType.EOL)('\n')

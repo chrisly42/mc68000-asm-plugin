@@ -128,7 +128,7 @@ private statement_recover ::= !(EOL)
 
 Assignment ::= SYMBOLDEF (OP_ASSIGN|EQU) expr
 
-private LabelInsts ::= LabelOnly|LabelWithInstruction|InstructionOnly
+private LabelInsts ::= LabelWithInstruction | LabelOnly | InstructionOnly
 
 private LabelOnly ::= Label
 private LabelWithInstruction ::= Label Instruction
@@ -166,11 +166,7 @@ AsmInstruction ::= AsmOp AsmOperands?
 private Instruction ::= AsmInstruction | MacroCall
 //external Instruction ::= parseMacroCallOrAsmInstruction
 
-AsmOperands ::= FirstAsmOperand (SEPARATOR NextAsmOperand)*
-
-private FirstAsmOperand ::= AddressingMode
-
-private NextAsmOperand ::= AddressingMode
+AsmOperands ::= AddressingMode (SEPARATOR AddressingMode)*
 
 private PreprocessorOperands ::= PreprocessorOperand (SEPARATOR PreprocessorOperand)*
 
@@ -184,23 +180,23 @@ Register ::= DataRegister | AddressRegister | SpecialRegister
 
 private DataOrAddressRegister ::= DataRegister | AddressRegister
 
-AddressingMode ::= AbsoluteAddressAddressingMode
-                | SpecialRegisterDirectAddressingMode
-                | DataRegisterDirectAddressingMode
-                | AddressRegisterDirectAddressingMode
+AddressingMode ::= ImmediateData
+                | AddressRegisterIndirectPreDecAddressingMode
+                | AddressRegisterIndirectPostIncAddressingMode
                 | AddressRegisterIndirectAddressingMode
-                | AddressRegisterIndirectWithDisplacementOldAddressingMode
-                | ProgramCounterIndirectWithDisplacementOldAddressingMode
-                | AddressRegisterIndirectWithIndexOldAddressingMode
-                | ProgramCounterIndirectWithIndexOldAddressingMode
                 | AddressRegisterIndirectWithDisplacementNewAddressingMode
                 | ProgramCounterIndirectWithDisplacementNewAddressingMode
                 | AddressRegisterIndirectWithIndexNewAddressingMode
                 | ProgramCounterIndirectWithIndexNewAddressingMode
-                | AddressRegisterIndirectPreDecAddressingMode
-                | AddressRegisterIndirectPostIncAddressingMode
+                | AddressRegisterIndirectWithDisplacementOldAddressingMode
+                | ProgramCounterIndirectWithDisplacementOldAddressingMode
+                | AddressRegisterIndirectWithIndexOldAddressingMode
+                | ProgramCounterIndirectWithIndexOldAddressingMode
+                | SpecialRegisterDirectAddressingMode
+                | DataRegisterDirectAddressingMode
+                | AddressRegisterDirectAddressingMode
                 | RegisterListAddressingMode
-                | ImmediateData
+                | AbsoluteAddressAddressingMode
 
 SpecialRegisterDirectAddressingMode ::= SpecialRegister
 DataRegisterDirectAddressingMode ::= DataRegister !(OP_MINUS|OP_AR_DIV)

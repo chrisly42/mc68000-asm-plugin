@@ -1,0 +1,4 @@
+Assembly File: a.asm
+  PsiWhiteSpace('    ')
+  PsiComment(M68kTokenType.COMMENT)('#comment  ')
+  PsiWhiteSpace('\n')

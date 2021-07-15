@@ -1,0 +1,5 @@
+Assembly File: a.asm
+  M68kStatementImpl(STATEMENT)
+    M68kGlobalLabelImpl(GLOBAL_LABEL)
+      PsiElement(M68kTokenType.GLOBAL_LABEL_DEF)('Global_Label:')
+  PsiElement(M68kTokenType.EOL)('\n')
