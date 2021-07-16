@@ -33,6 +33,8 @@ object AssemblerDirectives {
 
             "extern", "nref", "xdef", "xref", "globl", "public", "weak",
 
+            "reg", "equr", "equrl",
+
             "incdir", "include", "incbin", "output",
 
             "list", "nlist", "nolist", "llen", "nopage", "page", "spc",

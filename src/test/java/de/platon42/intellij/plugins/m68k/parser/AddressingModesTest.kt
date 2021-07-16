@@ -98,4 +98,9 @@ internal class AddressingModesTest : AbstractParsingTest() {
         testGoodSyntax(testCase, " move.l usp,a0\n"
                 + " move.l a5,usp\n")
     }
+
+    @Test
+    internal fun complex_math_expression_in_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l -(~(!!(+(1//~WIDTH^@123+3*4/2+(NARF%10|32!21))<<2)>>1)&$1f)(a0),(-(~(!!(+(1//~WIDTH^@123+3*4/2+(NARF%10|32!21))<<2)>>1)&\$1f),a0,d0.l)\n")
+    }
 }
