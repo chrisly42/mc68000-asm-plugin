@@ -45,8 +45,8 @@ BINARY=(%[01]+)
 HEXADECIMAL=(\$[0-9a-f]+)
 OCTAL=(@[0-7]+)
 DECIMAL=([0-9]+)
-STRINGLIT=(`([^`\\]|\\.)*`|'([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
-PLAINPARAM=(`([^`\\]|\\.)*`|'([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")|<([^>\\]|\\.)*>|([^,;\p{Blank}\r\n])+ // why does \R not work, I have no idea
+STRINGLIT=(`([^`\\\r\n]|\\.)*`|'([^'\\\r\n]|\\.)*'|\"([^\"\\\r\n]|\\.)*\")
+PLAINPARAM=(`([^`\\\r\n]|\\.)*`|'([^'\\\r\n]|\\.)*'|\"([^\"\\\r\n]|\\.)*\")|<([^>\\\r\n]|\\.)*>|([^,;\p{Blank}\r\n])+ // why does \R not work, I have no idea
 COMMENT=([;].*+)
 HASH_COMMENT=([#;*].*+)
 
