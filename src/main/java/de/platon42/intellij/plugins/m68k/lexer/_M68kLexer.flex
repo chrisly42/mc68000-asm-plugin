@@ -162,7 +162,7 @@ HASH_COMMENT=([#;*].*+)
   ">>"                { yybegin(EXPR); return OP_AR_SHIFT_R; }
   "&&"                { yybegin(EXPR); return OP_LOGICAL_AND; }
   "||"                { yybegin(EXPR); return OP_LOGICAL_OR; }
-  "=="                { yybegin(EXPR); return OP_CMP_EQ; }
+  "=="|"="            { yybegin(EXPR); return OP_CMP_EQ; }
   "<>"|"!="           { yybegin(EXPR); return OP_CMP_NOT_EQ; }
   ">="                { yybegin(EXPR); return OP_CMP_GT_EQ; }
   "<="                { yybegin(EXPR); return OP_CMP_LT_EQ; }
@@ -180,7 +180,6 @@ HASH_COMMENT=([#;*].*+)
   ")"                 { return ROUND_R; }
 //  "."                 { return DOT; }
 //  "$"                 { return DOLLAR; }
-//  "="                 { yybegin(EXPR); return OP_ASSIGN; }
   "~"                 { yybegin(EXPR); return OP_UNARY_COMPL; }
   "+"                 { yybegin(EXPR); return OP_PLUS; }
   "-"                 { yybegin(EXPR); return OP_MINUS; }
@@ -238,7 +237,7 @@ HASH_COMMENT=([#;*].*+)
   ">>"                { yybegin(ASMOPS); return OP_AR_SHIFT_R; }
   "&&"                { yybegin(ASMOPS); return OP_LOGICAL_AND; }
   "||"                { yybegin(ASMOPS); return OP_LOGICAL_OR; }
-  "=="                { yybegin(ASMOPS); return OP_CMP_EQ; }
+  "=="|"="            { yybegin(ASMOPS); return OP_CMP_EQ; }
   "<>"|"!="           { yybegin(ASMOPS); return OP_CMP_NOT_EQ; }
   ">="                { yybegin(ASMOPS); return OP_CMP_GT_EQ; }
   "<="                { yybegin(ASMOPS); return OP_CMP_LT_EQ; }
@@ -256,7 +255,6 @@ HASH_COMMENT=([#;*].*+)
   ")"                 { return ROUND_R; }
 //  "."                 { return DOT; }
 //  "$"                 { return DOLLAR; }
-//  "="                 { return OP_ASSIGN; }
   "~"                 { yybegin(ASMOPS); return OP_UNARY_COMPL; }
   "+"                 { yybegin(ASMOPS); return OP_PLUS; }
   "-"                 { yybegin(ASMOPS); return OP_MINUS; }

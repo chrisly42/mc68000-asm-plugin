@@ -194,20 +194,20 @@ public class _M68kLexer implements FlexLexer {
                     "\1\2\1\7\1\10\1\1\1\11\2\12\1\7\1\10" +
                     "\1\13\1\14\1\1\1\15\1\16\5\15\6\1\1\17" +
                     "\1\20\1\21\1\22\1\23\1\24\1\25\1\26\1\27" +
-                    "\1\30\2\15\1\31\1\1\1\31\1\32\1\33\1\34" +
-                    "\1\35\1\36\1\37\1\40\1\41\1\42\1\43\1\44" +
-                    "\1\45\1\46\1\41\1\47\2\1\1\50\1\51\1\52" +
-                    "\6\1\1\53\1\54\1\1\1\55\1\56\1\57\1\60" +
-                    "\1\61\1\62\1\63\1\64\1\65\1\66\1\67\1\70" +
-                    "\1\63\1\71\1\72\1\12\4\72\1\0\1\73\1\4" +
-                    "\2\74\3\0\1\75\1\76\1\77\1\100\1\101\1\102" +
-                    "\1\103\1\15\1\104\1\105\1\106\1\0\1\107\5\0" +
-                    "\2\15\1\110\1\75\1\76\1\77\1\111\1\112\1\113" +
-                    "\1\114\1\115\1\116\1\117\2\0\1\120\1\121\1\122" +
-                    "\1\0\1\123\5\0\1\124\1\125\1\126\1\127\1\130" +
-                    "\1\131\1\132\1\133\1\0\1\72\1\0\1\72\1\0" +
-                    "\1\72\1\0\1\72\2\0\1\4\1\74\1\7\1\134" +
-                    "\1\135\1\136\1\137\1\72\7\0";
+                    "\1\30\2\15\1\31\1\32\1\31\1\33\1\34\1\35" +
+                    "\1\36\1\37\1\40\1\41\1\42\1\43\1\44\1\45" +
+                    "\1\46\1\47\1\42\1\50\2\1\1\51\1\52\1\53" +
+                    "\6\1\1\54\1\55\1\56\1\57\1\60\1\61\1\62" +
+                    "\1\63\1\64\1\65\1\66\1\67\1\70\1\71\1\72" +
+                    "\1\65\1\73\1\74\1\12\4\74\1\0\1\75\1\4" +
+                    "\2\76\3\0\1\77\1\100\1\101\1\102\1\103\1\104" +
+                    "\1\105\1\15\1\106\1\107\1\110\1\0\1\111\5\0" +
+                    "\2\15\1\32\1\77\1\100\1\101\1\112\1\113\1\114" +
+                    "\1\115\1\116\1\117\1\120\2\0\1\121\1\122\1\123" +
+                    "\1\0\1\124\5\0\1\56\1\125\1\126\1\127\1\130" +
+                    "\1\131\1\132\1\133\1\0\1\74\1\0\1\74\1\0" +
+                    "\1\74\1\0\1\74\2\0\1\4\1\76\1\7\1\134" +
+                    "\1\135\1\136\1\137\1\74\7\0";
 
     private static int[] zzUnpackAction() {
         int[] result = new int[193];
@@ -936,409 +936,409 @@ public class _M68kLexer implements FlexLexer {
                         break;
                     case 26: {
                         yybegin(ASMOPS);
-                        return OP_AR_MOD;
+                        return OP_CMP_EQ;
                     }
                     // fall through
                     case 121:
                         break;
                     case 27: {
                         yybegin(ASMOPS);
-                        return OP_CMP_LT;
+                        return OP_AR_MOD;
                     }
                     // fall through
                     case 122:
                         break;
                     case 28: {
                         yybegin(ASMOPS);
-                        return OP_CMP_GT;
+                        return OP_CMP_LT;
                     }
                     // fall through
                     case 123:
                         break;
                     case 29: {
                         yybegin(ASMOPS);
-                        return SEPARATOR;
+                        return OP_CMP_GT;
                     }
                     // fall through
                     case 124:
                         break;
                     case 30: {
                         yybegin(ASMOPS);
-                        return OP_BITWISE_XOR;
+                        return SEPARATOR;
                     }
                     // fall through
                     case 125:
                         break;
                     case 31: {
                         yybegin(ASMOPS);
-                        return ROUND_L;
+                        return OP_BITWISE_XOR;
                     }
                     // fall through
                     case 126:
                         break;
                     case 32: {
-                        return ROUND_R;
+                        yybegin(ASMOPS);
+                        return ROUND_L;
                     }
                     // fall through
                     case 127:
                         break;
                     case 33: {
-                        yybegin(ASMOPS);
-                        return OP_BITWISE_OR;
+                        return ROUND_R;
                     }
                     // fall through
                     case 128:
                         break;
                     case 34: {
                         yybegin(ASMOPS);
-                        return OP_UNARY_COMPL;
+                        return OP_BITWISE_OR;
                     }
                     // fall through
                     case 129:
                         break;
                     case 35: {
                         yybegin(ASMOPS);
-                        return OP_PLUS;
+                        return OP_UNARY_COMPL;
                     }
                     // fall through
                     case 130:
                         break;
                     case 36: {
                         yybegin(ASMOPS);
-                        return OP_MINUS;
+                        return OP_PLUS;
                     }
                     // fall through
                     case 131:
                         break;
                     case 37: {
                         yybegin(ASMOPS);
-                        return OP_AR_MUL;
+                        return OP_MINUS;
                     }
                     // fall through
                     case 132:
                         break;
                     case 38: {
                         yybegin(ASMOPS);
-                        return OP_BITWISE_AND;
+                        return OP_AR_MUL;
                     }
                     // fall through
                     case 133:
                         break;
                     case 39: {
                         yybegin(ASMOPS);
-                        return OP_AR_DIV;
+                        return OP_BITWISE_AND;
                     }
                     // fall through
                     case 134:
                         break;
                     case 40: {
-                        yybegin(EXPR);
-                        return OP_ASSIGN;
+                        yybegin(ASMOPS);
+                        return OP_AR_DIV;
                     }
                     // fall through
                     case 135:
                         break;
                     case 41: {
-                        yybegin(EXPR_OP);
-                        return SYMBOL;
+                        yybegin(EXPR);
+                        return OP_ASSIGN;
                     }
                     // fall through
                     case 136:
                         break;
                     case 42: {
                         yybegin(EXPR_OP);
-                        return DECIMAL;
+                        return SYMBOL;
                     }
                     // fall through
                     case 137:
                         break;
                     case 43: {
                         yybegin(EXPR_OP);
-                        return ROUND_R;
+                        return DECIMAL;
                     }
                     // fall through
                     case 138:
                         break;
                     case 44: {
                         yybegin(EXPR_OP);
-                        return CURRENT_PC_SYMBOL;
+                        return ROUND_R;
                     }
                     // fall through
                     case 139:
                         break;
                     case 45: {
-                        yybegin(EXPR);
-                        return OP_AR_MOD;
+                        yybegin(EXPR_OP);
+                        return CURRENT_PC_SYMBOL;
                     }
                     // fall through
                     case 140:
                         break;
                     case 46: {
                         yybegin(EXPR);
-                        return OP_CMP_LT;
+                        return OP_CMP_EQ;
                     }
                     // fall through
                     case 141:
                         break;
                     case 47: {
                         yybegin(EXPR);
-                        return OP_CMP_GT;
+                        return OP_AR_MOD;
                     }
                     // fall through
                     case 142:
                         break;
                     case 48: {
                         yybegin(EXPR);
-                        return SEPARATOR;
+                        return OP_CMP_LT;
                     }
                     // fall through
                     case 143:
                         break;
                     case 49: {
                         yybegin(EXPR);
-                        return OP_BITWISE_XOR;
+                        return OP_CMP_GT;
                     }
                     // fall through
                     case 144:
                         break;
                     case 50: {
                         yybegin(EXPR);
-                        return ROUND_L;
+                        return SEPARATOR;
                     }
                     // fall through
                     case 145:
                         break;
                     case 51: {
                         yybegin(EXPR);
-                        return OP_BITWISE_OR;
+                        return OP_BITWISE_XOR;
                     }
                     // fall through
                     case 146:
                         break;
                     case 52: {
                         yybegin(EXPR);
-                        return OP_UNARY_COMPL;
+                        return ROUND_L;
                     }
                     // fall through
                     case 147:
                         break;
                     case 53: {
                         yybegin(EXPR);
-                        return OP_PLUS;
+                        return OP_BITWISE_OR;
                     }
                     // fall through
                     case 148:
                         break;
                     case 54: {
                         yybegin(EXPR);
-                        return OP_MINUS;
+                        return OP_UNARY_COMPL;
                     }
                     // fall through
                     case 149:
                         break;
                     case 55: {
                         yybegin(EXPR);
-                        return OP_AR_MUL;
+                        return OP_PLUS;
                     }
                     // fall through
                     case 150:
                         break;
                     case 56: {
                         yybegin(EXPR);
-                        return OP_BITWISE_AND;
+                        return OP_MINUS;
                     }
                     // fall through
                     case 151:
                         break;
                     case 57: {
                         yybegin(EXPR);
-                        return OP_AR_DIV;
+                        return OP_AR_MUL;
                     }
                     // fall through
                     case 152:
                         break;
                     case 58: {
-                        return STRINGLIT;
+                        yybegin(EXPR);
+                        return OP_BITWISE_AND;
                     }
                     // fall through
                     case 153:
                         break;
                     case 59: {
-                        yybegin(ASSIGNMENT);
-                        yypushback(pushbackAssignment(yytext()));
-                        return SYMBOLDEF;
+                        yybegin(EXPR);
+                        return OP_AR_DIV;
                     }
                     // fall through
                     case 154:
                         break;
                     case 60: {
-                        yybegin(INSTRPART);
-                        return LOCAL_LABEL_DEF;
+                        return STRINGLIT;
                     }
                     // fall through
                     case 155:
                         break;
                     case 61: {
-                        return OPSIZE_BS;
+                        yybegin(ASSIGNMENT);
+                        yypushback(pushbackAssignment(yytext()));
+                        return SYMBOLDEF;
                     }
                     // fall through
                     case 156:
                         break;
                     case 62: {
-                        return OPSIZE_W;
+                        yybegin(INSTRPART);
+                        return LOCAL_LABEL_DEF;
                     }
                     // fall through
                     case 157:
                         break;
                     case 63: {
-                        return OPSIZE_L;
+                        return OPSIZE_BS;
                     }
                     // fall through
                     case 158:
                         break;
                     case 64: {
-                        yybegin(ASMOPS_OP);
-                        return AREG;
+                        return OPSIZE_W;
                     }
                     // fall through
                     case 159:
                         break;
                     case 65: {
-                        yybegin(ASMOPS_OP);
-                        return REG_SR;
+                        return OPSIZE_L;
                     }
                     // fall through
                     case 160:
                         break;
                     case 66: {
                         yybegin(ASMOPS_OP);
-                        return PC;
+                        return AREG;
                     }
                     // fall through
                     case 161:
                         break;
                     case 67: {
                         yybegin(ASMOPS_OP);
-                        return DREG;
+                        return REG_SR;
                     }
                     // fall through
                     case 162:
                         break;
                     case 68: {
                         yybegin(ASMOPS_OP);
-                        return HEXADECIMAL;
+                        return PC;
                     }
                     // fall through
                     case 163:
                         break;
                     case 69: {
                         yybegin(ASMOPS_OP);
-                        return BINARY;
+                        return DREG;
                     }
                     // fall through
                     case 164:
                         break;
                     case 70: {
                         yybegin(ASMOPS_OP);
-                        return OCTAL;
+                        return HEXADECIMAL;
                     }
                     // fall through
                     case 165:
                         break;
                     case 71: {
                         yybegin(ASMOPS_OP);
-                        return STRINGLIT;
+                        return BINARY;
                     }
                     // fall through
                     case 166:
                         break;
                     case 72: {
-                        yybegin(ASMOPS);
-                        return OP_CMP_EQ;
+                        yybegin(ASMOPS_OP);
+                        return OCTAL;
                     }
                     // fall through
                     case 167:
                         break;
                     case 73: {
-                        yybegin(ASMOPS);
-                        return OP_CMP_LT_EQ;
+                        yybegin(ASMOPS_OP);
+                        return STRINGLIT;
                     }
                     // fall through
                     case 168:
                         break;
                     case 74: {
                         yybegin(ASMOPS);
-                        return OP_AR_SHIFT_L;
+                        return OP_CMP_LT_EQ;
                     }
                     // fall through
                     case 169:
                         break;
                     case 75: {
                         yybegin(ASMOPS);
-                        return OP_CMP_NOT_EQ;
+                        return OP_AR_SHIFT_L;
                     }
                     // fall through
                     case 170:
                         break;
                     case 76: {
                         yybegin(ASMOPS);
-                        return OP_CMP_GT_EQ;
+                        return OP_CMP_NOT_EQ;
                     }
                     // fall through
                     case 171:
                         break;
                     case 77: {
                         yybegin(ASMOPS);
-                        return OP_AR_SHIFT_R;
+                        return OP_CMP_GT_EQ;
                     }
                     // fall through
                     case 172:
                         break;
                     case 78: {
                         yybegin(ASMOPS);
-                        return OP_LOGICAL_AND;
+                        return OP_AR_SHIFT_R;
                     }
                     // fall through
                     case 173:
                         break;
                     case 79: {
                         yybegin(ASMOPS);
-                        return OP_LOGICAL_OR;
+                        return OP_LOGICAL_AND;
                     }
                     // fall through
                     case 174:
                         break;
                     case 80: {
-                        yybegin(EXPR_OP);
-                        return HEXADECIMAL;
+                        yybegin(ASMOPS);
+                        return OP_LOGICAL_OR;
                     }
                     // fall through
                     case 175:
                         break;
                     case 81: {
                         yybegin(EXPR_OP);
-                        return BINARY;
+                        return HEXADECIMAL;
                     }
                     // fall through
                     case 176:
                         break;
                     case 82: {
                         yybegin(EXPR_OP);
-                        return OCTAL;
+                        return BINARY;
                     }
                     // fall through
                     case 177:
                         break;
                     case 83: {
                         yybegin(EXPR_OP);
-                        return STRINGLIT;
+                        return OCTAL;
                     }
                     // fall through
                     case 178:
                         break;
                     case 84: {
-                        yybegin(EXPR);
-                        return OP_CMP_EQ;
+                        yybegin(EXPR_OP);
+                        return STRINGLIT;
                     }
                     // fall through
                     case 179:

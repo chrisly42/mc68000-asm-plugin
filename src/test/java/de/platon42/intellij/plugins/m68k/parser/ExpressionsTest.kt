@@ -43,4 +43,9 @@ internal class ExpressionsTest : AbstractParsingTest() {
     internal fun current_pc_symbol_relative_expression(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
         testGoodSyntax(testCase, " dc.w *-.label\n")
     }
+
+    @Test
+    internal fun if_with_single_equals_comparison(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " IF DEBUG=1\n")
+    }
 }
