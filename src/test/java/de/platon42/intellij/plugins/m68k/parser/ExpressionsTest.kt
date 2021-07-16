@@ -1,0 +1,46 @@
+package de.platon42.intellij.plugins.m68k.parser
+
+import de.platon42.intellij.jupiter.MyTestCase
+import de.platon42.intellij.jupiter.ParsingTestExtension
+import de.platon42.intellij.jupiter.TestDataSubPath
+import org.junit.jupiter.api.Test
+
+@TestDataSubPath("expressions")
+internal class ExpressionsTest : AbstractParsingTest() {
+
+    @Test
+    internal fun pure_decimal_number_literal(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, "FOO = 10\n")
+    }
+
+    @Test
+    internal fun pure_hexadecimal_number_literal(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, "FOO = $1234\n")
+    }
+
+    @Test
+    internal fun pure_octal_number_literal(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, "FOO = @777\n")
+    }
+
+    @Test
+    internal fun pure_binary_number_literal(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, "FOO = %11001100\n")
+    }
+
+    @Test
+    internal fun pure_string_literal(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, "FOO = 'string'\n"
+                + "FOO=\"bar\"\n")
+    }
+
+    @Test
+    internal fun math_expression(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, "FOO = -(~(!!(+(1//~WIDTH^@123+3*4/2+(NARF%10|32!21))<<2)>>1)&$1f)\n")
+    }
+
+    @Test
+    internal fun current_pc_symbol_relative_expression(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " dc.w *-.label\n")
+    }
+}

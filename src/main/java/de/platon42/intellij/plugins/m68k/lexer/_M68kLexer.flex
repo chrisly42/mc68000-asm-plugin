@@ -49,7 +49,7 @@ PLAINPARAM=(`([^`\\]|\\.)*`|'([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")|<([^>\\]|\\.)*>|
 COMMENT=([;].*+)
 HASH_COMMENT=([#;*].*+)
 
-%state NOSOL,INSTRPART,ASMINSTR,ASMOPS,ASSIGNMENT,EXPR,MACROCALL,WAITEOL
+%state NOSOL,INSTRPART,ASMINSTR,ASMOPS,ASSIGNMENT,EXPR,EXPR_OP,MACROCALL,WAITEOL
 
 %%
 <YYINITIAL> {
@@ -133,45 +133,69 @@ HASH_COMMENT=([#;*].*+)
   {WHITE_SPACE}       { return WHITE_SPACE; } // FIXME space optionally introduces comment
   {EOL}               { yybegin(YYINITIAL); return EOL; }
 
-  {BINARY}            { return BINARY; }
-  {HEXADECIMAL}       { return HEXADECIMAL; }
-  {OCTAL}             { return OCTAL; }
-  {DECIMAL}           { return DECIMAL; }
-  {STRINGLIT}         { return STRINGLIT; }
+  {BINARY}            { yybegin(EXPR_OP); return BINARY; }
+  {HEXADECIMAL}       { yybegin(EXPR_OP); return HEXADECIMAL; }
+  {OCTAL}             { yybegin(EXPR_OP); return OCTAL; }
+  {DECIMAL}           { yybegin(EXPR_OP); return DECIMAL; }
+  {STRINGLIT}         { yybegin(EXPR_OP); return STRINGLIT; }
 
-  "<<"                { return OP_AR_SHIFT_L; }
-  ">>"                { return OP_AR_SHIFT_R; }
-  "&&"                { return OP_LOGICAL_AND; }
-  "||"                { return OP_LOGICAL_OR; }
-  "=="                { return OP_CMP_EQ; }
-  "<>"                { return OP_CMP_NOT_EQ; }
-  ">="                { return OP_CMP_GT_EQ; }
-  "<="                { return OP_CMP_LT_EQ; }
-  "!="                { return OP_CMP_NOT_EQ; }
-  "<"                 { return OP_CMP_LT; }
-  ">"                 { return OP_CMP_GT; }
-  "&"                 { return OP_BITWISE_AND; }
-  "|"                 { return OP_BITWISE_OR; }
   "^"                 { return OP_BITWISE_XOR; }
-//  ":"                 { return COLON; }
-//  ";"                 { return SEMICOLON; }
-//  "["                 { return SQUARE_L; }
-//  "]"                 { return SQUARE_R; }
   ","                 { return SEPARATOR; }
   "("                 { return ROUND_L; }
-  ")"                 { return ROUND_R; }
-//  "."                 { return DOT; }
-//  "$"                 { return DOLLAR; }
-  "="                 { return OP_ASSIGN; }
+  ")"                 { yybegin(EXPR_OP); return ROUND_R; }
   "!"                 { return OP_UNARY_NOT; }
   "~"                 { return OP_UNARY_COMPL; }
   "+"                 { return OP_PLUS; }
   "-"                 { return OP_MINUS; }
-  "*"                 { return OP_AR_MUL; }
-  "/"                 { return OP_AR_DIV; }
-  "%"                 { return OP_AR_MOD; }
+  "*"                 { yybegin(EXPR_OP); return CURRENT_PC_SYMBOL; }
 
-  {SYMBOL}            { return SYMBOL; }
+  {SYMBOL}            { yybegin(EXPR_OP); return SYMBOL; }
+
+  {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
+}
+
+<EXPR_OP> {
+  {WHITE_SPACE}       { return WHITE_SPACE; } // FIXME space optionally introduces comment
+  {EOL}               { yybegin(YYINITIAL); return EOL; }
+
+//  {BINARY}            { return BINARY; }
+//  {HEXADECIMAL}       { return HEXADECIMAL; }
+//  {OCTAL}             { return OCTAL; }
+//  {DECIMAL}           { return DECIMAL; }
+//  {STRINGLIT}         { return STRINGLIT; }
+
+  "<<"                { yybegin(EXPR); return OP_AR_SHIFT_L; }
+  ">>"                { yybegin(EXPR); return OP_AR_SHIFT_R; }
+  "&&"                { yybegin(EXPR); return OP_LOGICAL_AND; }
+  "||"                { yybegin(EXPR); return OP_LOGICAL_OR; }
+  "=="                { yybegin(EXPR); return OP_CMP_EQ; }
+  "<>"                { yybegin(EXPR); return OP_CMP_NOT_EQ; }
+  ">="                { yybegin(EXPR); return OP_CMP_GT_EQ; }
+  "<="                { yybegin(EXPR); return OP_CMP_LT_EQ; }
+  "!="                { yybegin(EXPR); return OP_CMP_NOT_EQ; }
+  "<"                 { yybegin(EXPR); return OP_CMP_LT; }
+  ">"                 { yybegin(EXPR); return OP_CMP_GT; }
+  "&"                 { yybegin(EXPR); return OP_BITWISE_AND; }
+  "|"|"!"             { yybegin(EXPR); return OP_BITWISE_OR; }
+  "^"                 { yybegin(EXPR); return OP_BITWISE_XOR; }
+//  ":"                 { return COLON; }
+//  ";"                 { return SEMICOLON; }
+//  "["                 { return SQUARE_L; }
+//  "]"                 { return SQUARE_R; }
+  ","                 { yybegin(EXPR); return SEPARATOR; }
+  "("                 { yybegin(EXPR); return ROUND_L; }
+  ")"                 { return ROUND_R; }
+//  "."                 { return DOT; }
+//  "$"                 { return DOLLAR; }
+  "="                 { yybegin(EXPR); return OP_ASSIGN; }
+  "~"                 { yybegin(EXPR); return OP_UNARY_COMPL; }
+  "+"                 { yybegin(EXPR); return OP_PLUS; }
+  "-"                 { yybegin(EXPR); return OP_MINUS; }
+  "*"                 { yybegin(EXPR); return OP_AR_MUL; }
+  "%"|"//"            { yybegin(EXPR); return OP_AR_MOD; }
+  "/"                 { yybegin(EXPR); return OP_AR_DIV; }
+
+//  {SYMBOL}            { return SYMBOL; }
 
   {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
 }
@@ -228,8 +252,8 @@ HASH_COMMENT=([#;*].*+)
   "+"                 { return OP_PLUS; }
   "-"                 { return OP_MINUS; }
   "*"                 { return OP_AR_MUL; }
+  "%"|"//"            { return OP_AR_MOD; }
   "/"                 { return OP_AR_DIV; }
-  "%"                 { return OP_AR_MOD; }
 
   {SYMBOL}            { return SYMBOL; }
 

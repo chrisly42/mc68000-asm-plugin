@@ -1194,13 +1194,14 @@ public class M68kParser implements PsiParser, LightPsiParser {
         return r || p;
     }
 
-    // SYMBOL
+    // SYMBOL|CURRENT_PC_SYMBOL
     public static boolean ref_expr(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "ref_expr")) return false;
-        if (!nextTokenIsSmart(b, SYMBOL)) return false;
+        if (!nextTokenIsSmart(b, CURRENT_PC_SYMBOL, SYMBOL)) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NONE_, REF_EXPR, "<expression>");
         r = consumeTokenSmart(b, SYMBOL);
+        if (!r) r = consumeTokenSmart(b, CURRENT_PC_SYMBOL);
         exit_section_(b, l, m, r, false, null);
         return r;
     }

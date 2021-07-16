@@ -253,5 +253,5 @@ binary_logical_or_expr ::= expr OP_LOGICAL_OR expr
 
 //macrobrace_expr ::= OP_CMP_LT expr OP_CMP_GT
 paren_expr ::= ROUND_L expr ROUND_R //{pin=1 recoverWhile=statement_recover}
-ref_expr ::= SYMBOL
+ref_expr ::= SYMBOL|CURRENT_PC_SYMBOL
 literal_expr ::= BINARY|DECIMAL|HEXADECIMAL|OCTAL|STRINGLIT

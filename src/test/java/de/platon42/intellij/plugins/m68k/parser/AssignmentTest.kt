@@ -19,6 +19,11 @@ internal class AssignmentTest : AbstractParsingTest() {
     }
 
     @Test
+    internal fun assignment_with_local_label(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, "FOO=.local-.bar\n")
+    }
+
+    @Test
     internal fun assignment_via_equ(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
         testGoodSyntax(testCase, "FOO equ BAR\n")
     }

@@ -1,0 +1,13 @@
+Assembly File: a.asm
+  PsiWhiteSpace(' ')
+  M68kStatementImpl(STATEMENT)
+    M68kPreprocessorDirectiveImpl(PREPROCESSOR_DIRECTIVE)
+      PsiElement(M68kTokenType.DATA_DIRECTIVE)('dc.w')
+      PsiWhiteSpace(' ')
+      M68kBinarySubExprImpl(BINARY_SUB_EXPR)
+        M68kRefExprImpl(REF_EXPR)
+          PsiElement(M68kTokenType.CURRENT_PC_SYMBOL)('*')
+        PsiElement(M68kTokenType.OP_MINUS)('-')
+        M68kRefExprImpl(REF_EXPR)
+          PsiElement(M68kTokenType.SYMBOL)('.label')
+  PsiElement(M68kTokenType.EOL)('\n')

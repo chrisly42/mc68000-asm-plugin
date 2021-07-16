@@ -72,6 +72,7 @@ public interface M68kTypes {
     IElementType AREG = new M68kTokenType("AREG");
     IElementType BINARY = new M68kTokenType("BINARY");
     IElementType COMMENT = new M68kTokenType("COMMENT");
+    IElementType CURRENT_PC_SYMBOL = new M68kTokenType("CURRENT_PC_SYMBOL");
     IElementType DATA_DIRECTIVE = new M68kTokenType("DATA_DIRECTIVE");
     IElementType DECIMAL = new M68kTokenType("DECIMAL");
     IElementType DREG = new M68kTokenType("DREG");

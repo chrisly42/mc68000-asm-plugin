@@ -1,0 +1,12 @@
+Assembly File: a.asm
+  M68kStatementImpl(STATEMENT)
+    M68kAssignmentImpl(ASSIGNMENT)
+      PsiElement(M68kTokenType.SYMBOLDEF)('FOO')
+      PsiElement(M68kTokenType.OP_ASSIGN)('=')
+      M68kBinarySubExprImpl(BINARY_SUB_EXPR)
+        M68kRefExprImpl(REF_EXPR)
+          PsiElement(M68kTokenType.SYMBOL)('.local')
+        PsiElement(M68kTokenType.OP_MINUS)('-')
+        M68kRefExprImpl(REF_EXPR)
+          PsiElement(M68kTokenType.SYMBOL)('.bar')
+  PsiElement(M68kTokenType.EOL)('\n')
