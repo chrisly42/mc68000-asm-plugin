@@ -21,6 +21,7 @@
         <lang.syntaxHighlighterFactory language="M68k"
                                        implementationClass="de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighterFactory"/>
         <colorSettingsPage implementation="de.platon42.intellij.plugins.m68k.syntax.M68kColorSettingsPage"/>
+        <completion.contributor language="M68k" implementationClass="de.platon42.intellij.plugins.m68k.asm.M68kMnemonicCompletionContributor"/>
     </extensions>
 
     <actions>

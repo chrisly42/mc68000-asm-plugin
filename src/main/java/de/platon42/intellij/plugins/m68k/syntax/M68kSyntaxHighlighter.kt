@@ -25,7 +25,7 @@ class M68kSyntaxHighlighter : SyntaxHighlighterBase() {
             M68kTypes.MNEMONIC -> arrayOf(MNEMONIC)
             M68kTypes.MACRO_INVOKATION -> arrayOf(MACRO_CALL)
             M68kTypes.DATA_DIRECTIVE -> arrayOf(DATA_PREPROCESSOR)
-            M68kTypes.OTHER_DIRECTIVE -> arrayOf(OTHER_PREPROCESSOR)
+            M68kTypes.OTHER_DIRECTIVE, M68kTypes.EQU -> arrayOf(OTHER_PREPROCESSOR)
             M68kTypes.OPSIZE_BS -> arrayOf(DATA_WIDTH_BS)
             M68kTypes.OPSIZE_W -> arrayOf(DATA_WIDTH_W)
             M68kTypes.OPSIZE_L -> arrayOf(DATA_WIDTH_L)
