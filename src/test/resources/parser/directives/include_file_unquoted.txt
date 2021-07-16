@@ -1,0 +1,10 @@
+Assembly File: a.asm
+  M68kStatementImpl(STATEMENT)
+    M68kPreprocessorDirectiveImpl(PREPROCESSOR_DIRECTIVE)
+      M68kGlobalLabelImpl(GLOBAL_LABEL)
+        PsiElement(M68kTokenType.GLOBAL_LABEL_DEF)('howto:')
+      PsiElement(M68kTokenType.OTHER_DIRECTIVE)('incbin')
+      PsiWhiteSpace(' ')
+      M68kRefExprImpl(REF_EXPR)
+        PsiElement(M68kTokenType.SYMBOL)('Convertedassets\scroller_howto.raw.BPL')
+  PsiElement(M68kTokenType.EOL)('\n')

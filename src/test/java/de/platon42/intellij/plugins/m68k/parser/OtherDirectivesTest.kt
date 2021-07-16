@@ -14,6 +14,11 @@ internal class OtherDirectivesTest : AbstractParsingTest() {
     }
 
     @Test
+    internal fun include_file_unquoted(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, "howto:incbin Convertedassets\\scroller_howto.raw.BPL\n")
+    }
+
+    @Test
     internal fun if_defined_block(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
         testGoodSyntax(testCase, "\tIFD DEBUG ; cause a crash\n illegal\n ENDC\n")
     }

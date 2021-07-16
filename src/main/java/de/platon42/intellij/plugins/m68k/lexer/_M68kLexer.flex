@@ -35,6 +35,7 @@ GLOBAL_LABEL=(([:letter:]|_)(([:letter:]|[:digit:])|_)*:?:?)
 GLOBAL_LABEL_WC=(([:letter:]|_)(([:letter:]|[:digit:])|_)*::?)
 //MNEMONIC=(([:letter:])+)
 SYMBOL=(([:letter:]|_|\.)(([:letter:]|[:digit:]|[_\$]))*)
+BONUSSYMBOL=(([:letter:]|_|\.)(([:letter:]|[:digit:]|[_\$\.\\]))*)
 MACRONAME=(([:letter:]|_)(([:letter:]|[:digit:]|_))*)
 DIRECTIVE_KEYWORD=(([:letter:])(([:letter:]))*)(\..)?
 OPSIZE_BS=(\.[bs])
@@ -149,7 +150,7 @@ HASH_COMMENT=([#;*].*+)
   "-"                 { return OP_MINUS; }
   "*"                 { yybegin(EXPR_OP); return CURRENT_PC_SYMBOL; }
 
-  {SYMBOL}            { yybegin(EXPR_OP); return SYMBOL; }
+  {BONUSSYMBOL}       { yybegin(EXPR_OP); return SYMBOL; }
 
   {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
 }
