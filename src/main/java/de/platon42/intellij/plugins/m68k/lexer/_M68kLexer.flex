@@ -28,7 +28,7 @@ EOL=\R
 WHITE_SPACE=\p{Blank}+
 AREG=((a[0-7])|sp)
 DREG=(d[0-7])
-ASSIGNMENT=(([:letter:]|_)(([:letter:]|[:digit:])|_)*((\p{Blank}+equ\p{Blank}+)|(\p{Blank}+set\p{Blank}+)|\p{Blank}*=\p{Blank}*))
+ASSIGNMENT=(([:letter:]|_)(([:letter:]|[:digit:])|_)*:?((\p{Blank}+equ\p{Blank}+)|(\p{Blank}+set\p{Blank}+)|\p{Blank}*=\p{Blank}*))
 LOCAL_LABEL=(\.([:letter:]|_)(([:letter:]|[:digit:])|_)*:?)|(([:letter:]|_)(([:letter:]|[:digit:])|_)*\$:?)
 LOCAL_LABEL_WC=(\.([:letter:]|_)(([:letter:]|[:digit:])|_)*:)|(([:letter:]|_)(([:letter:]|[:digit:])|_)*\$:)
 GLOBAL_LABEL=(([:letter:]|_)(([:letter:]|[:digit:])|_)*:?:?)
@@ -125,6 +125,7 @@ HASH_COMMENT=([#;*].*+)
 
   "equ"|"set"         { yybegin(EXPR); return EQU; }
 
+  ":"                 { return COLON; }
   "="                 { yybegin(EXPR); return OP_ASSIGN; }
 
   {COMMENT}           { yybegin(WAITEOL); return COMMENT; }

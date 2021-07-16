@@ -3,6 +3,7 @@ Assembly File: a.asm
     M68kAssignmentImpl(ASSIGNMENT)
       PsiElement(M68kTokenType.SYMBOLDEF)('FOO')
       PsiElement(M68kTokenType.OP_ASSIGN)('=')
+      PsiWhiteSpace(' ')
       M68kBinarySubExprImpl(BINARY_SUB_EXPR)
         M68kRefExprImpl(REF_EXPR)
           PsiElement(M68kTokenType.SYMBOL)('.local')

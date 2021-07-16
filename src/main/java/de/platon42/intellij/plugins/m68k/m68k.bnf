@@ -126,7 +126,7 @@ statement ::= (Assignment
 
 private statement_recover ::= !(EOL)
 
-Assignment ::= SYMBOLDEF (OP_ASSIGN|EQU) expr
+Assignment ::= SYMBOLDEF COLON? (OP_ASSIGN|EQU) expr
 
 private LabelInsts ::= LabelWithInstruction | LabelOnly | InstructionOnly
 

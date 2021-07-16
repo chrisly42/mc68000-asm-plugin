@@ -20,7 +20,17 @@ internal class AssignmentTest : AbstractParsingTest() {
 
     @Test
     internal fun assignment_with_local_label(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        testGoodSyntax(testCase, "FOO=.local-.bar\n")
+        testGoodSyntax(testCase, "FOO= .local-.bar\n")
+    }
+
+    @Test
+    internal fun assignment_with_colon(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, "FOO: = 123\n")
+    }
+
+    @Test
+    internal fun assignment_with_colon_and_set(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, "FOO: set 123\n")
     }
 
     @Test

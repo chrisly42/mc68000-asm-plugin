@@ -1,0 +1,11 @@
+Assembly File: a.asm
+  M68kStatementImpl(STATEMENT)
+    M68kAssignmentImpl(ASSIGNMENT)
+      PsiElement(M68kTokenType.SYMBOLDEF)('FOO')
+      PsiElement(M68kTokenType.COLON)(':')
+      PsiWhiteSpace(' ')
+      PsiElement(M68kTokenType.OP_ASSIGN)('=')
+      PsiWhiteSpace(' ')
+      M68kLiteralExprImpl(LITERAL_EXPR)
+        PsiElement(M68kTokenType.DECIMAL)('123')
+  PsiElement(M68kTokenType.EOL)('\n')

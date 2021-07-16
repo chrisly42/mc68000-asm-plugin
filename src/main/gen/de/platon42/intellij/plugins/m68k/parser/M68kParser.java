@@ -411,7 +411,7 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // SYMBOLDEF (OP_ASSIGN|EQU) expr
+    // SYMBOLDEF COLON? (OP_ASSIGN|EQU) expr
     public static boolean Assignment(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "Assignment")) return false;
         if (!nextTokenIs(b, SYMBOLDEF)) return false;
@@ -419,14 +419,22 @@ public class M68kParser implements PsiParser, LightPsiParser {
         Marker m = enter_section_(b);
         r = consumeToken(b, SYMBOLDEF);
         r = r && Assignment_1(b, l + 1);
+        r = r && Assignment_2(b, l + 1);
         r = r && expr(b, l + 1, -1);
         exit_section_(b, m, ASSIGNMENT, r);
         return r;
     }
 
-    // OP_ASSIGN|EQU
+    // COLON?
     private static boolean Assignment_1(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "Assignment_1")) return false;
+        consumeToken(b, COLON);
+        return true;
+    }
+
+    // OP_ASSIGN|EQU
+    private static boolean Assignment_2(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "Assignment_2")) return false;
         boolean r;
         r = consumeToken(b, OP_ASSIGN);
         if (!r) r = consumeToken(b, EQU);

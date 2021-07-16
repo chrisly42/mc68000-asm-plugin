@@ -5,7 +5,7 @@ import de.platon42.intellij.plugins.m68k.asm.M68kIsa.mnemonics
 
 object LexerUtil {
 
-    private val ASSIGNMENT_SEPARATORS = charArrayOf(' ', '\t')
+    private val ASSIGNMENT_SEPARATORS = charArrayOf(' ', '\t', '=', ':')
 
     @JvmStatic
     fun isAsmMnemonic(text: CharSequence) = mnemonics.contains(text.toString().lowercase())
@@ -23,10 +23,6 @@ object LexerUtil {
 
     @JvmStatic
     fun pushbackAssignment(text: CharSequence): Int {
-        val spacePos = text.indexOfAny(ASSIGNMENT_SEPARATORS)
-        if (spacePos > -1) {
-            return text.length - spacePos
-        }
-        return text.length - text.indexOf('=')
+        return text.length - text.indexOfAny(ASSIGNMENT_SEPARATORS)
     }
 }
