@@ -44,7 +44,7 @@ Assembly File: a.asm
                                   M68kBinaryDivExprImpl(BINARY_DIV_EXPR)
                                     M68kBinaryMulExprImpl(BINARY_MUL_EXPR)
                                       M68kLiteralExprImpl(LITERAL_EXPR)
-                                        PsiElement(M68kTokenType.DECIMAL)('3')
+                                        PsiElement(M68kTokenType.BINARY)('%100101')
                                       PsiElement(M68kTokenType.OP_AR_MUL)('*')
                                       M68kLiteralExprImpl(LITERAL_EXPR)
                                         PsiElement(M68kTokenType.DECIMAL)('4')

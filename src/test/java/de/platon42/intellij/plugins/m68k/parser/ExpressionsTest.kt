@@ -30,13 +30,12 @@ internal class ExpressionsTest : AbstractParsingTest() {
 
     @Test
     internal fun pure_string_literal(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        testGoodSyntax(testCase, "FOO = 'string'\n"
-                + "FOO=\"bar\"\n")
+        testGoodSyntax(testCase, "FOO = 'string'\n" + "FOO=\"bar\"\n")
     }
 
     @Test
     internal fun math_expression(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        testGoodSyntax(testCase, "FOO = -(~(!!(+(1//~WIDTH^@123+3*4/2+(NARF%10|32!21))<<2)>>1)&$1f)\n")
+        testGoodSyntax(testCase, "FOO = -(~(!!(+(1//~WIDTH^@123+%100101*4/2+(NARF%10|32!21))<<2)>>1)&$1f)\n")
     }
 
     @Test
