@@ -12,6 +12,7 @@ import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import de.platon42.intellij.plugins.m68k.M68kFileElementType;
 import de.platon42.intellij.plugins.m68k.lexer.M68kLexer;
+import de.platon42.intellij.plugins.m68k.lexer.M68kLexerPrefs;
 import de.platon42.intellij.plugins.m68k.psi.M68kFile;
 import de.platon42.intellij.plugins.m68k.psi.M68kTypes;
 import org.jetbrains.annotations.NotNull;
@@ -20,12 +21,19 @@ public class M68kParserDefinition implements ParserDefinition {
     public static final TokenSet STRING_LITERALS = TokenSet.create(M68kTypes.STRINGLIT);
     public static final TokenSet COMMENTS = TokenSet.create(M68kTypes.COMMENT);
 
+    private M68kLexerPrefs lexerPrefs = new M68kLexerPrefs(); // TODO make this configurable
+
     public M68kParserDefinition() {
+    }
+
+    public M68kLexerPrefs getLexerPrefs() {
+        return lexerPrefs;
     }
 
     @Override
     public @NotNull Lexer createLexer(Project project) {
-        return new M68kLexer();
+        // TODO take prefs from project somehow
+        return new M68kLexer(lexerPrefs);
     }
 
     @Override

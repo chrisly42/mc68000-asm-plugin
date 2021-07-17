@@ -11,8 +11,17 @@ import static de.platon42.intellij.plugins.m68k.lexer.LexerUtil.*;
 %%
 
 %{
-  public _M68kLexer() {
-    this((java.io.Reader)null);
+  private M68kLexerPrefs lexerPrefs;
+  boolean eatOneWhitespace = false;
+
+  public M68kLexerPrefs getLexerPrefs()
+  {
+      return lexerPrefs;
+  }
+
+  public _M68kLexer(M68kLexerPrefs lexerPrefs) {
+      this((java.io.Reader)null);
+      this.lexerPrefs = lexerPrefs;
   }
 %}
 
@@ -49,16 +58,17 @@ STRINGLIT=(`([^`\\\r\n]|\\.)*`|'([^'\\\r\n]|\\.)*'|\"([^\"\\\r\n]|\\.)*\")
 PLAINPARAM=(`([^`\\\r\n]|\\.)*`|'([^'\\\r\n]|\\.)*'|\"([^\"\\\r\n]|\\.)*\")|<([^>\\\r\n]|\\.)*>|([^,;\p{Blank}\r\n])+ // why does \R not work, I have no idea
 COMMENT=([;].*+)
 HASH_COMMENT=([#;*].*+)
+SKIP_TO_EOL=[^\r\n]+
 
 %state NOSOL,INSTRPART,ASMINSTR,ASMOPS,ASMOPS_OP,ASSIGNMENT,EXPR,EXPR_OP,MACROCALL,WAITEOL
 
 %%
 <YYINITIAL> {
-  {WHITE_SPACE}       { yybegin(NOSOL); return WHITE_SPACE; }
+  {WHITE_SPACE}       { yybegin(NOSOL); eatOneWhitespace = false; return WHITE_SPACE; }
   {EOL}               { return WHITE_SPACE; }
-  {ASSIGNMENT}        { yybegin(ASSIGNMENT); yypushback(pushbackAssignment(yytext())); return SYMBOLDEF; }
-  {LOCAL_LABEL}       { yybegin(INSTRPART); yypushback(pushbackLabelColons(yytext())); return LOCAL_LABEL_DEF; }
-  {GLOBAL_LABEL}      { yybegin(INSTRPART); yypushback(pushbackLabelColons(yytext())); return GLOBAL_LABEL_DEF; }
+  {ASSIGNMENT}        { yybegin(ASSIGNMENT); eatOneWhitespace = true; yypushback(pushbackAssignment(yytext())); return SYMBOLDEF; }
+  {LOCAL_LABEL}       { yybegin(INSTRPART); eatOneWhitespace = false; yypushback(pushbackLabelColons(yytext())); return LOCAL_LABEL_DEF; }
+  {GLOBAL_LABEL}      { yybegin(INSTRPART); eatOneWhitespace = false; yypushback(pushbackLabelColons(yytext())); return GLOBAL_LABEL_DEF; }
 
   {HASH_COMMENT}      { return COMMENT; }
 }
@@ -73,10 +83,10 @@ HASH_COMMENT=([#;*].*+)
                         if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; }
                         if(isDataDirective(yytext())) { yybegin(EXPR); return DATA_DIRECTIVE; }
                         if(isOtherDirective(yytext())) { yybegin(EXPR); return OTHER_DIRECTIVE; }
-                        yybegin(MACROCALL); return MACRO_INVOKATION;
+                        yybegin(MACROCALL); eatOneWhitespace = true; return MACRO_INVOKATION;
                       }
 //  {MNEMONIC}          { if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; } else { yybegin(INSTRPART); return SYMBOL; } }
-  {MACRONAME}         { yybegin(MACROCALL); return MACRO_INVOKATION; }
+  {MACRONAME}         { yybegin(MACROCALL); eatOneWhitespace = true; return MACRO_INVOKATION; }
   {HASH_COMMENT}      { yybegin(YYINITIAL); return COMMENT; }
 }
 
@@ -91,10 +101,10 @@ HASH_COMMENT=([#;*].*+)
                         if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; }
                         if(isDataDirective(yytext())) { yybegin(EXPR); return DATA_DIRECTIVE; }
                         if(isOtherDirective(yytext())) { yybegin(EXPR); return OTHER_DIRECTIVE; }
-                        yybegin(MACROCALL); return MACRO_INVOKATION;
+                        yybegin(MACROCALL); eatOneWhitespace = true; return MACRO_INVOKATION;
                       }
 //  {MNEMONIC}          { if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; } else { return SYMBOL; } }
-  {MACRONAME}         { yybegin(MACROCALL); return MACRO_INVOKATION; }
+  {MACRONAME}         { yybegin(MACROCALL); eatOneWhitespace = true; return MACRO_INVOKATION; }
 
   {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
 }
@@ -111,7 +121,7 @@ HASH_COMMENT=([#;*].*+)
 }
 
 <MACROCALL> {
-  {WHITE_SPACE}       { return WHITE_SPACE; } // FIXME space optionally introduces comment
+  {WHITE_SPACE}       { return handleEolCommentWhitespace(this); }
   {EOL}               { yybegin(YYINITIAL); return EOL; }
 
   {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
@@ -134,7 +144,7 @@ HASH_COMMENT=([#;*].*+)
 }
 
 <EXPR> {
-  {WHITE_SPACE}       { return WHITE_SPACE; } // FIXME space optionally introduces comment
+  {WHITE_SPACE}       { return handleEolCommentWhitespace(this); }
   {EOL}               { yybegin(YYINITIAL); return EOL; }
 
   {BINARY}            { yybegin(EXPR_OP); return BINARY; }
@@ -159,7 +169,7 @@ HASH_COMMENT=([#;*].*+)
 }
 
 <EXPR_OP> {
-  {WHITE_SPACE}       { return WHITE_SPACE; } // FIXME space optionally introduces comment
+  {WHITE_SPACE}       { return handleEolCommentWhitespace(this); }
   {EOL}               { yybegin(YYINITIAL); return EOL; }
 
   "<<"                { yybegin(EXPR); return OP_AR_SHIFT_L; }
@@ -195,7 +205,7 @@ HASH_COMMENT=([#;*].*+)
 }
 
 <ASMOPS> {
-  {WHITE_SPACE}       { return WHITE_SPACE; } // FIXME space optionally introduces comment
+  {WHITE_SPACE}       { return handleEolCommentWhitespace(this); }
   {EOL}               { yybegin(YYINITIAL); return EOL; }
 
   {BINARY}            { yybegin(ASMOPS_OP); return BINARY; }
@@ -230,7 +240,7 @@ HASH_COMMENT=([#;*].*+)
 }
 
 <ASMOPS_OP> {
-  {WHITE_SPACE}       { return WHITE_SPACE; } // FIXME space optionally introduces comment
+  {WHITE_SPACE}       { return handleEolCommentWhitespace(this); }
   {EOL}               { yybegin(YYINITIAL); return EOL; }
 
   {OPSIZE_BS}         { return OPSIZE_BS; }
@@ -274,6 +284,7 @@ HASH_COMMENT=([#;*].*+)
 <WAITEOL>
 {
   {EOL}               { yybegin(YYINITIAL); return EOL; }
+  {SKIP_TO_EOL}       { return COMMENT; }
 }
 
 [^] { return BAD_CHARACTER; }

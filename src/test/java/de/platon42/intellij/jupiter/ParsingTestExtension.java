@@ -112,6 +112,9 @@ public class ParsingTestExtension implements ParameterResolver, AfterTestExecuti
     }
 
     public interface IParsingTestCase {
+
+        ParserDefinition getParserDefinition();
+
         void ensureNoErrorElements();
 
         void doTest(boolean checkResult);
@@ -129,11 +132,14 @@ public class ParsingTestExtension implements ParameterResolver, AfterTestExecuti
 
     private static class ParsingTestCaseWrapper extends ParsingTestCase implements IParsingTestCase {
         private ExtensionContext extensionContext;
+
+        private ParserDefinition parserDefinition;
         private static ExtensionContext extensionContextHack;
 
         private ParsingTestCaseWrapper(ExtensionContext extensionContext, String extension, ParserDefinition parserDefinition) {
             super(passthroughInitHack(extensionContext), extension, parserDefinition);
             this.extensionContext = extensionContext;
+            this.parserDefinition = parserDefinition;
         }
 
         private static String passthroughInitHack(ExtensionContext extensionContext) {
@@ -157,6 +163,11 @@ public class ParsingTestExtension implements ParameterResolver, AfterTestExecuti
                 store.remove("disposable");
             }
             super.tearDown(); // Clears fields!
+        }
+
+        @Override
+        public ParserDefinition getParserDefinition() {
+            return parserDefinition;
         }
 
         @Override

@@ -9,6 +9,7 @@ import com.intellij.openapi.util.NlsContexts.ConfigurableName
 import de.platon42.intellij.plugins.m68k.M68kIcons.FILE
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.AREG
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.BAD_CHARACTER
+import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.COLON
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.COMMENT
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.DATA_PREPROCESSOR
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.DATA_WIDTH_BS
@@ -36,7 +37,7 @@ class M68kColorSettingsPage : ColorSettingsPage {
     }
 
     override fun getHighlighter(): SyntaxHighlighter {
-        return M68kSyntaxHighlighter()
+        return M68kSyntaxHighlighter(null)
     }
 
     @NonNls
@@ -85,24 +86,26 @@ hello:  dc.b   'Hello World!',10,0
 
     companion object {
         private val DESCRIPTORS = arrayOf(
-                AttributesDescriptor("Global labels", GLOBAL_LABEL),
-                AttributesDescriptor("Local labels", LOCAL_LABEL),
-                AttributesDescriptor("Comma (separator)", SEPARATOR),
-                AttributesDescriptor("Symbol definition", SYMBOLDEF),
-                AttributesDescriptor("Symbol reference", SYMBOL),
-                AttributesDescriptor("Assembly mnemonic", MNEMONIC),
-                AttributesDescriptor("Macro invocation", MACRO_CALL),
-                AttributesDescriptor("Byte/short data width", DATA_WIDTH_BS),
-                AttributesDescriptor("Word data width", DATA_WIDTH_W),
-                AttributesDescriptor("Long data width", DATA_WIDTH_L),
-                AttributesDescriptor("Data preprocessor directives", DATA_PREPROCESSOR),
-                AttributesDescriptor("Other preprocessor directives", OTHER_PREPROCESSOR),
-                AttributesDescriptor("Strings", STRING),
-                AttributesDescriptor("Numbers", NUMBER),
-                AttributesDescriptor("Address registers", AREG),
-                AttributesDescriptor("Data registers", DREG),
-                AttributesDescriptor("Special registers", SPECIAL_REG),
-                AttributesDescriptor("Comments", COMMENT),
-                AttributesDescriptor("Bad characters", BAD_CHARACTER))
+            AttributesDescriptor("Global labels", GLOBAL_LABEL),
+            AttributesDescriptor("Local labels", LOCAL_LABEL),
+            AttributesDescriptor("Comma (separator)", SEPARATOR),
+            AttributesDescriptor("Colon", COLON),
+            AttributesDescriptor("Symbol definition", SYMBOLDEF),
+            AttributesDescriptor("Symbol reference", SYMBOL),
+            AttributesDescriptor("Assembly mnemonic", MNEMONIC),
+            AttributesDescriptor("Macro invocation", MACRO_CALL),
+            AttributesDescriptor("Byte/short data width", DATA_WIDTH_BS),
+            AttributesDescriptor("Word data width", DATA_WIDTH_W),
+            AttributesDescriptor("Long data width", DATA_WIDTH_L),
+            AttributesDescriptor("Data preprocessor directives", DATA_PREPROCESSOR),
+            AttributesDescriptor("Other preprocessor directives", OTHER_PREPROCESSOR),
+            AttributesDescriptor("Strings", STRING),
+            AttributesDescriptor("Numbers", NUMBER),
+            AttributesDescriptor("Address registers", AREG),
+            AttributesDescriptor("Data registers", DREG),
+            AttributesDescriptor("Special registers", SPECIAL_REG),
+            AttributesDescriptor("Comments", COMMENT),
+            AttributesDescriptor("Bad characters", BAD_CHARACTER)
+        )
     }
 }

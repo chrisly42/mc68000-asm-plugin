@@ -1,5 +1,7 @@
 package de.platon42.intellij.plugins.m68k.lexer
 
+import com.intellij.psi.TokenType
+import com.intellij.psi.tree.IElementType
 import de.platon42.intellij.plugins.m68k.asm.AssemblerDirectives
 import de.platon42.intellij.plugins.m68k.asm.M68kIsa.mnemonics
 
@@ -29,5 +31,14 @@ object LexerUtil {
     @JvmStatic
     fun pushbackLabelColons(text: CharSequence): Int {
         return text.count { it == ':' }
+    }
+
+    @JvmStatic
+    fun handleEolCommentWhitespace(lexer: _M68kLexer): IElementType {
+        if (!lexer.eatOneWhitespace && lexer.lexerPrefs.spaceIntroducesComment) {
+            lexer.yybegin(_M68kLexer.WAITEOL)
+        }
+        lexer.eatOneWhitespace = false;
+        return TokenType.WHITE_SPACE
     }
 }

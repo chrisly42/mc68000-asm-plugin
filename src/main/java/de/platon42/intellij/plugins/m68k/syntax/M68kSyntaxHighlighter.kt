@@ -5,19 +5,27 @@ import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.HighlighterColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase
+import com.intellij.openapi.project.Project
 import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
 import de.platon42.intellij.plugins.m68k.lexer.M68kLexer
+import de.platon42.intellij.plugins.m68k.lexer.M68kLexerPrefs
 import de.platon42.intellij.plugins.m68k.psi.M68kTypes
 
-class M68kSyntaxHighlighter : SyntaxHighlighterBase() {
+class M68kSyntaxHighlighter(val project: Project?) : SyntaxHighlighterBase() {
     override fun getHighlightingLexer(): Lexer {
-        return M68kLexer()
+        if (project == null) {
+            return M68kLexer(M68kLexerPrefs()) // Use some defaults
+        } else {
+            // FIXME Where do we get the prefs from?
+            return M68kLexer(M68kLexerPrefs())
+        }
     }
 
     override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {
         return when (tokenType) {
             M68kTypes.SEPARATOR -> arrayOf(SEPARATOR)
+            M68kTypes.COLON -> arrayOf(COLON)
             M68kTypes.GLOBAL_LABEL_DEF, M68kTypes.GLOBAL_LABEL -> arrayOf(GLOBAL_LABEL)
             M68kTypes.LOCAL_LABEL_DEF, M68kTypes.LOCAL_LABEL -> arrayOf(LOCAL_LABEL)
             M68kTypes.SYMBOLDEF -> arrayOf(SYMBOLDEF)
@@ -44,6 +52,7 @@ class M68kSyntaxHighlighter : SyntaxHighlighterBase() {
         val GLOBAL_LABEL = TextAttributesKey.createTextAttributesKey("M68K_LOCAL_LABEL", DefaultLanguageHighlighterColors.LOCAL_VARIABLE)
         val LOCAL_LABEL = TextAttributesKey.createTextAttributesKey("M68K_GLOBAL_LABEL", DefaultLanguageHighlighterColors.GLOBAL_VARIABLE)
         val SEPARATOR = TextAttributesKey.createTextAttributesKey("M68K_SEPARATOR", DefaultLanguageHighlighterColors.COMMA)
+        val COLON = TextAttributesKey.createTextAttributesKey("M68K_COLON", DefaultLanguageHighlighterColors.DOT)
         val SYMBOLDEF = TextAttributesKey.createTextAttributesKey("M68K_SYMBOLDEF", DefaultLanguageHighlighterColors.STATIC_FIELD)
         val SYMBOL = TextAttributesKey.createTextAttributesKey("M68K_SYMBOL", DefaultLanguageHighlighterColors.IDENTIFIER)
         val MNEMONIC = TextAttributesKey.createTextAttributesKey("M68K_MNEMONIC", DefaultLanguageHighlighterColors.FUNCTION_CALL)
