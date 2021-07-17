@@ -25,4 +25,9 @@ object LexerUtil {
     fun pushbackAssignment(text: CharSequence): Int {
         return text.length - text.indexOfAny(ASSIGNMENT_SEPARATORS)
     }
+
+    @JvmStatic
+    fun pushbackLabelColons(text: CharSequence): Int {
+        return text.count { it == ':' }
+    }
 }

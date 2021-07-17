@@ -1,0 +1,42 @@
+package de.platon42.intellij.plugins.m68k.psi
+
+import com.intellij.psi.PsiElement
+import com.intellij.util.IncorrectOperationException
+import de.platon42.intellij.plugins.m68k.psi.M68kElementFactory.createGlobalLabel
+import de.platon42.intellij.plugins.m68k.psi.M68kElementFactory.createLocalLabel
+
+object M68kPsiImplUtil {
+
+    @JvmStatic
+    fun getName(element: M68kGlobalLabel): String? = element.firstChild.text
+
+    @JvmStatic
+    fun setName(element: M68kGlobalLabel, name: String): PsiElement {
+        val nameNode = element.node.findChildByType(M68kTypes.GLOBAL_LABEL_DEF)
+        if (nameNode != null) {
+            val newGlobalLabel = createGlobalLabel(element.project, name)
+            element.node.replaceChild(nameNode, newGlobalLabel.firstChild.node)
+        }
+        return element
+    }
+
+    @JvmStatic
+    fun getNameIdentifier(element: M68kGlobalLabel): PsiElement = element.firstChild
+
+    @JvmStatic
+    fun getName(element: M68kLocalLabel): String? = element.firstChild.text
+
+    @JvmStatic
+    fun setName(element: M68kLocalLabel, name: String): PsiElement {
+        if (!(name.startsWith(".") || name.endsWith("$"))) throw IncorrectOperationException("local label must start with '.' or end with '$'")
+        val nameNode = element.node.findChildByType(M68kTypes.LOCAL_LABEL_DEF)
+        if (nameNode != null) {
+            val newLocalLabel = createLocalLabel(element.project, name)
+            element.node.replaceChild(nameNode, newLocalLabel.firstChild.node)
+        }
+        return element
+    }
+
+    @JvmStatic
+    fun getNameIdentifier(element: M68kLocalLabel): PsiElement = element.firstChild
+}

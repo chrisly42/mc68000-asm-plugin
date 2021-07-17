@@ -87,9 +87,9 @@ public class M68kParser implements PsiParser, LightPsiParser {
     // AREG
     public static boolean AddressRegister(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "AddressRegister")) return false;
-        if (!nextTokenIs(b, "<Register>", AREG)) return false;
+        if (!nextTokenIs(b, "<address register>", AREG)) return false;
         boolean r;
-        Marker m = enter_section_(b, l, _NONE_, ADDRESS_REGISTER, "<Register>");
+        Marker m = enter_section_(b, l, _NONE_, ADDRESS_REGISTER, "<address register>");
         r = consumeToken(b, AREG);
         exit_section_(b, l, m, r, false, null);
         return r;
@@ -288,9 +288,9 @@ public class M68kParser implements PsiParser, LightPsiParser {
     // OPSIZE_W|OPSIZE_L
     public static boolean AddressSize(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "AddressSize")) return false;
-        if (!nextTokenIs(b, "<address size>", OPSIZE_L, OPSIZE_W)) return false;
+        if (!nextTokenIs(b, "<.w|.l>", OPSIZE_L, OPSIZE_W)) return false;
         boolean r;
-        Marker m = enter_section_(b, l, _NONE_, ADDRESS_SIZE, "<address size>");
+        Marker m = enter_section_(b, l, _NONE_, ADDRESS_SIZE, "<.w|.l>");
         r = consumeToken(b, OPSIZE_W);
         if (!r) r = consumeToken(b, OPSIZE_L);
         exit_section_(b, l, m, r, false, null);
@@ -445,9 +445,9 @@ public class M68kParser implements PsiParser, LightPsiParser {
     // DataRegister | AddressRegister
     static boolean DataOrAddressRegister(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "DataOrAddressRegister")) return false;
-        if (!nextTokenIs(b, "<Register>", AREG, DREG)) return false;
+        if (!nextTokenIs(b, "<data or address register>", AREG, DREG)) return false;
         boolean r;
-        Marker m = enter_section_(b, l, _NONE_, null, "<Register>");
+        Marker m = enter_section_(b, l, _NONE_, null, "<data or address register>");
         r = DataRegister(b, l + 1);
         if (!r) r = AddressRegister(b, l + 1);
         exit_section_(b, l, m, r, false, null);
@@ -458,9 +458,9 @@ public class M68kParser implements PsiParser, LightPsiParser {
     // DREG
     public static boolean DataRegister(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "DataRegister")) return false;
-        if (!nextTokenIs(b, "<Register>", DREG)) return false;
+        if (!nextTokenIs(b, "<data register>", DREG)) return false;
         boolean r;
-        Marker m = enter_section_(b, l, _NONE_, DATA_REGISTER, "<Register>");
+        Marker m = enter_section_(b, l, _NONE_, DATA_REGISTER, "<data register>");
         r = consumeToken(b, DREG);
         exit_section_(b, l, m, r, false, null);
         return r;
@@ -502,9 +502,9 @@ public class M68kParser implements PsiParser, LightPsiParser {
     // OPSIZE_W|OPSIZE_L
     public static boolean DataWidth(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "DataWidth")) return false;
-        if (!nextTokenIs(b, "<data width>", OPSIZE_L, OPSIZE_W)) return false;
+        if (!nextTokenIs(b, "<.w|.l>", OPSIZE_L, OPSIZE_W)) return false;
         boolean r;
-        Marker m = enter_section_(b, l, _NONE_, DATA_WIDTH, "<data width>");
+        Marker m = enter_section_(b, l, _NONE_, DATA_WIDTH, "<.w|.l>");
         r = consumeToken(b, OPSIZE_W);
         if (!r) r = consumeToken(b, OPSIZE_L);
         exit_section_(b, l, m, r, false, null);
@@ -512,27 +512,39 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // GLOBAL_LABEL_DEF
+    // GLOBAL_LABEL_DEF COLON*
     public static boolean GlobalLabel(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "GlobalLabel")) return false;
-        if (!nextTokenIs(b, GLOBAL_LABEL_DEF)) return false;
+        if (!nextTokenIs(b, "<global label>", GLOBAL_LABEL_DEF)) return false;
         boolean r;
-        Marker m = enter_section_(b);
+        Marker m = enter_section_(b, l, _NONE_, GLOBAL_LABEL, "<global label>");
         r = consumeToken(b, GLOBAL_LABEL_DEF);
-        exit_section_(b, m, GLOBAL_LABEL, r);
+        r = r && GlobalLabel_1(b, l + 1);
+        exit_section_(b, l, m, r, false, null);
         return r;
+    }
+
+    // COLON*
+    private static boolean GlobalLabel_1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "GlobalLabel_1")) return false;
+        while (true) {
+            int c = current_position_(b);
+            if (!consumeToken(b, COLON)) break;
+            if (!empty_element_parsed_guard_(b, "GlobalLabel_1", c)) break;
+        }
+        return true;
     }
 
     /* ********************************************************** */
     // HASH expr
     public static boolean ImmediateData(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "ImmediateData")) return false;
-        if (!nextTokenIs(b, HASH)) return false;
+        if (!nextTokenIs(b, "<immediate data>", HASH)) return false;
         boolean r;
-        Marker m = enter_section_(b);
+        Marker m = enter_section_(b, l, _NONE_, IMMEDIATE_DATA, "<immediate data>");
         r = consumeToken(b, HASH);
         r = r && expr(b, l + 1, -1);
-        exit_section_(b, m, IMMEDIATE_DATA, r);
+        exit_section_(b, l, m, r, false, null);
         return r;
     }
 
@@ -597,15 +609,23 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // LOCAL_LABEL_DEF
+    // LOCAL_LABEL_DEF COLON?
     public static boolean LocalLabel(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "LocalLabel")) return false;
-        if (!nextTokenIs(b, LOCAL_LABEL_DEF)) return false;
+        if (!nextTokenIs(b, "<local label>", LOCAL_LABEL_DEF)) return false;
         boolean r;
-        Marker m = enter_section_(b);
+        Marker m = enter_section_(b, l, _NONE_, LOCAL_LABEL, "<local label>");
         r = consumeToken(b, LOCAL_LABEL_DEF);
-        exit_section_(b, m, LOCAL_LABEL, r);
+        r = r && LocalLabel_1(b, l + 1);
+        exit_section_(b, l, m, r, false, null);
         return r;
+    }
+
+    // COLON?
+    private static boolean LocalLabel_1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "LocalLabel_1")) return false;
+        consumeToken(b, COLON);
+        return true;
     }
 
     /* ********************************************************** */
@@ -645,7 +665,7 @@ public class M68kParser implements PsiParser, LightPsiParser {
     public static boolean OperandSize(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "OperandSize")) return false;
         boolean r;
-        Marker m = enter_section_(b, l, _NONE_, OPERAND_SIZE, "<operand size>");
+        Marker m = enter_section_(b, l, _NONE_, OPERAND_SIZE, "<.s|.b|.w|.l>");
         r = consumeToken(b, OPSIZE_BS);
         if (!r) r = consumeToken(b, OPSIZE_W);
         if (!r) r = consumeToken(b, OPSIZE_L);
@@ -976,7 +996,7 @@ public class M68kParser implements PsiParser, LightPsiParser {
     public static boolean SpecialRegister(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "SpecialRegister")) return false;
         boolean r;
-        Marker m = enter_section_(b, l, _NONE_, SPECIAL_REGISTER, "<Register>");
+        Marker m = enter_section_(b, l, _NONE_, SPECIAL_REGISTER, "<special register>");
         r = consumeToken(b, REG_CCR);
         if (!r) r = consumeToken(b, REG_SR);
         if (!r) r = consumeToken(b, REG_USP);
@@ -1062,9 +1082,9 @@ public class M68kParser implements PsiParser, LightPsiParser {
     // 11: ATOM(ref_expr) ATOM(literal_expr) PREFIX(paren_expr)
     public static boolean expr(PsiBuilder b, int l, int g) {
         if (!recursion_guard_(b, l, "expr")) return false;
-        addVariant(b, "<expr>");
+        addVariant(b, "<expression>");
         boolean r, p;
-        Marker m = enter_section_(b, l, _NONE_, "<expr>");
+        Marker m = enter_section_(b, l, _NONE_, "<expression>");
         r = unary_plus_expr(b, l + 1);
         if (!r) r = unary_minus_expr(b, l + 1);
         if (!r) r = unary_not_expr(b, l + 1);

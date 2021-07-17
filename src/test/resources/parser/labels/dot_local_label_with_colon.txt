@@ -1,5 +1,6 @@
 Assembly File: a.asm
   M68kStatementImpl(STATEMENT)
     M68kLocalLabelImpl(LOCAL_LABEL)
-      PsiElement(M68kTokenType.LOCAL_LABEL_DEF)('.local_label:')
+      PsiElement(M68kTokenType.LOCAL_LABEL_DEF)('.local_label')
+      PsiElement(M68kTokenType.COLON)(':')
   PsiElement(M68kTokenType.EOL)('\n')

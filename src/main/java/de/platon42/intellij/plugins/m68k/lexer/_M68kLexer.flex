@@ -57,8 +57,8 @@ HASH_COMMENT=([#;*].*+)
   {WHITE_SPACE}       { yybegin(NOSOL); return WHITE_SPACE; }
   {EOL}               { return WHITE_SPACE; }
   {ASSIGNMENT}        { yybegin(ASSIGNMENT); yypushback(pushbackAssignment(yytext())); return SYMBOLDEF; }
-  {LOCAL_LABEL}       { yybegin(INSTRPART); return LOCAL_LABEL_DEF; }
-  {GLOBAL_LABEL}      { yybegin(INSTRPART); return GLOBAL_LABEL_DEF; }
+  {LOCAL_LABEL}       { yybegin(INSTRPART); yypushback(pushbackLabelColons(yytext())); return LOCAL_LABEL_DEF; }
+  {GLOBAL_LABEL}      { yybegin(INSTRPART); yypushback(pushbackLabelColons(yytext())); return GLOBAL_LABEL_DEF; }
 
   {HASH_COMMENT}      { return COMMENT; }
 }
@@ -66,8 +66,8 @@ HASH_COMMENT=([#;*].*+)
 <NOSOL> {
   {WHITE_SPACE}       { return WHITE_SPACE; }
   {EOL}               { yybegin(YYINITIAL); return WHITE_SPACE; }
-  {LOCAL_LABEL_WC}    { yybegin(INSTRPART); return LOCAL_LABEL_DEF; }
-  {GLOBAL_LABEL_WC}   { yybegin(INSTRPART); return GLOBAL_LABEL_DEF; }
+  {LOCAL_LABEL_WC}    { yybegin(INSTRPART); yypushback(pushbackLabelColons(yytext())); return LOCAL_LABEL_DEF; }
+  {GLOBAL_LABEL_WC}   { yybegin(INSTRPART); yypushback(pushbackLabelColons(yytext())); return GLOBAL_LABEL_DEF; }
   {DIRECTIVE_KEYWORD} {
                         if(isAsmMnemonicWithSize(yytext())) { yybegin(ASMINSTR); yypushback(2); return MNEMONIC; }
                         if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; }
@@ -83,6 +83,8 @@ HASH_COMMENT=([#;*].*+)
 <INSTRPART> {
   {WHITE_SPACE}       { return WHITE_SPACE; }
   {EOL}               { yybegin(YYINITIAL); return EOL; }
+
+  ":"                 { return COLON; }
 
   {DIRECTIVE_KEYWORD} {
                         if(isAsmMnemonicWithSize(yytext())) { yybegin(ASMINSTR); yypushback(2); return MNEMONIC; }

@@ -3,11 +3,11 @@
     parserUtilClass="de.platon42.intellij.plugins.m68k.parser.M68kParserUtilBase"
 
     extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
-
     psiClassPrefix="M68k"
     psiImplClassSuffix="Impl"
     psiPackage="de.platon42.intellij.plugins.m68k.psi"
     psiImplPackage="de.platon42.intellij.plugins.m68k.psi.impl"
+    psiImplUtilClass="de.platon42.intellij.plugins.m68k.psi.M68kPsiImplUtil"
 
 //    elementTypeFactory="de.platon42.intellij.plugins.m68k.parser.M68kParserDefinition.createType"
 //    tokenTypeFactory="de.platon42.intellij.plugins.m68k.parser.M68kParserDefinition.createTokenType"
@@ -134,13 +134,27 @@ private LabelOnly ::= Label
 private LabelWithInstruction ::= Label Instruction
 private InstructionOnly ::= Instruction
 
-LocalLabel ::= LOCAL_LABEL_DEF {extends=Label}
-GlobalLabel ::= GLOBAL_LABEL_DEF {extends=Label}
+LocalLabel ::= LOCAL_LABEL_DEF COLON? {
+    name = "local label"
+    extends = Label
+    implements = "de.platon42.intellij.plugins.m68k.psi.M68kNamedElement"
+    mixin = "de.platon42.intellij.plugins.m68k.psi.M68kLocalLabelMixin"
+    methods = [getName setName getNameIdentifier]
+}
+
+GlobalLabel ::= GLOBAL_LABEL_DEF COLON* {
+    name = "global label"
+    extends = Label
+    implements = "de.platon42.intellij.plugins.m68k.psi.M68kNamedElement"
+    mixin = "de.platon42.intellij.plugins.m68k.psi.M68kGlobalLabelMixin"
+    methods = [getName setName getNameIdentifier]
+}
+
 Label ::= LocalLabel | GlobalLabel
 
-OperandSize ::= (OPSIZE_BS|OPSIZE_W|OPSIZE_L)
-AddressSize ::= (OPSIZE_W|OPSIZE_L)
-DataWidth ::= (OPSIZE_W|OPSIZE_L)
+OperandSize ::= (OPSIZE_BS|OPSIZE_W|OPSIZE_L) { name = ".s|.b|.w|.l" }
+AddressSize ::= (OPSIZE_W|OPSIZE_L) { name = ".w|.l" }
+DataWidth ::= (OPSIZE_W|OPSIZE_L) { name = ".w|.l" }
 
 AsmOp ::= MNEMONIC OperandSize?
 
@@ -159,13 +173,24 @@ private PreprocessorOperand ::= expr
 
 private PlainOperands ::= STRINGLIT (SEPARATOR STRINGLIT)*
 
-DataRegister ::= DREG {extends=Register}
-AddressRegister ::= AREG {extends=Register}
-SpecialRegister ::= REG_CCR | REG_SR | REG_USP | REG_VBR {extends=Register}
+DataRegister ::= DREG {
+    name = "data register"
+    extends = Register
+}
+
+AddressRegister ::= AREG {
+    name = "address register"
+    extends = Register
+}
+
+SpecialRegister ::= REG_CCR | REG_SR | REG_USP | REG_VBR {
+    name = "special register"
+    extends = Register
+}
 
 Register ::= DataRegister | AddressRegister | SpecialRegister
 
-private DataOrAddressRegister ::= DataRegister | AddressRegister
+private DataOrAddressRegister ::= DataRegister | AddressRegister { name = "data or address register"}
 
 AddressingMode ::= ImmediateData
                 | AddressRegisterIndirectPreDecAddressingMode
@@ -202,7 +227,10 @@ ProgramCounterIndirectWithIndexNewAddressingMode ::= ROUND_L (expr SEPARATOR)? P
 AbsoluteAddressAddressingMode ::= expr AddressSize? !ROUND_L
 private RegisterRange ::= (DataOrAddressRegister OP_MINUS DataOrAddressRegister)
 RegisterListAddressingMode ::= (DataOrAddressRegister|RegisterRange) ((OP_AR_DIV|OP_MINUS) (DataOrAddressRegister|RegisterRange))*
-ImmediateData ::= HASH expr {extends=AddressingMode}
+ImmediateData ::= HASH expr {
+    name = "immediate data"
+    extends = AddressingMode
+}
 
 expr ::= binary_logical_or_expr
         | binary_logical_and_expr
@@ -215,7 +243,7 @@ expr ::= binary_logical_or_expr
         | binary_bitwise_and_expr
         | binary_shift_group
         | unary_group
-        | primary_group
+        | primary_group { name = "expression" }
 //        | macrobrace_expr
 
 // private rules to define operators with the same priority
@@ -247,11 +275,13 @@ binary_cmp_gt_expr ::= expr OP_CMP_GT expr
 binary_cmp_ge_expr ::= expr OP_CMP_GT_EQ expr
 binary_cmp_eq_expr ::= expr OP_CMP_EQ expr
 binary_cmp_ne_expr ::= expr OP_CMP_NOT_EQ expr
-//binary_cmp_ne_expr ::= expr (OP_CMP_NOT_EQ|OP_CMP_NOT_EQ2) expr
 binary_logical_and_expr ::= expr OP_LOGICAL_AND expr
 binary_logical_or_expr ::= expr OP_LOGICAL_OR expr
 
 //macrobrace_expr ::= OP_CMP_LT expr OP_CMP_GT
 paren_expr ::= ROUND_L expr ROUND_R //{pin=1 recoverWhile=statement_recover}
 ref_expr ::= SYMBOL|CURRENT_PC_SYMBOL
-literal_expr ::= BINARY|DECIMAL|HEXADECIMAL|OCTAL|STRINGLIT
+literal_expr ::= BINARY|DECIMAL|HEXADECIMAL|OCTAL|STRINGLIT {
+    implements = "com.intellij.psi.PsiLiteralValue"
+    mixin = "de.platon42.intellij.plugins.m68k.psi.M68kLiteralExprMixin"
+}
