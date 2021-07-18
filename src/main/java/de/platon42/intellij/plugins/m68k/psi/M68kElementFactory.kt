@@ -8,13 +8,18 @@ import de.platon42.intellij.plugins.m68k.M68kFileType.Companion.INSTANCE
 object M68kElementFactory {
 
     fun createGlobalLabel(project: Project, label: String): M68kGlobalLabel {
-        val file = createFile(project, label)
+        val file = createFile(project, "$label\n")
         return PsiTreeUtil.findChildOfType(file, M68kGlobalLabel::class.java)!!
     }
 
     fun createLocalLabel(project: Project, label: String): M68kLocalLabel {
-        val file = createFile(project, label)
+        val file = createFile(project, "$label\n")
         return PsiTreeUtil.findChildOfType(file, M68kLocalLabel::class.java)!!
+    }
+
+    fun createSymbolDefinition(project: Project, label: String): M68kSymbolDefinition {
+        val file = createFile(project, "$label=0\n")
+        return PsiTreeUtil.findChildOfType(file, M68kSymbolDefinition::class.java)!!
     }
 
     fun createFile(project: Project, content: String): M68kFile {

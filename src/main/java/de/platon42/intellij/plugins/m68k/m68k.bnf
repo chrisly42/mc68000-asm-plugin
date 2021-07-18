@@ -126,7 +126,13 @@ statement ::= (Assignment
 
 private statement_recover ::= !(EOL)
 
-Assignment ::= SYMBOLDEF COLON? (OP_ASSIGN|EQU) expr
+SymbolDefinition ::= SYMBOLDEF {
+    implements = "de.platon42.intellij.plugins.m68k.psi.M68kNamedElement"
+    mixin = "de.platon42.intellij.plugins.m68k.psi.M68kSymbolDefinitionMixin"
+    methods = [getName setName getNameIdentifier]
+}
+
+Assignment ::= SymbolDefinition COLON? (OP_ASSIGN|EQU) expr
 
 private LabelInsts ::= LabelWithInstruction | LabelOnly | InstructionOnly
 
@@ -172,6 +178,9 @@ private PreprocessorOperands ::= PreprocessorOperand (SEPARATOR PreprocessorOper
 private PreprocessorOperand ::= expr
 
 private PlainOperands ::= STRINGLIT (SEPARATOR STRINGLIT)*
+
+SymbolReference ::= SYMBOL // TODO This should probably be a ILazyParseableElementType, no idea how to implement that yet
+ProgramCounterReference ::= CURRENT_PC_SYMBOL
 
 DataRegister ::= DREG {
     name = "data register"
@@ -280,7 +289,7 @@ binary_logical_or_expr ::= expr OP_LOGICAL_OR expr
 
 //macrobrace_expr ::= OP_CMP_LT expr OP_CMP_GT
 paren_expr ::= ROUND_L expr ROUND_R //{pin=1 recoverWhile=statement_recover}
-ref_expr ::= SYMBOL|CURRENT_PC_SYMBOL
+ref_expr ::= SymbolReference|ProgramCounterReference
 literal_expr ::= BINARY|DECIMAL|HEXADECIMAL|OCTAL|STRINGLIT {
     implements = "com.intellij.psi.PsiLiteralValue"
     mixin = "de.platon42.intellij.plugins.m68k.psi.M68kLiteralExprMixin"

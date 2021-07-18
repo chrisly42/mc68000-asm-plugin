@@ -58,12 +58,15 @@ public interface M68kTypes {
     IElementType PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT_OLD_ADDRESSING_MODE = new M68kElementType("PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT_OLD_ADDRESSING_MODE");
     IElementType PROGRAM_COUNTER_INDIRECT_WITH_INDEX_NEW_ADDRESSING_MODE = new M68kElementType("PROGRAM_COUNTER_INDIRECT_WITH_INDEX_NEW_ADDRESSING_MODE");
     IElementType PROGRAM_COUNTER_INDIRECT_WITH_INDEX_OLD_ADDRESSING_MODE = new M68kElementType("PROGRAM_COUNTER_INDIRECT_WITH_INDEX_OLD_ADDRESSING_MODE");
+    IElementType PROGRAM_COUNTER_REFERENCE = new M68kElementType("PROGRAM_COUNTER_REFERENCE");
     IElementType REF_EXPR = new M68kElementType("REF_EXPR");
     IElementType REGISTER = new M68kElementType("REGISTER");
     IElementType REGISTER_LIST_ADDRESSING_MODE = new M68kElementType("REGISTER_LIST_ADDRESSING_MODE");
     IElementType SPECIAL_REGISTER = new M68kElementType("SPECIAL_REGISTER");
     IElementType SPECIAL_REGISTER_DIRECT_ADDRESSING_MODE = new M68kElementType("SPECIAL_REGISTER_DIRECT_ADDRESSING_MODE");
     IElementType STATEMENT = new M68kElementType("STATEMENT");
+    IElementType SYMBOL_DEFINITION = new M68kElementType("SYMBOL_DEFINITION");
+    IElementType SYMBOL_REFERENCE = new M68kElementType("SYMBOL_REFERENCE");
     IElementType UNARY_COMPL_EXPR = new M68kElementType("UNARY_COMPL_EXPR");
     IElementType UNARY_MINUS_EXPR = new M68kElementType("UNARY_MINUS_EXPR");
     IElementType UNARY_NOT_EXPR = new M68kElementType("UNARY_NOT_EXPR");
@@ -220,6 +223,8 @@ public interface M68kTypes {
                 return new M68kProgramCounterIndirectWithIndexNewAddressingModeImpl(node);
             } else if (type == PROGRAM_COUNTER_INDIRECT_WITH_INDEX_OLD_ADDRESSING_MODE) {
                 return new M68kProgramCounterIndirectWithIndexOldAddressingModeImpl(node);
+            } else if (type == PROGRAM_COUNTER_REFERENCE) {
+                return new M68kProgramCounterReferenceImpl(node);
             } else if (type == REF_EXPR) {
                 return new M68kRefExprImpl(node);
             } else if (type == REGISTER_LIST_ADDRESSING_MODE) {
@@ -230,6 +235,10 @@ public interface M68kTypes {
                 return new M68kSpecialRegisterDirectAddressingModeImpl(node);
             } else if (type == STATEMENT) {
                 return new M68kStatementImpl(node);
+            } else if (type == SYMBOL_DEFINITION) {
+                return new M68kSymbolDefinitionImpl(node);
+            } else if (type == SYMBOL_REFERENCE) {
+                return new M68kSymbolReferenceImpl(node);
             } else if (type == UNARY_COMPL_EXPR) {
                 return new M68kUnaryComplExprImpl(node);
             } else if (type == UNARY_MINUS_EXPR) {

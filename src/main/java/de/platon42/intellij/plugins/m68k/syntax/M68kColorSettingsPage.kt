@@ -22,11 +22,12 @@ import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.MNEMONIC
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.NUMBER
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.OTHER_PREPROCESSOR
+import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.PROGRAM_COUNTER
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.SEPARATOR
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.SPECIAL_REG
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.STRING
-import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.SYMBOL
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.SYMBOLDEF
+import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.SYMBOLREF
 import org.jetbrains.annotations.NonNls
 import javax.swing.Icon
 
@@ -55,6 +56,7 @@ demo_init                       ; global label
         tst.w   d1
         beq.s   .skip
         PUSHM   d0-d7/a0-a6     ; this is a macro call
+        lea     hello(pc),a1
         lea     pd_ModViewTable(a4,d1.w),a0
         moveq.l #0,d0
         move.w  #PIC_HEIGHT-1,d7
@@ -65,6 +67,7 @@ demo_init                       ; global label
 
 hello:  dc.b   'Hello World!',10,0
         even
+        dc.w    *-hello         ; length of string
 """
     }
 
@@ -91,7 +94,7 @@ hello:  dc.b   'Hello World!',10,0
             AttributesDescriptor("Comma (separator)", SEPARATOR),
             AttributesDescriptor("Colon", COLON),
             AttributesDescriptor("Symbol definition", SYMBOLDEF),
-            AttributesDescriptor("Symbol reference", SYMBOL),
+            AttributesDescriptor("Symbol reference", SYMBOLREF),
             AttributesDescriptor("Assembly mnemonic", MNEMONIC),
             AttributesDescriptor("Macro invocation", MACRO_CALL),
             AttributesDescriptor("Byte/short data width", DATA_WIDTH_BS),
@@ -103,6 +106,7 @@ hello:  dc.b   'Hello World!',10,0
             AttributesDescriptor("Numbers", NUMBER),
             AttributesDescriptor("Address registers", AREG),
             AttributesDescriptor("Data registers", DREG),
+            AttributesDescriptor("Program counter", PROGRAM_COUNTER),
             AttributesDescriptor("Special registers", SPECIAL_REG),
             AttributesDescriptor("Comments", COMMENT),
             AttributesDescriptor("Bad characters", BAD_CHARACTER)

@@ -7,6 +7,9 @@ import org.jetbrains.annotations.NotNull;
 public interface M68kAssignment extends PsiElement {
 
     @NotNull
+    M68kSymbolDefinition getSymbolDefinition();
+
+    @NotNull
     M68kExpr getExpr();
 
 }

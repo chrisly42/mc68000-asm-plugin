@@ -1,7 +1,8 @@
 Assembly File: a.asm
   M68kStatementImpl(STATEMENT)
     M68kAssignmentImpl(ASSIGNMENT)
-      PsiElement(M68kTokenType.SYMBOLDEF)('FOO')
+      M68kSymbolDefinitionImpl(SYMBOL_DEFINITION)
+        PsiElement(M68kTokenType.SYMBOLDEF)('FOO')
       PsiWhiteSpace(' ')
       PsiElement(M68kTokenType.OP_ASSIGN)('=')
       PsiWhiteSpace(' ')

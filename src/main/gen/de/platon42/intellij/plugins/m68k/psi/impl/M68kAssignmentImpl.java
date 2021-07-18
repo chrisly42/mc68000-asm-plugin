@@ -6,6 +6,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
 import de.platon42.intellij.plugins.m68k.psi.M68kAssignment;
 import de.platon42.intellij.plugins.m68k.psi.M68kExpr;
+import de.platon42.intellij.plugins.m68k.psi.M68kSymbolDefinition;
 import de.platon42.intellij.plugins.m68k.psi.M68kVisitor;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,6 +24,12 @@ public class M68kAssignmentImpl extends ASTWrapperPsiElement implements M68kAssi
     public void accept(@NotNull PsiElementVisitor visitor) {
         if (visitor instanceof M68kVisitor) accept((M68kVisitor) visitor);
         else super.accept(visitor);
+    }
+
+    @Override
+    @NotNull
+    public M68kSymbolDefinition getSymbolDefinition() {
+        return findNotNullChildByClass(M68kSymbolDefinition.class);
     }
 
     @Override

@@ -125,6 +125,10 @@ public class M68kVisitor extends PsiElementVisitor {
         visitAddressingMode(o);
     }
 
+    public void visitProgramCounterReference(@NotNull M68kProgramCounterReference o) {
+        visitPsiElement(o);
+    }
+
     public void visitRegister(@NotNull M68kRegister o) {
         visitPsiElement(o);
     }
@@ -139,6 +143,14 @@ public class M68kVisitor extends PsiElementVisitor {
 
     public void visitSpecialRegisterDirectAddressingMode(@NotNull M68kSpecialRegisterDirectAddressingMode o) {
         visitAddressingMode(o);
+    }
+
+    public void visitSymbolDefinition(@NotNull M68kSymbolDefinition o) {
+        visitNamedElement(o);
+    }
+
+    public void visitSymbolReference(@NotNull M68kSymbolReference o) {
+        visitPsiElement(o);
     }
 
     public void visitBinaryAddExpr(@NotNull M68kBinaryAddExpr o) {
@@ -248,6 +260,10 @@ public class M68kVisitor extends PsiElementVisitor {
 
     public void visitUnaryPlusExpr(@NotNull M68kUnaryPlusExpr o) {
         visitExpr(o);
+    }
+
+    public void visitNamedElement(@NotNull M68kNamedElement o) {
+        visitPsiElement(o);
     }
 
     public void visitPsiElement(@NotNull PsiElement o) {

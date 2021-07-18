@@ -4,9 +4,11 @@ import com.intellij.psi.PsiElement
 import com.intellij.util.IncorrectOperationException
 import de.platon42.intellij.plugins.m68k.psi.M68kElementFactory.createGlobalLabel
 import de.platon42.intellij.plugins.m68k.psi.M68kElementFactory.createLocalLabel
+import de.platon42.intellij.plugins.m68k.psi.M68kElementFactory.createSymbolDefinition
 
 object M68kPsiImplUtil {
 
+    // Global Label
     @JvmStatic
     fun getName(element: M68kGlobalLabel): String? = element.firstChild.text
 
@@ -23,6 +25,7 @@ object M68kPsiImplUtil {
     @JvmStatic
     fun getNameIdentifier(element: M68kGlobalLabel): PsiElement = element.firstChild
 
+    // Local Label
     @JvmStatic
     fun getName(element: M68kLocalLabel): String? = element.firstChild.text
 
@@ -39,4 +42,24 @@ object M68kPsiImplUtil {
 
     @JvmStatic
     fun getNameIdentifier(element: M68kLocalLabel): PsiElement = element.firstChild
+
+
+    // Symbol Definition
+
+    @JvmStatic
+    fun getName(element: M68kSymbolDefinition): String? = element.firstChild.text
+
+    @JvmStatic
+    fun setName(element: M68kSymbolDefinition, name: String): PsiElement {
+        val nameNode = element.node.findChildByType(M68kTypes.SYMBOLDEF)
+        if (nameNode != null) {
+            val newSymbolDefinition = createSymbolDefinition(element.project, name)
+            element.node.replaceChild(nameNode, newSymbolDefinition.firstChild.node)
+        }
+        return element
+    }
+
+    @JvmStatic
+    fun getNameIdentifier(element: M68kSymbolDefinition): PsiElement = element.firstChild
+
 }

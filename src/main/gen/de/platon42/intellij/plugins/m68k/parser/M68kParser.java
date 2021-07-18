@@ -411,13 +411,13 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // SYMBOLDEF COLON? (OP_ASSIGN|EQU) expr
+    // SymbolDefinition COLON? (OP_ASSIGN|EQU) expr
     public static boolean Assignment(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "Assignment")) return false;
         if (!nextTokenIs(b, SYMBOLDEF)) return false;
         boolean r;
         Marker m = enter_section_(b);
-        r = consumeToken(b, SYMBOLDEF);
+        r = SymbolDefinition(b, l + 1);
         r = r && Assignment_1(b, l + 1);
         r = r && Assignment_2(b, l + 1);
         r = r && expr(b, l + 1, -1);
@@ -903,6 +903,18 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
+    // CURRENT_PC_SYMBOL
+    public static boolean ProgramCounterReference(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "ProgramCounterReference")) return false;
+        if (!nextTokenIs(b, CURRENT_PC_SYMBOL)) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeToken(b, CURRENT_PC_SYMBOL);
+        exit_section_(b, m, PROGRAM_COUNTER_REFERENCE, r);
+        return r;
+    }
+
+    /* ********************************************************** */
     // DataRegister | AddressRegister | SpecialRegister
     public static boolean Register(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "Register")) return false;
@@ -1013,6 +1025,30 @@ public class M68kParser implements PsiParser, LightPsiParser {
         Marker m = enter_section_(b, l, _NONE_, SPECIAL_REGISTER_DIRECT_ADDRESSING_MODE, "<AddressingMode>");
         r = SpecialRegister(b, l + 1);
         exit_section_(b, l, m, r, false, null);
+        return r;
+    }
+
+    /* ********************************************************** */
+    // SYMBOLDEF
+    public static boolean SymbolDefinition(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "SymbolDefinition")) return false;
+        if (!nextTokenIs(b, SYMBOLDEF)) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeToken(b, SYMBOLDEF);
+        exit_section_(b, m, SYMBOL_DEFINITION, r);
+        return r;
+    }
+
+    /* ********************************************************** */
+    // SYMBOL
+    public static boolean SymbolReference(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "SymbolReference")) return false;
+        if (!nextTokenIs(b, SYMBOL)) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeToken(b, SYMBOL);
+        exit_section_(b, m, SYMBOL_REFERENCE, r);
         return r;
     }
 
@@ -1222,14 +1258,14 @@ public class M68kParser implements PsiParser, LightPsiParser {
         return r || p;
     }
 
-    // SYMBOL|CURRENT_PC_SYMBOL
+    // SymbolReference|ProgramCounterReference
     public static boolean ref_expr(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "ref_expr")) return false;
         if (!nextTokenIsSmart(b, CURRENT_PC_SYMBOL, SYMBOL)) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NONE_, REF_EXPR, "<expression>");
-        r = consumeTokenSmart(b, SYMBOL);
-        if (!r) r = consumeTokenSmart(b, CURRENT_PC_SYMBOL);
+        r = SymbolReference(b, l + 1);
+        if (!r) r = ProgramCounterReference(b, l + 1);
         exit_section_(b, l, m, r, false, null);
         return r;
     }

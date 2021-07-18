@@ -7,5 +7,6 @@ Assembly File: a.asm
       PsiElement(M68kTokenType.OTHER_DIRECTIVE)('incbin')
       PsiWhiteSpace(' ')
       M68kRefExprImpl(REF_EXPR)
-        PsiElement(M68kTokenType.SYMBOL)('Convertedassets\scroller_howto.raw.BPL')
+        M68kSymbolReferenceImpl(SYMBOL_REFERENCE)
+          PsiElement(M68kTokenType.SYMBOL)('Convertedassets\scroller_howto.raw.BPL')
   PsiElement(M68kTokenType.EOL)('\n')
