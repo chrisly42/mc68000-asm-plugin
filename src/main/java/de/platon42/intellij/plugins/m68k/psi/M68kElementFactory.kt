@@ -22,6 +22,11 @@ object M68kElementFactory {
         return PsiTreeUtil.findChildOfType(file, M68kSymbolDefinition::class.java)!!
     }
 
+    fun createSymbolReference(project: Project, symbol: String): M68kSymbolReference {
+        val file = createFile(project, " bra $symbol\n")
+        return PsiTreeUtil.findChildOfType(file, M68kSymbolReference::class.java)!!
+    }
+
     fun createFile(project: Project, content: String): M68kFile {
         return PsiFileFactory.getInstance(project).createFileFromText("dummy.m68k", INSTANCE, content) as M68kFile
     }

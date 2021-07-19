@@ -24,8 +24,11 @@
         <completion.contributor language="M68k" implementationClass="de.platon42.intellij.plugins.m68k.asm.M68kMnemonicCompletionContributor"/>
         <lang.braceMatcher language="M68k" implementationClass="de.platon42.intellij.plugins.m68k.syntax.M68kPairedBraceMatcher"/>
         <lang.quoteHandler language="M68k" implementationClass="de.platon42.intellij.plugins.m68k.M68kStringQuoteHandler"/>
-        <psi.referenceContributor implementation="de.platon42.intellij.plugins.m68k.refs.M68kReferenceContributor"/>
         <lang.findUsagesProvider language="M68k" implementationClass="de.platon42.intellij.plugins.m68k.scanner.M68kFindUsagesProvider"/>
+        <lang.elementManipulator forClass="de.platon42.intellij.plugins.m68k.psi.M68kSymbolReference"
+                                 implementationClass="de.platon42.intellij.plugins.m68k.refs.M68kSymbolReferenceElementManipulator"/>
+
+        <psi.referenceContributor implementation="de.platon42.intellij.plugins.m68k.refs.M68kReferenceContributor"/>
         <renameInputValidator implementation="de.platon42.intellij.plugins.m68k.psi.M68kRenameInputValidator"/>
     </extensions>
 
