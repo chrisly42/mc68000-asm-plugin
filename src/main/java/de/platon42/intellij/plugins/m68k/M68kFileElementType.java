@@ -14,7 +14,7 @@ public class M68kFileElementType extends IStubFileElementType<M68kFileStub> {
     public static final int VERSION = 1;
 
     private M68kFileElementType() {
-        super("M68K_FILE", M68kLanguage.Companion.getINSTANCE());
+        super("MC68000_FILE", MC68000Language.Companion.getINSTANCE());
     }
 
     @Override
