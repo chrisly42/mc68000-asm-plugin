@@ -63,10 +63,8 @@ class M68kLocalLabelReference(element: M68kSymbolReference) : PsiPolyVariantRefe
     }
 
     override fun getVariants(): Array<Any> {
-        return findLocalLabels(element) { true }.asSequence()
-            .distinct()
+        return findLocalLabels(element) { true }
             .map { LookupElementBuilder.createWithIcon(it) }
-            .toList()
             .toTypedArray()
     }
 }
