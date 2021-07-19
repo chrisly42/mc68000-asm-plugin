@@ -45,7 +45,6 @@ object M68kPsiImplUtil {
 
 
     // Symbol Definition
-
     @JvmStatic
     fun getName(element: M68kSymbolDefinition): String? = element.firstChild.text
 
@@ -62,4 +61,14 @@ object M68kPsiImplUtil {
     @JvmStatic
     fun getNameIdentifier(element: M68kSymbolDefinition): PsiElement = element.firstChild
 
+
+    // Symbol Reference
+    @JvmStatic
+    fun getSymbolName(element: M68kSymbolReference): String = element.firstChild.text
+
+    @JvmStatic
+    fun isLocalLabelRef(element: M68kSymbolReference): Boolean {
+        val text = element.firstChild.text
+        return text.startsWith('.') || text.endsWith('$')
+    }
 }

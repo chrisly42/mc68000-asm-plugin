@@ -1,6 +1,6 @@
-package de.platon42.intellij.plugins.m68k.psi;
+package de.platon42.intellij.plugins.m68k.psi
 
-import com.intellij.psi.PsiNameIdentifierOwner;
+import com.intellij.psi.NavigatablePsiElement
+import com.intellij.psi.PsiNameIdentifierOwner
 
-public interface M68kNamedElement extends PsiNameIdentifierOwner {
-}
+interface M68kNamedElement : PsiNameIdentifierOwner, NavigatablePsiElement

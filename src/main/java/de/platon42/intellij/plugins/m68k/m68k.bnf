@@ -153,6 +153,8 @@ GlobalLabel ::= GLOBAL_LABEL_DEF COLON* {
     extends = Label
     implements = "de.platon42.intellij.plugins.m68k.psi.M68kNamedElement"
     mixin = "de.platon42.intellij.plugins.m68k.psi.M68kGlobalLabelMixin"
+//    elementTypeFactory = "de.platon42.intellij.plugins.m68k.stubs.M68kStubElementTypeFactory.stubFactory"
+//    stubClass = "de.platon42.intellij.plugins.m68k.stubs.M68kGlobalLabelStub"
     methods = [getName setName getNameIdentifier]
 }
 
@@ -179,7 +181,13 @@ private PreprocessorOperand ::= expr
 
 private PlainOperands ::= STRINGLIT (SEPARATOR STRINGLIT)*
 
-SymbolReference ::= SYMBOL // TODO This should probably be a ILazyParseableElementType, no idea how to implement that yet
+// TODO This should probably be a ILazyParseableElementType, no idea how to implement that yet
+SymbolReference ::= SYMBOL {
+    mixin = "de.platon42.intellij.plugins.m68k.psi.M68kSymbolReferenceMixin"
+    methods = [getSymbolName isLocalLabelRef]
+//    implements = "com.intellij.model.psi.PsiExternalReferenceHost"
+}
+
 ProgramCounterReference ::= CURRENT_PC_SYMBOL
 
 DataRegister ::= DREG {
