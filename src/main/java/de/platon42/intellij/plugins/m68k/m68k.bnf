@@ -195,7 +195,7 @@ DataRegister ::= DREG {
     extends = Register
 }
 
-AddressRegister ::= AREG {
+AddressRegister ::= AREG | REG_SP {
     name = "address register"
     extends = Register
 }

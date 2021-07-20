@@ -20,7 +20,7 @@ Assembly File: a.asm
               PsiElement(M68kTokenType.SYMBOL)('foo')
         PsiElement(M68kTokenType.SEPARATOR)(',')
         M68kAddressRegisterImpl(ADDRESS_REGISTER)
-          PsiElement(M68kTokenType.AREG)('sp')
+          PsiElement(M68kTokenType.REG_SP)('sp')
         PsiElement(M68kTokenType.ROUND_R)(')')
       PsiElement(M68kTokenType.SEPARATOR)(',')
       M68kAddressRegisterIndirectWithDisplacementNewAddressingModeImpl(ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT_NEW_ADDRESSING_MODE)

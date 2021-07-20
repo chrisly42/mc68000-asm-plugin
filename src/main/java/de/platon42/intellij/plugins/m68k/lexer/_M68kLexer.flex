@@ -35,7 +35,7 @@ import static de.platon42.intellij.plugins.m68k.lexer.LexerUtil.*;
 
 EOL=\R
 WHITE_SPACE=\p{Blank}+
-AREG=((a[0-7])|sp)
+AREG=(a[0-6])
 DREG=(d[0-7])
 ASSIGNMENT=(([:letter:]|_)(([:letter:]|[:digit:])|_)*:?((\p{Blank}+equ\p{Blank}+)|(\p{Blank}+set\p{Blank}+)|\p{Blank}*=\p{Blank}*))
 LOCAL_LABEL=(\.([:letter:]|_)(([:letter:]|[:digit:])|_)*:?)|(([:letter:]|_)(([:letter:]|[:digit:])|_)*\$:?)
@@ -216,6 +216,7 @@ SKIP_TO_EOL=[^\r\n]+
 
   {AREG}              { yybegin(ASMOPS_OP); return AREG; }
   {DREG}              { yybegin(ASMOPS_OP); return DREG; }
+  "sp"|"a7"           { yybegin(ASMOPS_OP); return REG_SP; }
   "pc"                { yybegin(ASMOPS_OP); return PC; }
   "ccr"               { yybegin(ASMOPS_OP); return REG_CCR; }
   "sr"                { yybegin(ASMOPS_OP); return REG_SR; }

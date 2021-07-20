@@ -25,6 +25,7 @@ import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.PROGRAM_COUNTER
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.SEPARATOR
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.SPECIAL_REG
+import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.STACK_POINTER
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.STRING
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.SYMBOLDEF
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.SYMBOLREF
@@ -65,6 +66,12 @@ demo_init                       ; global label
         POPM
 .skip   rts
 
+irq:    move.l  a0,-(sp)
+        move    usp,a0
+        move.l  a0,$400.w
+        move.l  (sp)+,a0
+        rte
+
 hello:  dc.b   'Hello World!',10,0
         even
         dc.w    *-hello         ; length of string
@@ -97,17 +104,18 @@ hello:  dc.b   'Hello World!',10,0
             AttributesDescriptor("Symbol reference", SYMBOLREF),
             AttributesDescriptor("Assembly mnemonic", MNEMONIC),
             AttributesDescriptor("Macro invocation", MACRO_CALL),
-            AttributesDescriptor("Byte/short data width", DATA_WIDTH_BS),
-            AttributesDescriptor("Word data width", DATA_WIDTH_W),
-            AttributesDescriptor("Long data width", DATA_WIDTH_L),
+            AttributesDescriptor("Data width: Byte/short", DATA_WIDTH_BS),
+            AttributesDescriptor("Data width: Word", DATA_WIDTH_W),
+            AttributesDescriptor("Data width: Long", DATA_WIDTH_L),
             AttributesDescriptor("Data preprocessor directives", DATA_PREPROCESSOR),
             AttributesDescriptor("Other preprocessor directives", OTHER_PREPROCESSOR),
             AttributesDescriptor("Strings", STRING),
             AttributesDescriptor("Numbers", NUMBER),
-            AttributesDescriptor("Address registers", AREG),
-            AttributesDescriptor("Data registers", DREG),
-            AttributesDescriptor("Program counter", PROGRAM_COUNTER),
-            AttributesDescriptor("Special registers", SPECIAL_REG),
+            AttributesDescriptor("Registers: Address registers", AREG),
+            AttributesDescriptor("Registers: Stack pointer", STACK_POINTER),
+            AttributesDescriptor("Registers: Data registers", DREG),
+            AttributesDescriptor("Registers: Program counter", PROGRAM_COUNTER),
+            AttributesDescriptor("Registers: Special registers", SPECIAL_REG),
             AttributesDescriptor("Comments", COMMENT),
             AttributesDescriptor("Bad characters", BAD_CHARACTER)
         )

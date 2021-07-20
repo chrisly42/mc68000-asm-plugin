@@ -84,13 +84,14 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // AREG
+    // AREG | REG_SP
     public static boolean AddressRegister(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "AddressRegister")) return false;
-        if (!nextTokenIs(b, "<address register>", AREG)) return false;
+        if (!nextTokenIs(b, "<address register>", AREG, REG_SP)) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NONE_, ADDRESS_REGISTER, "<address register>");
         r = consumeToken(b, AREG);
+        if (!r) r = consumeToken(b, REG_SP);
         exit_section_(b, l, m, r, false, null);
         return r;
     }
@@ -99,7 +100,7 @@ public class M68kParser implements PsiParser, LightPsiParser {
     // AddressRegister !(OP_MINUS|OP_AR_DIV)
     public static boolean AddressRegisterDirectAddressingMode(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "AddressRegisterDirectAddressingMode")) return false;
-        if (!nextTokenIsFast(b, AREG)) return false;
+        if (!nextTokenIsFast(b, AREG, REG_SP)) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NONE_, ADDRESS_REGISTER_DIRECT_ADDRESSING_MODE, "<AddressingMode>");
         r = AddressRegister(b, l + 1);
@@ -445,7 +446,6 @@ public class M68kParser implements PsiParser, LightPsiParser {
     // DataRegister | AddressRegister
     static boolean DataOrAddressRegister(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "DataOrAddressRegister")) return false;
-        if (!nextTokenIs(b, "<data or address register>", AREG, DREG)) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NONE_, null, "<data or address register>");
         r = DataRegister(b, l + 1);
@@ -931,7 +931,6 @@ public class M68kParser implements PsiParser, LightPsiParser {
     // (DataOrAddressRegister|RegisterRange) ((OP_AR_DIV|OP_MINUS) (DataOrAddressRegister|RegisterRange))*
     public static boolean RegisterListAddressingMode(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "RegisterListAddressingMode")) return false;
-        if (!nextTokenIsFast(b, AREG, DREG)) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NONE_, REGISTER_LIST_ADDRESSING_MODE, "<AddressingMode>");
         r = RegisterListAddressingMode_0(b, l + 1);
@@ -993,7 +992,6 @@ public class M68kParser implements PsiParser, LightPsiParser {
     // DataOrAddressRegister OP_MINUS DataOrAddressRegister
     static boolean RegisterRange(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "RegisterRange")) return false;
-        if (!nextTokenIs(b, "", AREG, DREG)) return false;
         boolean r;
         Marker m = enter_section_(b);
         r = DataOrAddressRegister(b, l + 1);

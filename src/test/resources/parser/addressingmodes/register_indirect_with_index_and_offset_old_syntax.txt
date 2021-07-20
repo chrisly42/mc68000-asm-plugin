@@ -19,7 +19,7 @@ Assembly File: a.asm
               PsiElement(M68kTokenType.SYMBOL)('foo')
         PsiElement(M68kTokenType.ROUND_L)('(')
         M68kAddressRegisterImpl(ADDRESS_REGISTER)
-          PsiElement(M68kTokenType.AREG)('sp')
+          PsiElement(M68kTokenType.REG_SP)('sp')
         PsiElement(M68kTokenType.SEPARATOR)(',')
         M68kDataRegisterImpl(DATA_REGISTER)
           PsiElement(M68kTokenType.DREG)('d0')
