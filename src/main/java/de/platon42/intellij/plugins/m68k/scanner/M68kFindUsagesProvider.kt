@@ -8,10 +8,7 @@ import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.tree.TokenSet
 import de.platon42.intellij.plugins.m68k.lexer.M68kLexer
 import de.platon42.intellij.plugins.m68k.lexer.M68kLexerPrefs
-import de.platon42.intellij.plugins.m68k.psi.M68kGlobalLabel
-import de.platon42.intellij.plugins.m68k.psi.M68kLocalLabel
-import de.platon42.intellij.plugins.m68k.psi.M68kSymbolDefinition
-import de.platon42.intellij.plugins.m68k.psi.M68kTypes
+import de.platon42.intellij.plugins.m68k.psi.*
 import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.NonNls
 
@@ -40,6 +37,7 @@ class M68kFindUsagesProvider : FindUsagesProvider {
             is M68kGlobalLabel -> "global label"
             is M68kLocalLabel -> "local label"
             is M68kSymbolDefinition -> "symbol definition"
+            is M68kSymbolReference -> "symbol reference"
             else -> ""
         }
     }
@@ -49,6 +47,7 @@ class M68kFindUsagesProvider : FindUsagesProvider {
             is M68kGlobalLabel -> element.name!!
             is M68kLocalLabel -> element.name!!
             is M68kSymbolDefinition -> element.parent.text
+            is M68kSymbolReference -> element.symbolName
             else -> ""
         }
     }

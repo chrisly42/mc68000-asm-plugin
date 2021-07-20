@@ -9,10 +9,12 @@ class M68kReferenceContributor : PsiReferenceContributor() {
 
     companion object {
         val localLabelReferenceProvider = LocalLabelReferenceProvider()
+        val globalLabelReferenceProvider = GlobalLabelSymbolReferenceProvider()
     }
 
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
         registrar.registerReferenceProvider(PlatformPatterns.psiElement(M68kSymbolReference::class.java), localLabelReferenceProvider)
+        registrar.registerReferenceProvider(PlatformPatterns.psiElement(M68kSymbolReference::class.java), globalLabelReferenceProvider)
     }
 
     class LocalLabelReferenceProvider : PsiReferenceProvider() {
@@ -20,6 +22,14 @@ class M68kReferenceContributor : PsiReferenceContributor() {
             val symbolReference = element as M68kSymbolReference
             if (!symbolReference.isLocalLabelRef) return emptyArray()
             return arrayOf(M68kLocalLabelReference(symbolReference))
+        }
+    }
+
+    class GlobalLabelSymbolReferenceProvider : PsiReferenceProvider() {
+        override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
+            val symbolReference = element as M68kSymbolReference
+            if (symbolReference.isLocalLabelRef) return emptyArray()
+            return arrayOf(M68kGlobalLabelSymbolReference(symbolReference))
         }
     }
 }
