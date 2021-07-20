@@ -25,6 +25,7 @@
         <lang.braceMatcher language="MC68000" implementationClass="de.platon42.intellij.plugins.m68k.syntax.M68kPairedBraceMatcher"/>
         <lang.quoteHandler language="MC68000" implementationClass="de.platon42.intellij.plugins.m68k.M68kStringQuoteHandler"/>
         <lang.findUsagesProvider language="MC68000" implementationClass="de.platon42.intellij.plugins.m68k.scanner.M68kFindUsagesProvider"/>
+        <lang.psiStructureViewFactory language="MC68000" implementationClass="de.platon42.intellij.plugins.m68k.structureview.M68kStructureViewFactory"/>
         <lang.elementManipulator forClass="de.platon42.intellij.plugins.m68k.psi.M68kSymbolReference"
                                  implementationClass="de.platon42.intellij.plugins.m68k.refs.M68kSymbolReferenceElementManipulator"/>
 
