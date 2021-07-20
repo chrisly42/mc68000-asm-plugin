@@ -1,4 +1,4 @@
-# MC68000 Assembly Language Plugin [![Build Status](https://travis-ci.com/chrisly42/mc68000-asm-plugin.svg?branch=master)](https://travis-ci.com/chrisly42/mc68000-asm-plugin) [![Coverage Status](https://coveralls.io/repos/github/chrisly42/mc68000-asm-plugin/badge.svg?branch=master)](https://coveralls.io/github/chrisly42/mc68000-asm-plugin?branch=master)
+# MC68000 Assembly Language Plugin [![Build Status](https://travis-ci.com/chrisly42/mc68000-asm-plugin.svg?branch=main)](https://travis-ci.com/chrisly42/mc68000-asm-plugin) [![Coverage Status](https://coveralls.io/repos/github/chrisly42/mc68000-asm-plugin/badge.svg?branch=main)](https://coveralls.io/github/chrisly42/mc68000-asm-plugin?branch=main)
 
 _MC68000 Assembly Language Plugin_ is plugin for Jetbrains IDEs (CLion, IntelliJ, etc.).
 
@@ -67,4 +67,4 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 
 ### V0.1 (20-Jun-21)
 
-- Initial release.
+- Initial public release.

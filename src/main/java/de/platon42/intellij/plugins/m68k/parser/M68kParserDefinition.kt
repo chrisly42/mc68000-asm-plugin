@@ -1,68 +1,40 @@
-package de.platon42.intellij.plugins.m68k.parser;
+package de.platon42.intellij.plugins.m68k.parser
 
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.ParserDefinition;
-import com.intellij.lang.PsiParser;
-import com.intellij.lexer.Lexer;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.tree.IFileElementType;
-import com.intellij.psi.tree.TokenSet;
-import de.platon42.intellij.plugins.m68k.M68kFileElementType;
-import de.platon42.intellij.plugins.m68k.lexer.M68kLexer;
-import de.platon42.intellij.plugins.m68k.lexer.M68kLexerPrefs;
-import de.platon42.intellij.plugins.m68k.psi.M68kFile;
-import de.platon42.intellij.plugins.m68k.psi.M68kTypes;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.lang.ASTNode
+import com.intellij.lang.ParserDefinition
+import com.intellij.lexer.Lexer
+import com.intellij.openapi.project.Project
+import com.intellij.psi.FileViewProvider
+import com.intellij.psi.tree.TokenSet
+import de.platon42.intellij.plugins.m68k.M68kFileElementType
+import de.platon42.intellij.plugins.m68k.lexer.M68kLexer
+import de.platon42.intellij.plugins.m68k.lexer.M68kLexerPrefs
+import de.platon42.intellij.plugins.m68k.psi.M68kFile
+import de.platon42.intellij.plugins.m68k.psi.M68kTypes
 
-public class M68kParserDefinition implements ParserDefinition {
-    public static final TokenSet STRING_LITERALS = TokenSet.create(M68kTypes.STRINGLIT);
-    public static final TokenSet COMMENTS = TokenSet.create(M68kTypes.COMMENT);
+class M68kParserDefinition : ParserDefinition {
 
-    private M68kLexerPrefs lexerPrefs = new M68kLexerPrefs(); // TODO make this configurable
+    val lexerPrefs = M68kLexerPrefs() // TODO make this configurable
 
-    public M68kParserDefinition() {
-    }
-
-    public M68kLexerPrefs getLexerPrefs() {
-        return lexerPrefs;
-    }
-
-    @Override
-    public @NotNull Lexer createLexer(Project project) {
+    override fun createLexer(project: Project): Lexer {
         // TODO take prefs from project somehow
-        return new M68kLexer(lexerPrefs);
+        return M68kLexer(lexerPrefs)
     }
 
-    @Override
-    public @NotNull PsiParser createParser(Project project) {
-        return new M68kParser();
-    }
+    override fun createParser(project: Project) = M68kParser()
 
-    @Override
-    public @NotNull IFileElementType getFileNodeType() {
-        return M68kFileElementType.INSTANCE;
-    }
+    override fun getFileNodeType() = M68kFileElementType.INSTANCE
 
-    @Override
-    public @NotNull TokenSet getCommentTokens() {
-        return COMMENTS;
-    }
+    override fun getCommentTokens() = COMMENTS
 
-    @Override
-    public @NotNull TokenSet getStringLiteralElements() {
-        return STRING_LITERALS;
-    }
+    override fun getStringLiteralElements() = STRING_LITERALS
 
-    @Override
-    public @NotNull PsiElement createElement(ASTNode node) {
-        return M68kTypes.Factory.createElement(node);
-    }
+    override fun createElement(node: ASTNode) = M68kTypes.Factory.createElement(node)
 
-    @Override
-    public @NotNull PsiFile createFile(@NotNull FileViewProvider viewProvider) {
-        return new M68kFile(viewProvider);
+    override fun createFile(viewProvider: FileViewProvider) = M68kFile(viewProvider)
+
+    companion object {
+        val STRING_LITERALS = TokenSet.create(M68kTypes.STRINGLIT)
+        val COMMENTS = TokenSet.create(M68kTypes.COMMENT)
     }
 }

@@ -46,9 +46,9 @@ intellij {
 
 patchPluginXml {
     setChangeNotes("""
-  <h4>V0.1 (xx-Jun-21)</h4>
+  <h4>V0.1 (20-Jun-21)</h4>
     <ul>
-      <li>Initial.
+      <li>Initial public release.
     </ul>
   <p>Full changelog available at <a href="https://github.com/chrisly42/mc68000-asm-plugin#changelog">Github project site</a>.</p>
 """)

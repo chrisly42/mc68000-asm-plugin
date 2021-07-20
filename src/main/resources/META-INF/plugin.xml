@@ -5,11 +5,11 @@
     </vendor>
 
     <description><![CDATA[
-    MC68000-asm-plugin is a plugin to add language support for Motorola 68000 assembly language files.
+    MC68000 Assembly Language Plugin adds language support for Motorola 68000 (M68k) assembly language files.
     <p>
     <a href="https://github.com/chrisly42/mc68000-asm-plugin/blob/main/README.md">Full documentation here...</a>
     ]]></description>
-    <idea-version since-build="192.4205.45"/>
+    <idea-version since-build="193.7288.26"/>
 
     <depends>com.intellij.modules.lang</depends>
 

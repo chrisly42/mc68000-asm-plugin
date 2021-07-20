@@ -1,7 +1,5 @@
-package de.platon42.intellij.plugins.m68k.parser;
+package de.platon42.intellij.plugins.m68k.parser
 
-import com.intellij.lang.parser.GeneratedParserUtilBase;
+import com.intellij.lang.parser.GeneratedParserUtilBase
 
-public class M68kParserUtilBase extends GeneratedParserUtilBase {
-
-}
+class M68kParserUtilBase : GeneratedParserUtilBase()

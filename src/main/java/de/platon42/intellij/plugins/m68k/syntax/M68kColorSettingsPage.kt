@@ -5,7 +5,6 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighter
 import com.intellij.openapi.options.colors.AttributesDescriptor
 import com.intellij.openapi.options.colors.ColorDescriptor
 import com.intellij.openapi.options.colors.ColorSettingsPage
-import com.intellij.openapi.util.NlsContexts.ConfigurableName
 import de.platon42.intellij.plugins.m68k.M68kIcons.FILE
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.AREG
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.BAD_CHARACTER
@@ -90,7 +89,7 @@ hello:  dc.b   'Hello World!',10,0
         return ColorDescriptor.EMPTY_ARRAY
     }
 
-    override fun getDisplayName(): @ConfigurableName String {
+    override fun getDisplayName(): String {
         return "M68k Assembly"
     }
 

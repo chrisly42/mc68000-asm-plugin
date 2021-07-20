@@ -5,8 +5,7 @@ import de.platon42.intellij.plugins.m68k.M68kIcons.FILE
 import org.jetbrains.annotations.NonNls
 import javax.swing.Icon
 
-@Suppress("unused")
-class M68kFileType private constructor() : LanguageFileType(MC68000Language.INSTANCE, false) {
+class M68kFileType private constructor() : LanguageFileType(MC68000Language.INSTANCE) {
     @NonNls
     override fun getName(): String {
         return "MC68000 Assembler"
