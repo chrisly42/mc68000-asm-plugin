@@ -65,6 +65,6 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 
 ## Changelog
 
-### V0.1 (20-Jun-21)
+### V0.1 (20-Jul-21)
 
 - Initial public release.

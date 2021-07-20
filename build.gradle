@@ -46,7 +46,7 @@ intellij {
 
 patchPluginXml {
     setChangeNotes("""
-  <h4>V0.1 (20-Jun-21)</h4>
+  <h4>V0.1 (20-Jul-21)</h4>
     <ul>
       <li>Initial public release.
     </ul>
