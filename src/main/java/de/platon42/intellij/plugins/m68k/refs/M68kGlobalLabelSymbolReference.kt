@@ -8,6 +8,9 @@ import com.intellij.psi.PsiPolyVariantReferenceBase
 import com.intellij.psi.ResolveResult
 import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.psi.search.GlobalSearchScope
+import com.intellij.psi.search.PsiSearchHelper
+import com.intellij.psi.search.UsageSearchContext
+import com.intellij.util.SmartList
 import de.platon42.intellij.plugins.m68k.psi.M68kGlobalLabel
 import de.platon42.intellij.plugins.m68k.psi.M68kLookupUtil
 import de.platon42.intellij.plugins.m68k.psi.M68kSymbolDefinition
@@ -19,28 +22,34 @@ class M68kGlobalLabelSymbolReference(element: M68kSymbolReference) :
     companion object {
         val INSTANCE = Resolver()
 
-        fun findGlobalLabels(element: M68kSymbolReference, predicate: (M68kGlobalLabel) -> Boolean): List<M68kGlobalLabel> {
-            return M68kLookupUtil.findAllGlobalLabels(element.project).filter(predicate)
-        }
+        fun findGlobalLabels(element: M68kSymbolReference, predicate: (M68kGlobalLabel) -> Boolean): List<M68kGlobalLabel> =
+            M68kLookupUtil.findAllGlobalLabels(element.project).filter(predicate)
 
-        fun findSymbolDefinitions(element: M68kSymbolReference, predicate: (M68kSymbolDefinition) -> Boolean): List<M68kSymbolDefinition> {
-            return M68kLookupUtil.findAllSymbolDefinitions(element.project).filter(predicate)
-        }
-
-        private fun getCurrentFileSearchScope(element: PsiElement): GlobalSearchScope {
-            return GlobalSearchScope.fileScope(element.containingFile.originalFile)
-        }
+        fun findSymbolDefinitions(element: M68kSymbolReference, predicate: (M68kSymbolDefinition) -> Boolean): List<M68kSymbolDefinition> =
+            M68kLookupUtil.findAllSymbolDefinitions(element.project).filter(predicate)
     }
 
     class Resolver : ResolveCache.PolyVariantResolver<M68kGlobalLabelSymbolReference> {
         override fun resolve(ref: M68kGlobalLabelSymbolReference, incompleteCode: Boolean): Array<ResolveResult> {
             val refName = ref.element.symbolName
 
+            val project = ref.element.project
+            val targets: MutableList<PsiElement> = SmartList()
+            PsiSearchHelper.getInstance(project).processElementsWithWord(
+                { elem, offset ->
+                    when (elem) {
+                        is M68kGlobalLabel, is M68kSymbolDefinition -> targets.add(elem)
+                    }
+                    true
+                }, GlobalSearchScope.allScope(project),
+                refName, UsageSearchContext.IN_CODE, true
+            )
+
             val globalLabelMatches: Array<ResolveResult> = findGlobalLabels(ref.myElement) { it.name == refName }
                 .map { PsiElementResolveResult(it) }
                 .toTypedArray()
             if (globalLabelMatches.isNotEmpty()) return globalLabelMatches
-            return findSymbolDefinitions(ref.myElement) { it.name == refName }
+            return targets
                 .map { PsiElementResolveResult(it) }
                 .toTypedArray()
         }

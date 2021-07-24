@@ -19,7 +19,7 @@ class M68kFindUsagesProvider : FindUsagesProvider {
             M68kLexer(M68kLexerPrefs()),  // FIXME Oh no! More Prefs!
             TokenSet.create(M68kTypes.SYMBOLDEF, M68kTypes.GLOBAL_LABEL_DEF, M68kTypes.LOCAL_LABEL_DEF, M68kTypes.SYMBOL),
             TokenSet.create(M68kTypes.COMMENT),
-            TokenSet.create(M68kTypes.STRINGLIT),
+            TokenSet.create(M68kTypes.STRINGLIT, M68kTypes.DECIMAL, M68kTypes.HEXADECIMAL, M68kTypes.OCTAL, M68kTypes.BINARY),
             TokenSet.EMPTY
         )
     }
