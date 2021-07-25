@@ -9,6 +9,7 @@ object M68kStubElementTypeFactory {
     fun stubFactory(name: String): IStubElementType<out StubElement<out M68kPsiElement>, out M68kPsiElement> {
         when (name) {
             "GLOBAL_LABEL" -> return M68kElementTypes.GLOBAL_LABEL
+            "SYMBOL_DEFINITION" -> return M68kElementTypes.SYMBOL_DEFINITION
             else -> throw RuntimeException("Unknown element type '$name'")
         }
     }

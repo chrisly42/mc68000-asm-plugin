@@ -66,7 +66,7 @@ public interface M68kTypes {
     IElementType SPECIAL_REGISTER = new M68kElementType("SPECIAL_REGISTER");
     IElementType SPECIAL_REGISTER_DIRECT_ADDRESSING_MODE = new M68kElementType("SPECIAL_REGISTER_DIRECT_ADDRESSING_MODE");
     IElementType STATEMENT = new M68kElementType("STATEMENT");
-    IElementType SYMBOL_DEFINITION = new M68kElementType("SYMBOL_DEFINITION");
+    IElementType SYMBOL_DEFINITION = M68kStubElementTypeFactory.stubFactory("SYMBOL_DEFINITION");
     IElementType SYMBOL_REFERENCE = new M68kElementType("SYMBOL_REFERENCE");
     IElementType UNARY_COMPL_EXPR = new M68kElementType("UNARY_COMPL_EXPR");
     IElementType UNARY_MINUS_EXPR = new M68kElementType("UNARY_MINUS_EXPR");

@@ -130,6 +130,8 @@ private statement_recover ::= !(EOL)
 SymbolDefinition ::= SYMBOLDEF {
     implements = "de.platon42.intellij.plugins.m68k.psi.M68kNamedElement"
     mixin = "de.platon42.intellij.plugins.m68k.psi.M68kSymbolDefinitionMixin"
+    elementTypeFactory = "de.platon42.intellij.plugins.m68k.stubs.M68kStubElementTypeFactory.stubFactory"
+    stubClass = "de.platon42.intellij.plugins.m68k.stubs.M68kSymbolDefinitionStub"
     methods = [getName setName getNameIdentifier]
 }
 
