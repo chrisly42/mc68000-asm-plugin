@@ -5,6 +5,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import de.platon42.intellij.plugins.m68k.psi.impl.*;
+import de.platon42.intellij.plugins.m68k.stubs.M68kStubElementTypeFactory;
 
 public interface M68kTypes {
 
@@ -45,7 +46,7 @@ public interface M68kTypes {
     IElementType DATA_REGISTER_DIRECT_ADDRESSING_MODE = new M68kElementType("DATA_REGISTER_DIRECT_ADDRESSING_MODE");
     IElementType DATA_WIDTH = new M68kElementType("DATA_WIDTH");
     IElementType EXPR = new M68kElementType("EXPR");
-    IElementType GLOBAL_LABEL = new M68kElementType("GLOBAL_LABEL");
+    IElementType GLOBAL_LABEL = M68kStubElementTypeFactory.stubFactory("GLOBAL_LABEL");
     IElementType IMMEDIATE_DATA = new M68kElementType("IMMEDIATE_DATA");
     IElementType LABEL = new M68kElementType("LABEL");
     IElementType LITERAL_EXPR = new M68kElementType("LITERAL_EXPR");

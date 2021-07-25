@@ -3,6 +3,7 @@ package de.platon42.intellij.plugins.m68k.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
 import de.platon42.intellij.plugins.m68k.psi.M68kExpr;
 import de.platon42.intellij.plugins.m68k.psi.M68kUnaryNotExpr;
 import de.platon42.intellij.plugins.m68k.psi.M68kVisitor;
@@ -29,7 +30,7 @@ public class M68kUnaryNotExprImpl extends M68kExprImpl implements M68kUnaryNotEx
     @Override
     @Nullable
     public M68kExpr getExpr() {
-        return findChildByClass(M68kExpr.class);
+        return PsiTreeUtil.getChildOfType(this, M68kExpr.class);
     }
 
 }

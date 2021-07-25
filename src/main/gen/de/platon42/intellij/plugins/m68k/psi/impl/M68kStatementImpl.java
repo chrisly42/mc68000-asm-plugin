@@ -4,6 +4,7 @@ package de.platon42.intellij.plugins.m68k.psi.impl;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
 import de.platon42.intellij.plugins.m68k.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,31 +28,31 @@ public class M68kStatementImpl extends ASTWrapperPsiElement implements M68kState
     @Override
     @Nullable
     public M68kAsmInstruction getAsmInstruction() {
-        return findChildByClass(M68kAsmInstruction.class);
+        return PsiTreeUtil.getChildOfType(this, M68kAsmInstruction.class);
     }
 
     @Override
     @Nullable
     public M68kAssignment getAssignment() {
-        return findChildByClass(M68kAssignment.class);
+        return PsiTreeUtil.getChildOfType(this, M68kAssignment.class);
     }
 
     @Override
     @Nullable
     public M68kLabel getLabel() {
-        return findChildByClass(M68kLabel.class);
+        return PsiTreeUtil.getChildOfType(this, M68kLabel.class);
     }
 
     @Override
     @Nullable
     public M68kMacroCall getMacroCall() {
-        return findChildByClass(M68kMacroCall.class);
+        return PsiTreeUtil.getChildOfType(this, M68kMacroCall.class);
     }
 
     @Override
     @Nullable
     public M68kPreprocessorDirective getPreprocessorDirective() {
-        return findChildByClass(M68kPreprocessorDirective.class);
+        return PsiTreeUtil.getChildOfType(this, M68kPreprocessorDirective.class);
     }
 
 }

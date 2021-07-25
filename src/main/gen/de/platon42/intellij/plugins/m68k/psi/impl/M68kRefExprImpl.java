@@ -3,6 +3,7 @@ package de.platon42.intellij.plugins.m68k.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
 import de.platon42.intellij.plugins.m68k.psi.M68kProgramCounterReference;
 import de.platon42.intellij.plugins.m68k.psi.M68kRefExpr;
 import de.platon42.intellij.plugins.m68k.psi.M68kSymbolReference;
@@ -30,13 +31,13 @@ public class M68kRefExprImpl extends M68kExprImpl implements M68kRefExpr {
     @Override
     @Nullable
     public M68kProgramCounterReference getProgramCounterReference() {
-        return findChildByClass(M68kProgramCounterReference.class);
+        return PsiTreeUtil.getChildOfType(this, M68kProgramCounterReference.class);
     }
 
     @Override
     @Nullable
     public M68kSymbolReference getSymbolReference() {
-        return findChildByClass(M68kSymbolReference.class);
+        return PsiTreeUtil.getChildOfType(this, M68kSymbolReference.class);
     }
 
 }

@@ -4,6 +4,7 @@ package de.platon42.intellij.plugins.m68k.psi.impl;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
 import de.platon42.intellij.plugins.m68k.psi.M68kAsmOp;
 import de.platon42.intellij.plugins.m68k.psi.M68kOperandSize;
 import de.platon42.intellij.plugins.m68k.psi.M68kVisitor;
@@ -29,7 +30,7 @@ public class M68kAsmOpImpl extends ASTWrapperPsiElement implements M68kAsmOp {
     @Override
     @Nullable
     public M68kOperandSize getOperandSize() {
-        return findChildByClass(M68kOperandSize.class);
+        return PsiTreeUtil.getChildOfType(this, M68kOperandSize.class);
     }
 
 }

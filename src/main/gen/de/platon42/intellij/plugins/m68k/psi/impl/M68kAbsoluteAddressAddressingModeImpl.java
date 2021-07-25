@@ -3,6 +3,7 @@ package de.platon42.intellij.plugins.m68k.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
 import de.platon42.intellij.plugins.m68k.psi.M68kAbsoluteAddressAddressingMode;
 import de.platon42.intellij.plugins.m68k.psi.M68kAddressSize;
 import de.platon42.intellij.plugins.m68k.psi.M68kExpr;
@@ -30,13 +31,13 @@ public class M68kAbsoluteAddressAddressingModeImpl extends M68kAddressingModeImp
     @Override
     @Nullable
     public M68kAddressSize getAddressSize() {
-        return findChildByClass(M68kAddressSize.class);
+        return PsiTreeUtil.getChildOfType(this, M68kAddressSize.class);
     }
 
     @Override
     @NotNull
     public M68kExpr getExpr() {
-        return findNotNullChildByClass(M68kExpr.class);
+        return notNullChild(PsiTreeUtil.getChildOfType(this, M68kExpr.class));
     }
 
 }

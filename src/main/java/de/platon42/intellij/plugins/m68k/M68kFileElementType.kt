@@ -13,7 +13,8 @@ class M68kFileElementType private constructor() : IStubFileElementType<M68kFileS
         @JvmField
         val INSTANCE = M68kFileElementType()
 
-        const val STUB_VERSION = 1
+        const val STUB_VERSION = 2
+        const val STUB_EXTERNAL_ID_PREFIX = "MC68000."
     }
 
     override fun getStubVersion() = STUB_VERSION

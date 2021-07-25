@@ -1,7 +1,6 @@
 // This is a generated file. Not intended for manual editing.
 package de.platon42.intellij.plugins.m68k.psi;
 
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
 
@@ -266,7 +265,7 @@ public class M68kVisitor extends PsiElementVisitor {
         visitPsiElement(o);
     }
 
-    public void visitPsiElement(@NotNull PsiElement o) {
+    public void visitPsiElement(@NotNull M68kPsiElement o) {
         visitElement(o);
     }
 

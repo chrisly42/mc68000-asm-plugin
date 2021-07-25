@@ -36,7 +36,7 @@ class M68kGlobalLabelSymbolReference(element: M68kSymbolReference) :
             val project = ref.element.project
             val targets: MutableList<PsiElement> = SmartList()
             PsiSearchHelper.getInstance(project).processElementsWithWord(
-                { elem, offset ->
+                { elem, _ ->
                     when (elem) {
                         is M68kGlobalLabel, is M68kSymbolDefinition -> targets.add(elem)
                     }

@@ -3,6 +3,7 @@ package de.platon42.intellij.plugins.m68k.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
 import de.platon42.intellij.plugins.m68k.psi.M68kDataRegister;
 import de.platon42.intellij.plugins.m68k.psi.M68kDataRegisterDirectAddressingMode;
 import de.platon42.intellij.plugins.m68k.psi.M68kVisitor;
@@ -28,7 +29,7 @@ public class M68kDataRegisterDirectAddressingModeImpl extends M68kAddressingMode
     @Override
     @NotNull
     public M68kDataRegister getDataRegister() {
-        return findNotNullChildByClass(M68kDataRegister.class);
+        return notNullChild(PsiTreeUtil.getChildOfType(this, M68kDataRegister.class));
     }
 
 }

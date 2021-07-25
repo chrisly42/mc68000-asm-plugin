@@ -38,7 +38,7 @@ public class M68kAsmInstructionImpl extends ASTWrapperPsiElement implements M68k
     @Override
     @NotNull
     public M68kAsmOp getAsmOp() {
-        return findNotNullChildByClass(M68kAsmOp.class);
+        return notNullChild(PsiTreeUtil.getChildOfType(this, M68kAsmOp.class));
     }
 
 }

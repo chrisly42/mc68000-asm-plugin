@@ -6,11 +6,11 @@ import com.intellij.lexer.Lexer
 import com.intellij.openapi.project.Project
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.tree.TokenSet
-import de.platon42.intellij.plugins.m68k.M68kFileElementType
 import de.platon42.intellij.plugins.m68k.lexer.M68kLexer
 import de.platon42.intellij.plugins.m68k.lexer.M68kLexerPrefs
 import de.platon42.intellij.plugins.m68k.psi.M68kFile
 import de.platon42.intellij.plugins.m68k.psi.M68kTypes
+import de.platon42.intellij.plugins.m68k.stubs.M68kElementTypes
 
 class M68kParserDefinition : ParserDefinition {
 
@@ -23,7 +23,7 @@ class M68kParserDefinition : ParserDefinition {
 
     override fun createParser(project: Project) = M68kParser()
 
-    override fun getFileNodeType() = M68kFileElementType.INSTANCE
+    override fun getFileNodeType() = M68kElementTypes.FILE
 
     override fun getCommentTokens() = COMMENTS
 

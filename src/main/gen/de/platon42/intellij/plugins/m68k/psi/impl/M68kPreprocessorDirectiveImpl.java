@@ -33,7 +33,7 @@ public class M68kPreprocessorDirectiveImpl extends ASTWrapperPsiElement implemen
     @Override
     @Nullable
     public M68kLabel getLabel() {
-        return findChildByClass(M68kLabel.class);
+        return PsiTreeUtil.getChildOfType(this, M68kLabel.class);
     }
 
     @Override

@@ -2,6 +2,7 @@
     parserClass="de.platon42.intellij.plugins.m68k.parser.M68kParser"
     parserUtilClass="de.platon42.intellij.plugins.m68k.parser.M68kParserUtilBase"
 
+    implements = "de.platon42.intellij.plugins.m68k.psi.M68kPsiElement"
     extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
     psiClassPrefix="M68k"
     psiImplClassSuffix="Impl"
@@ -153,8 +154,8 @@ GlobalLabel ::= GLOBAL_LABEL_DEF COLON* {
     extends = Label
     implements = "de.platon42.intellij.plugins.m68k.psi.M68kNamedElement"
     mixin = "de.platon42.intellij.plugins.m68k.psi.M68kGlobalLabelMixin"
-//    elementTypeFactory = "de.platon42.intellij.plugins.m68k.stubs.M68kStubElementTypeFactory.stubFactory"
-//    stubClass = "de.platon42.intellij.plugins.m68k.stubs.M68kGlobalLabelStub"
+    elementTypeFactory = "de.platon42.intellij.plugins.m68k.stubs.M68kStubElementTypeFactory.stubFactory"
+    stubClass = "de.platon42.intellij.plugins.m68k.stubs.M68kGlobalLabelStub"
     methods = [getName setName getNameIdentifier]
 }
 

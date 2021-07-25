@@ -3,6 +3,7 @@ package de.platon42.intellij.plugins.m68k.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
 import de.platon42.intellij.plugins.m68k.psi.M68kExpr;
 import de.platon42.intellij.plugins.m68k.psi.M68kProgramCounterIndirectWithDisplacementNewAddressingMode;
 import de.platon42.intellij.plugins.m68k.psi.M68kVisitor;
@@ -28,7 +29,7 @@ public class M68kProgramCounterIndirectWithDisplacementNewAddressingModeImpl ext
     @Override
     @NotNull
     public M68kExpr getExpr() {
-        return findNotNullChildByClass(M68kExpr.class);
+        return notNullChild(PsiTreeUtil.getChildOfType(this, M68kExpr.class));
     }
 
 }

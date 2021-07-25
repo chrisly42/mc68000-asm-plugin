@@ -4,6 +4,7 @@ package de.platon42.intellij.plugins.m68k.psi.impl;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
 import de.platon42.intellij.plugins.m68k.psi.M68kAssignment;
 import de.platon42.intellij.plugins.m68k.psi.M68kExpr;
 import de.platon42.intellij.plugins.m68k.psi.M68kSymbolDefinition;
@@ -29,13 +30,13 @@ public class M68kAssignmentImpl extends ASTWrapperPsiElement implements M68kAssi
     @Override
     @NotNull
     public M68kSymbolDefinition getSymbolDefinition() {
-        return findNotNullChildByClass(M68kSymbolDefinition.class);
+        return notNullChild(PsiTreeUtil.getChildOfType(this, M68kSymbolDefinition.class));
     }
 
     @Override
     @NotNull
     public M68kExpr getExpr() {
-        return findNotNullChildByClass(M68kExpr.class);
+        return notNullChild(PsiTreeUtil.getChildOfType(this, M68kExpr.class));
     }
 
 }
