@@ -36,7 +36,6 @@ it's "good enough" to get started, and I can return to demo coding with its curr
 
 ## Known issues
 
-- Performance is not optimal yet (no stub index).
 - No referencing of macro invocations and macro definitions.
 - `Find Usages` always shows _"Unclassified"_ though it shouldn't.
 - Macro definitions may cause syntax errors when using backslash arguments.
@@ -55,15 +54,26 @@ it's "good enough" to get started, and I can return to demo coding with its curr
     - Formatter + Code Style Settings
     - Register use analysis (but this only makes sense after macro evaluation)
 
+## Recommendations
+
+Currently, I would suggest using the fabulous [Browse Word at Caret Plugin](https://plugins.jetbrains.com/plugin/201-browsewordatcaret)
+to highlight the same address and data registers while editing (see new `View -> Highlight Word at Caret` menu item).
+
 ## Development notice
 
-This plugin has been written in Kotlin 1.5.
+This plugin has been written in Kotlin 1.5 using Grammar-Kit.
 
 It is probably the only plugin (besides [Cajon](https://github.com/chrisly42/cajon-plugin) from the same author) that uses JUnit 5 Jupiter for unit testing so
 far (or at least the only one I'm aware of ;) ). The IntelliJ framework actually uses the JUnit 3 TestCase for plugin testing, and it took me quite a while to
 make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.intellij.jupiter```) for your projects (with attribution).
 
 ## Changelog
+
+### V0.2 (unreleased)
+
+- Added (same) icon for plugin as for file type.
+- Performance improvement: Use Word-Index for global labels and symbols instead of iterating over the file.
+- Performance improvement: Use Stub-Index for global labels and symbols.
 
 ### V0.1 (20-Jul-21)
 
