@@ -37,7 +37,6 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[]{
-            create_token_set_(GLOBAL_LABEL, LABEL, LOCAL_LABEL),
             create_token_set_(ADDRESS_REGISTER, DATA_REGISTER, REGISTER, SPECIAL_REGISTER),
             create_token_set_(ABSOLUTE_ADDRESS_ADDRESSING_MODE, ADDRESSING_MODE, ADDRESS_REGISTER_DIRECT_ADDRESSING_MODE, ADDRESS_REGISTER_INDIRECT_ADDRESSING_MODE,
                     ADDRESS_REGISTER_INDIRECT_POST_INC_ADDRESSING_MODE, ADDRESS_REGISTER_INDIRECT_PRE_DEC_ADDRESSING_MODE, ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT_NEW_ADDRESSING_MODE, ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT_OLD_ADDRESSING_MODE,
@@ -567,14 +566,12 @@ public class M68kParser implements PsiParser, LightPsiParser {
 
     /* ********************************************************** */
     // LocalLabel | GlobalLabel
-    public static boolean Label(PsiBuilder b, int l) {
+    static boolean Label(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "Label")) return false;
-        if (!nextTokenIs(b, "<label>", GLOBAL_LABEL_DEF, LOCAL_LABEL_DEF)) return false;
+        if (!nextTokenIs(b, "", GLOBAL_LABEL_DEF, LOCAL_LABEL_DEF)) return false;
         boolean r;
-        Marker m = enter_section_(b, l, _COLLAPSE_, LABEL, "<label>");
         r = LocalLabel(b, l + 1);
         if (!r) r = GlobalLabel(b, l + 1);
-        exit_section_(b, l, m, r, false, null);
         return r;
     }
 

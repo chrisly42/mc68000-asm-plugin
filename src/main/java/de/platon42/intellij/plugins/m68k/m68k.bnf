@@ -145,7 +145,6 @@ private InstructionOnly ::= Instruction
 
 LocalLabel ::= LOCAL_LABEL_DEF COLON? {
     name = "local label"
-    extends = Label
     implements = "de.platon42.intellij.plugins.m68k.psi.M68kNamedElement"
     mixin = "de.platon42.intellij.plugins.m68k.psi.M68kLocalLabelMixin"
     methods = [getName setName getNameIdentifier]
@@ -153,7 +152,6 @@ LocalLabel ::= LOCAL_LABEL_DEF COLON? {
 
 GlobalLabel ::= GLOBAL_LABEL_DEF COLON* {
     name = "global label"
-    extends = Label
     implements = "de.platon42.intellij.plugins.m68k.psi.M68kNamedElement"
     mixin = "de.platon42.intellij.plugins.m68k.psi.M68kGlobalLabelMixin"
     elementTypeFactory = "de.platon42.intellij.plugins.m68k.stubs.M68kStubElementTypeFactory.stubFactory"
@@ -161,7 +159,7 @@ GlobalLabel ::= GLOBAL_LABEL_DEF COLON* {
     methods = [getName setName getNameIdentifier]
 }
 
-Label ::= LocalLabel | GlobalLabel
+private Label ::= LocalLabel | GlobalLabel
 
 OperandSize ::= (OPSIZE_BS|OPSIZE_W|OPSIZE_L) { name = ".s|.b|.w|.l" }
 AddressSize ::= (OPSIZE_W|OPSIZE_L) { name = ".w|.l" }

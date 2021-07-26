@@ -12,7 +12,10 @@ public interface M68kStatement extends M68kPsiElement {
     M68kAssignment getAssignment();
 
     @Nullable
-    M68kLabel getLabel();
+    M68kGlobalLabel getGlobalLabel();
+
+    @Nullable
+    M68kLocalLabel getLocalLabel();
 
     @Nullable
     M68kMacroCall getMacroCall();

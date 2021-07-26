@@ -39,8 +39,14 @@ public class M68kStatementImpl extends ASTWrapperPsiElement implements M68kState
 
     @Override
     @Nullable
-    public M68kLabel getLabel() {
-        return PsiTreeUtil.getChildOfType(this, M68kLabel.class);
+    public M68kGlobalLabel getGlobalLabel() {
+        return PsiTreeUtil.getChildOfType(this, M68kGlobalLabel.class);
+    }
+
+    @Override
+    @Nullable
+    public M68kLocalLabel getLocalLabel() {
+        return PsiTreeUtil.getChildOfType(this, M68kLocalLabel.class);
     }
 
     @Override

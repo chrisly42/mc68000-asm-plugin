@@ -7,7 +7,7 @@ import de.platon42.intellij.plugins.m68k.stubs.M68kGlobalLabelStub;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface M68kGlobalLabel extends M68kLabel, M68kNamedElement, StubBasedPsiElement<M68kGlobalLabelStub> {
+public interface M68kGlobalLabel extends M68kNamedElement, StubBasedPsiElement<M68kGlobalLabelStub> {
 
     @Nullable
     String getName();

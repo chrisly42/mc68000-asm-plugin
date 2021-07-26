@@ -5,7 +5,7 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface M68kLocalLabel extends M68kLabel, M68kNamedElement {
+public interface M68kLocalLabel extends M68kNamedElement {
 
     @Nullable
     String getName();

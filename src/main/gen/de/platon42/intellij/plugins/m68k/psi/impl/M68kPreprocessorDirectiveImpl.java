@@ -5,10 +5,7 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
-import de.platon42.intellij.plugins.m68k.psi.M68kExpr;
-import de.platon42.intellij.plugins.m68k.psi.M68kLabel;
-import de.platon42.intellij.plugins.m68k.psi.M68kPreprocessorDirective;
-import de.platon42.intellij.plugins.m68k.psi.M68kVisitor;
+import de.platon42.intellij.plugins.m68k.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,8 +29,14 @@ public class M68kPreprocessorDirectiveImpl extends ASTWrapperPsiElement implemen
 
     @Override
     @Nullable
-    public M68kLabel getLabel() {
-        return PsiTreeUtil.getChildOfType(this, M68kLabel.class);
+    public M68kGlobalLabel getGlobalLabel() {
+        return PsiTreeUtil.getChildOfType(this, M68kGlobalLabel.class);
+    }
+
+    @Override
+    @Nullable
+    public M68kLocalLabel getLocalLabel() {
+        return PsiTreeUtil.getChildOfType(this, M68kLocalLabel.class);
     }
 
     @Override

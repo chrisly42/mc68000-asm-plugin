@@ -9,7 +9,10 @@ import java.util.List;
 public interface M68kPreprocessorDirective extends M68kPsiElement {
 
     @Nullable
-    M68kLabel getLabel();
+    M68kGlobalLabel getGlobalLabel();
+
+    @Nullable
+    M68kLocalLabel getLocalLabel();
 
     @NotNull
     List<M68kExpr> getExprList();

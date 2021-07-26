@@ -39,6 +39,11 @@ internal class ExpressionsTest : AbstractParsingTest() {
     }
 
     @Test
+    internal fun comparing_expressions(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, "FOO = ((WIDTH<20)&&(HEIGHT<=10))||((WIDTH>=40)&&(HEIGHT>=128))&&(WIDTH!=0)&&(HEIGHT<>0)=1\n")
+    }
+
+    @Test
     internal fun current_pc_symbol_relative_expression(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
         testGoodSyntax(testCase, " dc.w *-.label\n")
     }

@@ -48,7 +48,6 @@ public interface M68kTypes {
     IElementType EXPR = new M68kElementType("EXPR");
     IElementType GLOBAL_LABEL = M68kStubElementTypeFactory.stubFactory("GLOBAL_LABEL");
     IElementType IMMEDIATE_DATA = new M68kElementType("IMMEDIATE_DATA");
-    IElementType LABEL = new M68kElementType("LABEL");
     IElementType LITERAL_EXPR = new M68kElementType("LITERAL_EXPR");
     IElementType LOCAL_LABEL = new M68kElementType("LOCAL_LABEL");
     IElementType MACRO_CALL = new M68kElementType("MACRO_CALL");
