@@ -54,3 +54,6 @@ Assembly File: a.asm
   PsiElement(M68kTokenType.EOL)('\n')
   PsiWhiteSpace('  ')
   PsiWhiteSpace('\n')
+  M68kStatementImpl(STATEMENT)
+    M68kGlobalLabelImpl(GLOBAL_LABEL)
+      PsiElement(M68kTokenType.GLOBAL_LABEL_DEF)('eoflabel')

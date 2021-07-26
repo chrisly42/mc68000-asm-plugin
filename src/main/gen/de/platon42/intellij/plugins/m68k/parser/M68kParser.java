@@ -1051,14 +1051,14 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // !<<eof>> statement EOL
+    // !<<eof>> statement (<<eof>>|EOL)
     static boolean line(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "line")) return false;
         boolean r;
         Marker m = enter_section_(b);
         r = line_0(b, l + 1);
         r = r && statement(b, l + 1);
-        r = r && consumeToken(b, EOL);
+        r = r && line_2(b, l + 1);
         exit_section_(b, m, null, r);
         return r;
     }
@@ -1070,6 +1070,17 @@ public class M68kParser implements PsiParser, LightPsiParser {
         Marker m = enter_section_(b, l, _NOT_);
         r = !eof(b, l + 1);
         exit_section_(b, l, m, r, false, null);
+        return r;
+    }
+
+    // <<eof>>|EOL
+    private static boolean line_2(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "line_2")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = eof(b, l + 1);
+        if (!r) r = consumeToken(b, EOL);
+        exit_section_(b, m, null, r);
         return r;
     }
 

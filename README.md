@@ -71,9 +71,10 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 
 ### V0.2 (unreleased)
 
-- Added (same) icon for plugin as for file type.
+- Cosmetics: Added (same) icon for plugin as for file type.
 - Performance improvement: Use Word-Index for global labels and symbols instead of iterating over the file.
 - Performance improvement: Use Stub-Index for global labels and symbols.
+- Bugfix: No longer reports a syntax error when file lacks terminating End-Of-Line
 
 ### V0.1 (20-Jul-21)
 

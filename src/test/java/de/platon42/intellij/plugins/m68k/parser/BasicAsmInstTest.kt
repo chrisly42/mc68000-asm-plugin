@@ -13,13 +13,14 @@ internal class BasicAsmInstTest : AbstractParsingTest() {
     @ParserResultFile("basic_block_of_code")
     internal fun parser_can_parse_basic_block_of_code(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
         testGoodSyntax(
-                testCase, "\tadd.l d0,d0\n"
-                + "\tmoveq #10,d1\n"
-                + " rts\n"
-                + "\n"
-                + "; comment\n"
-                + "    jmp\tresetcode ; unreachable\n"
-                + "  \n"
+            testCase, "\tadd.l d0,d0\n"
+                    + "\tmoveq #10,d1\n"
+                    + " rts\n"
+                    + "\n"
+                    + "; comment\n"
+                    + "    jmp\tresetcode ; unreachable\n"
+                    + "  \n"
+                    + "eoflabel"
         )
     }
 }

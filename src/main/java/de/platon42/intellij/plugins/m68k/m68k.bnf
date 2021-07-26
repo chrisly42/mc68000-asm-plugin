@@ -118,7 +118,7 @@
 
 M68kFile ::= line*
 
-private line ::= !<<eof>> statement EOL
+private line ::= !<<eof>> statement (<<eof>>|EOL)
 
 statement ::= (Assignment
             | PreprocessorDirective
