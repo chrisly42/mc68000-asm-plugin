@@ -17,11 +17,11 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @TestDataPath("src/test/resources/references")
-@TestDataSubPath("labels")
 @ExtendWith(LightCodeInsightExtension::class)
 internal class M68kReferenceContributorTest : AbstractM68kTest() {
 
     @Test
+    @TestDataSubPath("labels")
     internal fun reference_to_dot_local_label_can_be_renamed(@MyFixture myFixture: CodeInsightTestFixture) {
         myFixture.configureByFile("dot_local_label.asm")
         assertThat(myFixture.elementAtCaret).isInstanceOf(M68kLocalLabel::class.java)
@@ -31,6 +31,7 @@ internal class M68kReferenceContributorTest : AbstractM68kTest() {
     }
 
     @Test
+    @TestDataSubPath("labels")
     internal fun reference_to_multiple_conditional_local_label_dollar_and_variants(@MyFixture myFixture: CodeInsightTestFixture) {
         val reference = myFixture.getReferenceAtCaretPositionWithAssertion("multiple_conditional_local_label_dollar.asm")
         assertThat(reference.element).isInstanceOf(M68kSymbolReference::class.java)
@@ -40,6 +41,7 @@ internal class M68kReferenceContributorTest : AbstractM68kTest() {
     }
 
     @Test
+    @TestDataSubPath("labels")
     internal fun reference_to_global_label_can_be_renamed(@MyFixture myFixture: CodeInsightTestFixture) {
         val file = myFixture.configureByFile("global_labels.asm")
         assertThat(myFixture.elementAtCaret).isInstanceOf(M68kGlobalLabel::class.java)
@@ -47,9 +49,7 @@ internal class M68kReferenceContributorTest : AbstractM68kTest() {
 
         val reference = file.findReferenceAt(myFixture.editor.caretModel.offset - 1)!!
         assertThat(reference).isInstanceOf(M68kGlobalLabelSymbolReference::class.java)
-        assertThat(reference.variants).hasOnlyElementsOfType(LookupElementBuilder::class.java)
-            .extracting<String> { (it as LookupElementBuilder).lookupString }
-            .containsExactlyInAnyOrder("main", "init", "exit")
+        assertThat(reference.variants).isEmpty()
 
         myFixture.renameElementAtCaret("intro_main")
 
@@ -57,6 +57,7 @@ internal class M68kReferenceContributorTest : AbstractM68kTest() {
     }
 
     @Test
+    @TestDataSubPath("symbols")
     internal fun reference_to_symbol_can_be_renamed(@MyFixture myFixture: CodeInsightTestFixture) {
         val file = myFixture.configureByFile("symbol_assignment.asm")
         assertThat(myFixture.elementAtCaret).isInstanceOf(M68kSymbolDefinition::class.java)
@@ -66,9 +67,7 @@ internal class M68kReferenceContributorTest : AbstractM68kTest() {
 
         val reference = file.findReferenceAt(myFixture.editor.caretModel.offset)!!
         assertThat(reference).isInstanceOf(M68kGlobalLabelSymbolReference::class.java)
-        assertThat(reference.variants).hasOnlyElementsOfType(LookupElementBuilder::class.java)
-            .extracting<String> { (it as LookupElementBuilder).lookupString }
-            .containsExactlyInAnyOrder("main", "init", "exit", "PIC_WIDTH", "PIC_HEIGHT")
+        assertThat(reference.variants).isEmpty()
 
         myFixture.checkResultByFile("symbol_assignment_after_rename.asm")
     }

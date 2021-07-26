@@ -51,7 +51,8 @@ patchPluginXml {
       <li>Cosmetics: Added (same) icon for plugin as for file type.
       <li>Performance improvement: Use Word-Index for global labels and symbols instead of iterating over the file.
       <li>Performance improvement: Use Stub-Index for global labels and symbols.
-      <li>Bugfix: No longer reports a syntax error when file lacks terminating End-Of-Line
+      <li>Bugfix: No longer reports a syntax error when file lacks terminating End-Of-Line.
+      <li>Enhancement: Registers are now offered for code completion, making editing less annoying. 
     </ul>
   <h4>V0.1 (20-Jul-21)</h4>
     <ul>

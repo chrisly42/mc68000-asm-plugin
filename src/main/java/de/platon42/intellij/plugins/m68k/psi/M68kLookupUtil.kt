@@ -39,6 +39,8 @@ object M68kLookupUtil {
         return results
     }
 
+    fun findAllGlobalLabelNames(project: Project): Collection<String> = StubIndex.getInstance().getAllKeys(M68kGlobalLabelStubIndex.KEY, project).toList()
+
     fun findAllLocalLabels(globalLabel: M68kGlobalLabel): List<M68kLocalLabel> {
         val statement = PsiTreeUtil.getStubOrPsiParentOfType(globalLabel, M68kStatement::class.java)!!
         val results: MutableList<M68kLocalLabel> = ArrayList()
@@ -89,4 +91,6 @@ object M68kLookupUtil {
         )
         return results
     }
+
+    fun findAllSymbolDefinitionNames(project: Project): Collection<String> = StubIndex.getInstance().getAllKeys(M68kSymbolDefinitionStubIndex.KEY, project)
 }
