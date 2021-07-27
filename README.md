@@ -69,7 +69,7 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 
 ## Changelog
 
-### V0.2 (unreleased)
+### V0.2 (27-Jul-21)
 
 - Cosmetics: Added (same) icon for plugin as for file type.
 - Performance improvement: Use Word-Index for global labels and symbols instead of iterating over the file.
