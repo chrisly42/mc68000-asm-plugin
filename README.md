@@ -78,6 +78,7 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 - Bugfix: Missing REPT and ENDR assembler directives added.
 - Cosmetics: Changed or added some icons at various places.
 - Performance: Reference search for global labels and symbols now uses stub index.
+- Compatibility: Restored compatibility with IDEs versions < 2021.1.
 
 ### V0.2 (27-Jul-21)
 

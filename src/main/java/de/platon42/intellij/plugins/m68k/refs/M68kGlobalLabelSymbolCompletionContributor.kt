@@ -3,9 +3,9 @@ package de.platon42.intellij.plugins.m68k.refs
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
-import com.intellij.icons.AllIcons
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.util.ProcessingContext
+import de.platon42.intellij.plugins.m68k.M68kIcons
 import de.platon42.intellij.plugins.m68k.psi.M68kLookupUtil
 import de.platon42.intellij.plugins.m68k.psi.M68kTypes
 
@@ -18,7 +18,7 @@ class M68kGlobalLabelSymbolCompletionContributor : CompletionContributor() {
                 "a0", "a1", "a2", "a3", "a4", "a5", "a6", "sp",
                 "pc"
             )
-                .map { PrioritizedLookupElement.withPriority(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Record).withBoldness(true), 2.0) }
+                .map { PrioritizedLookupElement.withPriority(LookupElementBuilder.create(it).withIcon(M68kIcons.REGISTER).withBoldness(true), 2.0) }
     }
 
     init {

@@ -9,4 +9,6 @@ object M68kIcons {
     val GLOBAL_LABEL = AllIcons.Nodes.Method
     val SYMBOL_DEF = AllIcons.Nodes.ClassInitializer
     val MACRO_DEF = AllIcons.Nodes.MultipleTypeDefinitions
+    val REGISTER = AllIcons.Nodes.DataTables // AllIcons.Nodes.Record only available starting from 2020.1
+    val MNEMONIC = AllIcons.Nodes.C_protected
 }

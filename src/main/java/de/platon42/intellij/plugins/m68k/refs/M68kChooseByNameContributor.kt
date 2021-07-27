@@ -1,8 +1,7 @@
 package de.platon42.intellij.plugins.m68k.refs
 
-import com.intellij.navigation.ChooseByNameContributorEx2
+import com.intellij.navigation.ChooseByNameContributorEx
 import com.intellij.navigation.NavigationItem
-import com.intellij.openapi.project.Project
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.stubs.StubIndex
 import com.intellij.util.Processor
@@ -13,17 +12,17 @@ import de.platon42.intellij.plugins.m68k.psi.M68kSymbolDefinition
 import de.platon42.intellij.plugins.m68k.stubs.M68kGlobalLabelStubIndex
 import de.platon42.intellij.plugins.m68k.stubs.M68kSymbolDefinitionStubIndex
 
-class M68kChooseByNameContributor : ChooseByNameContributorEx2 {
+class M68kChooseByNameContributor : ChooseByNameContributorEx {
 
-    override fun processNames(processor: Processor<in String>, parameters: FindSymbolParameters) {
-        processNames(processor, parameters.searchScope, parameters.idFilter)
-    }
+//    override fun processNames(processor: Processor<in String>, parameters: FindSymbolParameters) {
+//        processNames(processor, parameters.searchScope, parameters.idFilter)
+//    }
 
-    override fun getItemsByName(name: String, pattern: String, project: Project, includeNonProjectItems: Boolean): Array<NavigationItem> {
-        val result: MutableList<NavigationItem> = ArrayList()
-        processElementsWithName(name, result::add, FindSymbolParameters.wrap(pattern, project, includeNonProjectItems))
-        return result.toTypedArray()
-    }
+//    override fun getItemsByName(name: String, pattern: String, project: Project, includeNonProjectItems: Boolean): Array<NavigationItem> {
+//        val result: MutableList<NavigationItem> = ArrayList()
+//        processElementsWithName(name, result::add, FindSymbolParameters.wrap(pattern, project, includeNonProjectItems))
+//        return result.toTypedArray()
+//    }
 
     override fun processNames(processor: Processor<in String>, scope: GlobalSearchScope, filter: IdFilter?) {
         StubIndex.getInstance().processAllKeys(M68kGlobalLabelStubIndex.KEY, processor, scope, filter)

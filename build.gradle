@@ -44,6 +44,16 @@ intellij {
 //    setPlugins(["com.intellij.java"])
 }
 
+runPluginVerifier {
+    ideVersions = ["IC-193.5662.53", "IC-211.7628.21", // 2019.3.1 - 2021.1.3
+                   "CL-193.5233.103", "CL-193.7288.25", // 2019.3
+                   "CL-201.6668.126", "CL-201.8743.17", // 2020.1
+                   "CL-202.6397.106", "CL-202.8194.17", // 2020.2
+                   "CL-203.5981.166", "CL-203.8084.11", // 2020.3
+                   "CL-211.6693.114", "CL-211.7628.27"] // 2021.1
+    downloadDir = System.getProperty("user.home") + "/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea"
+}
+
 patchPluginXml {
     setChangeNotes("""
   <h4>V0.3 (unreleased)</h4>
@@ -55,6 +65,7 @@ patchPluginXml {
       <li>Bugfix: Missing REPT and ENDR assembler directives added.
       <li>Cosmetics: Changed or added some icons at various places.
       <li>Performance: Reference search for global labels and symbols now uses stub index.
+      <li>Compatibility: Restored compatibility with IDEs versions < 2021.1.
     </ul>
   <h4>V0.2 (27-Jul-21)</h4>
     <ul>
