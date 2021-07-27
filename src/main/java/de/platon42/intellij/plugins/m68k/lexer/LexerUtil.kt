@@ -8,6 +8,7 @@ import de.platon42.intellij.plugins.m68k.asm.M68kIsa.mnemonics
 object LexerUtil {
 
     private val ASSIGNMENT_SEPARATORS = charArrayOf(' ', '\t', '=', ':')
+    private val TOKEN_SEPARATORS = charArrayOf(' ', '\t')
 
     @JvmStatic
     fun isAsmMnemonic(text: CharSequence) = mnemonics.contains(text.toString().lowercase())
@@ -29,6 +30,11 @@ object LexerUtil {
     }
 
     @JvmStatic
+    fun pushbackAfterFirstToken(text: CharSequence): Int {
+        return text.length - text.indexOfAny(TOKEN_SEPARATORS)
+    }
+
+    @JvmStatic
     fun pushbackLabelColons(text: CharSequence): Int {
         return text.count { it == ':' }
     }
@@ -38,7 +44,17 @@ object LexerUtil {
         if (!lexer.eatOneWhitespace && lexer.lexerPrefs.spaceIntroducesComment) {
             lexer.yybegin(_M68kLexer.WAITEOL)
         }
-        lexer.eatOneWhitespace = false;
+        lexer.eatOneWhitespace = false
+        return TokenType.WHITE_SPACE
+    }
+
+    @JvmStatic
+    fun handleMacroLineEol(lexer: _M68kLexer): IElementType {
+        if (++lexer.macroLines > lexer.lexerPrefs.maxLinesPerMacro) {
+            lexer.yybegin(_M68kLexer.YYINITIAL)
+            return TokenType.BAD_CHARACTER
+        }
+        lexer.yybegin(_M68kLexer.MACROLINE)
         return TokenType.WHITE_SPACE
     }
 }

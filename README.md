@@ -69,6 +69,10 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 
 ## Changelog
 
+### V0.3 (unreleased)
+
+- Enhancement: Macros contents are no longer parsed, added syntax highlighting options for macros.
+
 ### V0.2 (27-Jul-21)
 
 - Cosmetics: Added (same) icon for plugin as for file type.

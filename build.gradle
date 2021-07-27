@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'de.platon42'
-version = '0.2'
+version = '0.3'
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
@@ -46,6 +46,10 @@ intellij {
 
 patchPluginXml {
     setChangeNotes("""
+  <h4>V0.3 (unreleased)</h4>
+    <ul>
+      <li>Enhancement: Macros contents are no longer parsed, added syntax highlighting options for macros.
+    </ul>
   <h4>V0.2 (27-Jul-21)</h4>
     <ul>
       <li>Cosmetics: Added (same) icon for plugin as for file type.

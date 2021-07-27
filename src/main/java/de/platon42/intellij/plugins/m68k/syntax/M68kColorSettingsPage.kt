@@ -18,6 +18,9 @@ import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.GLOBAL_LABEL
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.LOCAL_LABEL
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.MACRO_CALL
+import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.MACRO_LINE
+import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.MACRO_NAME_DEF
+import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.MACRO_PREPROCESSOR
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.MNEMONIC
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.NUMBER
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.OTHER_PREPROCESSOR
@@ -26,8 +29,8 @@ import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.SPECIAL_REG
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.STACK_POINTER
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.STRING
-import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.SYMBOLDEF
-import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.SYMBOLREF
+import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.SYMBOL_DEF
+import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.SYMBOL_REF
 import org.jetbrains.annotations.NonNls
 import javax.swing.Icon
 
@@ -49,7 +52,7 @@ PIC_HEIGHT = 256
         include "../includes/hardware/custom.i"
 
 BLTHOGON MACRO                  ; macro definition
-        move.w	#DMAF_SETCLR|DMAF_BLITHOG,dmacon(a5)
+        move.w	#DMAF_SETCLR|DMAF_BLITHOG,dmacon(a5) ; hog!
         ENDM
 
 demo_init                       ; global label
@@ -99,9 +102,12 @@ hello:  dc.b   'Hello World!',10,0
             AttributesDescriptor("Local labels", LOCAL_LABEL),
             AttributesDescriptor("Comma (separator)", SEPARATOR),
             AttributesDescriptor("Colon", COLON),
-            AttributesDescriptor("Symbol definition", SYMBOLDEF),
-            AttributesDescriptor("Symbol reference", SYMBOLREF),
+            AttributesDescriptor("Symbol definition", SYMBOL_DEF),
+            AttributesDescriptor("Symbol reference", SYMBOL_REF),
             AttributesDescriptor("Assembly mnemonic", MNEMONIC),
+            AttributesDescriptor("Macro name definition", MACRO_NAME_DEF),
+            AttributesDescriptor("Macro preprocessor directives", MACRO_PREPROCESSOR),
+            AttributesDescriptor("Macro line", MACRO_LINE),
             AttributesDescriptor("Macro invocation", MACRO_CALL),
             AttributesDescriptor("Data width: Byte/short", DATA_WIDTH_BS),
             AttributesDescriptor("Data width: Word", DATA_WIDTH_W),

@@ -13,6 +13,7 @@ import static de.platon42.intellij.plugins.m68k.lexer.LexerUtil.*;
 %{
   private M68kLexerPrefs lexerPrefs;
   boolean eatOneWhitespace = false;
+  int macroLines = 0;
 
   public M68kLexerPrefs getLexerPrefs()
   {
@@ -38,10 +39,12 @@ WHITE_SPACE=\p{Blank}+
 AREG=(a[0-6])
 DREG=(d[0-7])
 ASSIGNMENT=(([:letter:]|_)(([:letter:]|[:digit:])|_)*:?((\p{Blank}+equ\p{Blank}+)|(\p{Blank}+set\p{Blank}+)|\p{Blank}*=\p{Blank}*))
-LOCAL_LABEL=(\.([:letter:]|_)(([:letter:]|[:digit:])|_)*:?)|(([:letter:]|_)(([:letter:]|[:digit:])|_)*\$:?)
-LOCAL_LABEL_WC=(\.([:letter:]|_)(([:letter:]|[:digit:])|_)*:)|(([:letter:]|_)(([:letter:]|[:digit:])|_)*\$:)
-GLOBAL_LABEL=(([:letter:]|_)(([:letter:]|[:digit:])|_)*:?:?)
-GLOBAL_LABEL_WC=(([:letter:]|_)(([:letter:]|[:digit:])|_)*::?)
+LOCAL_LABEL=(\.([:letter:]|_)([:letter:]|[:digit:]|_)*:?)|(([:letter:]|_)([:letter:]|[:digit:]|_)*\$:?)
+LOCAL_LABEL_WC=(\.([:letter:]|_)([:letter:]|[:digit:]|_)*:)|(([:letter:]|_)([:letter:]|[:digit:]|_)*\$:)
+GLOBAL_LABEL=(([:letter:]|_)([:letter:]|[:digit:]|_)*:?:?)
+GLOBAL_LABEL_WC=(([:letter:]|_)([:letter:]|[:digit:]|_)*::?)
+MACRO_DEF_LEFT=(([:letter:]|_)(([:letter:]|[:digit:]|_))*)\p{Blank}+macro\p{Blank}*
+MACRO_END_TAG=\p{Blank}+endm\p{Blank}*[^;\r\n]*
 //MNEMONIC=(([:letter:])+)
 SYMBOL=(([:letter:]|_|\.)(([:letter:]|[:digit:]|[_\$]))*)
 BONUSSYMBOL=(([:letter:]|_|\.)(([:letter:]|[:digit:]|[_\$\.\\]))*)
@@ -59,14 +62,16 @@ PLAINPARAM=(`([^`\\\r\n]|\\.)*`|'([^'\\\r\n]|\\.)*'|\"([^\"\\\r\n]|\\.)*\")|<([^
 COMMENT=([;].*+)
 HASH_COMMENT=([#;*].*+)
 SKIP_TO_EOL=[^\r\n]+
+PLAIN_MACRO_LINE=[^;\r\n]+
 
-%state NOSOL,INSTRPART,ASMINSTR,ASMOPS,ASMOPS_OP,ASSIGNMENT,EXPR,EXPR_OP,MACROCALL,WAITEOL
+%state NOSOL,INSTRPART,ASMINSTR,ASMOPS,ASMOPS_OP,ASSIGNMENT,EXPR,EXPR_OP,MACROCALL,WAITEOL,MACRODEF,MACROLINE,MACROTERMINATION,MACROWAITEOL
 
 %%
 <YYINITIAL> {
   {WHITE_SPACE}       { yybegin(NOSOL); eatOneWhitespace = false; return WHITE_SPACE; }
   {EOL}               { return WHITE_SPACE; }
   {ASSIGNMENT}        { yybegin(ASSIGNMENT); eatOneWhitespace = true; yypushback(pushbackAssignment(yytext())); return SYMBOLDEF; }
+  {MACRO_DEF_LEFT}    { yybegin(MACRODEF); yypushback(pushbackAfterFirstToken(yytext())); return MACRO_NAME; }
   {LOCAL_LABEL}       { yybegin(INSTRPART); eatOneWhitespace = false; yypushback(pushbackLabelColons(yytext())); return LOCAL_LABEL_DEF; }
   {GLOBAL_LABEL}      { yybegin(INSTRPART); eatOneWhitespace = false; yypushback(pushbackLabelColons(yytext())); return GLOBAL_LABEL_DEF; }
 
@@ -78,6 +83,7 @@ SKIP_TO_EOL=[^\r\n]+
   {EOL}               { yybegin(YYINITIAL); return WHITE_SPACE; }
   {LOCAL_LABEL_WC}    { yybegin(INSTRPART); yypushback(pushbackLabelColons(yytext())); return LOCAL_LABEL_DEF; }
   {GLOBAL_LABEL_WC}   { yybegin(INSTRPART); yypushback(pushbackLabelColons(yytext())); return GLOBAL_LABEL_DEF; }
+  "macro"             { yybegin(MACRODEF); return MACRO_TAG; }
   {DIRECTIVE_KEYWORD} {
                         if(isAsmMnemonicWithSize(yytext())) { yybegin(ASMINSTR); yypushback(2); return MNEMONIC; }
                         if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; }
@@ -285,6 +291,37 @@ SKIP_TO_EOL=[^\r\n]+
 <WAITEOL>
 {
   {EOL}               { yybegin(YYINITIAL); return EOL; }
+  {SKIP_TO_EOL}       { return COMMENT; }
+}
+
+// The macro mess starts here
+
+<MACRODEF> {
+  {WHITE_SPACE}       { return WHITE_SPACE; }
+  {EOL}               { yybegin(MACROLINE); macroLines = 0; return WHITE_SPACE; }
+  "macro"             { return MACRO_TAG; }
+  {MACRONAME}         { return MACRO_NAME; }
+
+  {COMMENT}           { yybegin(MACROWAITEOL); return COMMENT; }
+}
+
+<MACROLINE> {
+  {EOL}               { return handleMacroLineEol(this); }
+  {MACRO_END_TAG}     { yybegin(MACROTERMINATION); return MACRO_END_TAG; }
+
+  {PLAIN_MACRO_LINE}  { return MACRO_LINE; }
+  {COMMENT}           { yybegin(MACROWAITEOL); return COMMENT; }
+}
+
+<MACROTERMINATION> {
+  {WHITE_SPACE}       { return WHITE_SPACE; }
+  {EOL}               { yybegin(YYINITIAL); return EOL; }
+  {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
+}
+
+<MACROWAITEOL>
+{
+  {EOL}               { return handleMacroLineEol(this); }
   {SKIP_TO_EOL}       { return COMMENT; }
 }
 

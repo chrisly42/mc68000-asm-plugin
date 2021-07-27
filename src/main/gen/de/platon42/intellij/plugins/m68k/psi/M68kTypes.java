@@ -51,6 +51,9 @@ public interface M68kTypes {
     IElementType LITERAL_EXPR = new M68kElementType("LITERAL_EXPR");
     IElementType LOCAL_LABEL = new M68kElementType("LOCAL_LABEL");
     IElementType MACRO_CALL = new M68kElementType("MACRO_CALL");
+    IElementType MACRO_DEFINITION = new M68kElementType("MACRO_DEFINITION");
+    IElementType MACRO_NAME_DEFINITION = new M68kElementType("MACRO_NAME_DEFINITION");
+    IElementType MACRO_PLAIN_LINE = new M68kElementType("MACRO_PLAIN_LINE");
     IElementType OPERAND_SIZE = new M68kElementType("OPERAND_SIZE");
     IElementType PAREN_EXPR = new M68kElementType("PAREN_EXPR");
     IElementType PREPROCESSOR_DIRECTIVE = new M68kElementType("PREPROCESSOR_DIRECTIVE");
@@ -86,7 +89,11 @@ public interface M68kTypes {
     IElementType HASH = new M68kTokenType("HASH");
     IElementType HEXADECIMAL = new M68kTokenType("HEXADECIMAL");
     IElementType LOCAL_LABEL_DEF = new M68kTokenType("LOCAL_LABEL_DEF");
+    IElementType MACRO_END_TAG = new M68kTokenType("MACRO_END_TAG");
     IElementType MACRO_INVOKATION = new M68kTokenType("MACRO_INVOKATION");
+    IElementType MACRO_LINE = new M68kTokenType("MACRO_LINE");
+    IElementType MACRO_NAME = new M68kTokenType("MACRO_NAME");
+    IElementType MACRO_TAG = new M68kTokenType("MACRO_TAG");
     IElementType MNEMONIC = new M68kTokenType("MNEMONIC");
     IElementType OCTAL = new M68kTokenType("OCTAL");
     IElementType OPSIZE_BS = new M68kTokenType("OPSIZE_BS");
@@ -210,6 +217,12 @@ public interface M68kTypes {
                 return new M68kLocalLabelImpl(node);
             } else if (type == MACRO_CALL) {
                 return new M68kMacroCallImpl(node);
+            } else if (type == MACRO_DEFINITION) {
+                return new M68kMacroDefinitionImpl(node);
+            } else if (type == MACRO_NAME_DEFINITION) {
+                return new M68kMacroNameDefinitionImpl(node);
+            } else if (type == MACRO_PLAIN_LINE) {
+                return new M68kMacroPlainLineImpl(node);
             } else if (type == OPERAND_SIZE) {
                 return new M68kOperandSizeImpl(node);
             } else if (type == PAREN_EXPR) {
