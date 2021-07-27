@@ -58,14 +58,15 @@ patchPluginXml {
     setChangeNotes("""
   <h4>V0.3 (unreleased)</h4>
     <ul>
-      <li>Enhancement: Macros contents are no longer parsed, added syntax highlighting options for macros.
+      <li>Enhancement: Macro contents are no longer parsed, added syntax highlighting options for macros.
       <li>Enhancement: Macro definitions are now word and stub indexed, macro calls reference to definition.
       <li>Enhancement: Macro definition refactoring and find usages support.
       <li>Enhancement: Structural View also shows macro definitions. 
       <li>Bugfix: Missing REPT and ENDR assembler directives added.
       <li>Cosmetics: Changed or added some icons at various places.
       <li>Performance: Reference search for global labels and symbols now uses stub index.
-      <li>Compatibility: Restored compatibility with IDEs versions < 2021.1.
+      <li>Compatibility: Restored compatibility with IDE versions < 2021.1.
+      <li>Performance: Optimized lexer.
     </ul>
   <h4>V0.2 (27-Jul-21)</h4>
     <ul>

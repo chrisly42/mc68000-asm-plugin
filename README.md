@@ -71,14 +71,15 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 
 ### V0.3 (unreleased)
 
-- Enhancement: Macros contents are no longer parsed, added syntax highlighting options for macros.
+- Enhancement: Macro contents are no longer parsed, added syntax highlighting options for macros.
 - Enhancement: Macro definitions are now word and stub indexed, macro calls reference to definition.
 - Enhancement: Macro definition refactoring and find usages support.
 - Enhancement: Structural View also shows macro definitions.
 - Bugfix: Missing REPT and ENDR assembler directives added.
 - Cosmetics: Changed or added some icons at various places.
 - Performance: Reference search for global labels and symbols now uses stub index.
-- Compatibility: Restored compatibility with IDEs versions < 2021.1.
+- Compatibility: Restored compatibility with IDE versions < 2021.1.
+- Performance: Optimized lexer.
 
 ### V0.2 (27-Jul-21)
 

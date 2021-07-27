@@ -14,6 +14,8 @@ import static de.platon42.intellij.plugins.m68k.lexer.LexerUtil.*;
   private M68kLexerPrefs lexerPrefs;
   boolean eatOneWhitespace = false;
   int macroLines = 0;
+  int exprState = 0;
+  int exprOpState = 0;
 
   public M68kLexerPrefs getLexerPrefs()
   {
@@ -23,6 +25,12 @@ import static de.platon42.intellij.plugins.m68k.lexer.LexerUtil.*;
   public _M68kLexer(M68kLexerPrefs lexerPrefs) {
       this((java.io.Reader)null);
       this.lexerPrefs = lexerPrefs;
+  }
+
+  private void startExpr(int newExprState, int newExprOpState) {
+      exprState = newExprState;
+      exprOpState = newExprOpState;
+      yybegin(exprState);
   }
 %}
 
@@ -67,225 +75,154 @@ PLAIN_MACRO_LINE=[^;\r\n]+
 %state NOSOL,INSTRPART,ASMINSTR,ASMOPS,ASMOPS_OP,ASSIGNMENT,EXPR,EXPR_OP,MACROCALL,WAITEOL,MACRODEF,MACROLINE,MACROTERMINATION,MACROWAITEOL
 
 %%
+<YYINITIAL, NOSOL>
+{
+  {EOL}               { yybegin(YYINITIAL); return WHITE_SPACE; }
+  {HASH_COMMENT}      { yybegin(YYINITIAL); return COMMENT; }
+}
+
+<INSTRPART,ASMINSTR,MACROCALL,ASSIGNMENT,EXPR,EXPR_OP,ASMOPS,ASMOPS_OP>
+{
+  {EOL}               { yybegin(YYINITIAL); return EOL; }
+  {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
+}
+
+<NOSOL, INSTRPART, ASSIGNMENT>
+{
+  {WHITE_SPACE}       { return WHITE_SPACE; }
+}
+
+<MACROCALL, EXPR, EXPR_OP, ASMOPS, ASMOPS_OP> {
+  {WHITE_SPACE}       { return handleEolCommentWhitespace(this); }
+}
+
 <YYINITIAL> {
   {WHITE_SPACE}       { yybegin(NOSOL); eatOneWhitespace = false; return WHITE_SPACE; }
-  {EOL}               { return WHITE_SPACE; }
   {ASSIGNMENT}        { yybegin(ASSIGNMENT); eatOneWhitespace = true; yypushback(pushbackAssignment(yytext())); return SYMBOLDEF; }
   {MACRO_DEF_LEFT}    { yybegin(MACRODEF); yypushback(pushbackAfterFirstToken(yytext())); return MACRO_NAME; }
   {LOCAL_LABEL}       { yybegin(INSTRPART); eatOneWhitespace = false; yypushback(pushbackLabelColons(yytext())); return LOCAL_LABEL_DEF; }
   {GLOBAL_LABEL}      { yybegin(INSTRPART); eatOneWhitespace = false; yypushback(pushbackLabelColons(yytext())); return GLOBAL_LABEL_DEF; }
-
-  {HASH_COMMENT}      { return COMMENT; }
 }
 
 <NOSOL> {
-  {WHITE_SPACE}       { return WHITE_SPACE; }
-  {EOL}               { yybegin(YYINITIAL); return WHITE_SPACE; }
+  "macro"             { yybegin(MACRODEF); return MACRO_TAG; }
   {LOCAL_LABEL_WC}    { yybegin(INSTRPART); yypushback(pushbackLabelColons(yytext())); return LOCAL_LABEL_DEF; }
   {GLOBAL_LABEL_WC}   { yybegin(INSTRPART); yypushback(pushbackLabelColons(yytext())); return GLOBAL_LABEL_DEF; }
-  "macro"             { yybegin(MACRODEF); return MACRO_TAG; }
+//  {MNEMONIC}          { if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; } else { yybegin(INSTRPART); return SYMBOL; } }
+}
+
+<NOSOL, INSTRPART>
+{
   {DIRECTIVE_KEYWORD} {
                         if(isAsmMnemonicWithSize(yytext())) { yybegin(ASMINSTR); yypushback(2); return MNEMONIC; }
                         if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; }
-                        if(isDataDirective(yytext())) { yybegin(EXPR); return DATA_DIRECTIVE; }
-                        if(isOtherDirective(yytext())) { yybegin(EXPR); return OTHER_DIRECTIVE; }
+                        if(isDataDirective(yytext())) { startExpr(EXPR, EXPR_OP); return DATA_DIRECTIVE; }
+                        if(isOtherDirective(yytext())) { startExpr(EXPR, EXPR_OP); return OTHER_DIRECTIVE; }
                         return handleMacroMode(this);
                       }
-//  {MNEMONIC}          { if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; } else { yybegin(INSTRPART); return SYMBOL; } }
   {MACRONAME}         { return handleMacroMode(this); }
-  {HASH_COMMENT}      { yybegin(YYINITIAL); return COMMENT; }
 }
 
 <INSTRPART> {
-  {WHITE_SPACE}       { return WHITE_SPACE; }
-  {EOL}               { yybegin(YYINITIAL); return EOL; }
-
   ":"                 { return COLON; }
-
-  {DIRECTIVE_KEYWORD} {
-                        if(isAsmMnemonicWithSize(yytext())) { yybegin(ASMINSTR); yypushback(2); return MNEMONIC; }
-                        if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; }
-                        if(isDataDirective(yytext())) { yybegin(EXPR); return DATA_DIRECTIVE; }
-                        if(isOtherDirective(yytext())) { yybegin(EXPR); return OTHER_DIRECTIVE; }
-                        return handleMacroMode(this);
-                      }
 //  {MNEMONIC}          { if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; } else { return SYMBOL; } }
-  {MACRONAME}         { return handleMacroMode(this); }
-
-  {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
 }
 
 <ASMINSTR> {
-  {WHITE_SPACE}       { yybegin(ASMOPS); return WHITE_SPACE; }
-  {EOL}               { yybegin(YYINITIAL); return EOL; }
+  {WHITE_SPACE}       { startExpr(ASMOPS, ASMOPS_OP); return WHITE_SPACE; }
 
   {OPSIZE_BS}         { return OPSIZE_BS; }
   {OPSIZE_W}          { return OPSIZE_W; }
   {OPSIZE_L}          { return OPSIZE_L; }
-
-  {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
 }
 
 <MACROCALL> {
-  {WHITE_SPACE}       { return handleEolCommentWhitespace(this); }
-  {EOL}               { yybegin(YYINITIAL); return EOL; }
-
   ","                 { return SEPARATOR; }
-
-  {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
 
   {PLAINPARAM}        { return STRINGLIT; }
 }
 
 <ASSIGNMENT> {
-  {WHITE_SPACE}       { return WHITE_SPACE; }
-  {EOL}               { yybegin(YYINITIAL); return EOL; }
-
-  "equ"|"set"         { yybegin(EXPR); return EQU; }
+  "equ"|"set"         { startExpr(EXPR, EXPR_OP); return EQU; }
 
   ":"                 { return COLON; }
-  "="                 { yybegin(EXPR); return OP_ASSIGN; }
+  "="                 { startExpr(EXPR, EXPR_OP); return OP_ASSIGN; }
+}
 
-  {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
+<EXPR, ASMOPS> {
+  {BINARY}            { yybegin(exprOpState); return BINARY; }
+  {HEXADECIMAL}       { yybegin(exprOpState); return HEXADECIMAL; }
+  {OCTAL}             { yybegin(exprOpState); return OCTAL; }
+  {DECIMAL}           { yybegin(exprOpState); return DECIMAL; }
+  {STRINGLIT}         { yybegin(exprOpState); return STRINGLIT; }
+
+  "^"                 { return OP_BITWISE_XOR; }
+  ","                 { return SEPARATOR; }
+  "("                 { return ROUND_L; }
+  ")"                 { yybegin(exprOpState); return ROUND_R; }
+  "!"                 { return OP_UNARY_NOT; }
+  "~"                 { return OP_UNARY_COMPL; }
+  "+"                 { return OP_PLUS; }
+  "-"                 { return OP_MINUS; }
+  "*"                 { yybegin(exprOpState); return CURRENT_PC_SYMBOL; }
+
 }
 
 <EXPR> {
-  {WHITE_SPACE}       { return handleEolCommentWhitespace(this); }
-  {EOL}               { yybegin(YYINITIAL); return EOL; }
-
-  {BINARY}            { yybegin(EXPR_OP); return BINARY; }
-  {HEXADECIMAL}       { yybegin(EXPR_OP); return HEXADECIMAL; }
-  {OCTAL}             { yybegin(EXPR_OP); return OCTAL; }
-  {DECIMAL}           { yybegin(EXPR_OP); return DECIMAL; }
-  {STRINGLIT}         { yybegin(EXPR_OP); return STRINGLIT; }
-
-  "^"                 { return OP_BITWISE_XOR; }
-  ","                 { return SEPARATOR; }
-  "("                 { return ROUND_L; }
-  ")"                 { yybegin(EXPR_OP); return ROUND_R; }
-  "!"                 { return OP_UNARY_NOT; }
-  "~"                 { return OP_UNARY_COMPL; }
-  "+"                 { return OP_PLUS; }
-  "-"                 { return OP_MINUS; }
-  "*"                 { yybegin(EXPR_OP); return CURRENT_PC_SYMBOL; }
-
-  {BONUSSYMBOL}       { yybegin(EXPR_OP); return SYMBOL; }
-
-  {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
+  {BONUSSYMBOL}       { yybegin(exprOpState); return SYMBOL; }
 }
 
-<EXPR_OP> {
-  {WHITE_SPACE}       { return handleEolCommentWhitespace(this); }
-  {EOL}               { yybegin(YYINITIAL); return EOL; }
+<EXPR_OP, ASMOPS_OP> {
+  "<<"                { yybegin(exprState); return OP_AR_SHIFT_L; }
+  ">>"                { yybegin(exprState); return OP_AR_SHIFT_R; }
+  "&&"                { yybegin(exprState); return OP_LOGICAL_AND; }
+  "||"                { yybegin(exprState); return OP_LOGICAL_OR; }
+  "=="|"="            { yybegin(exprState); return OP_CMP_EQ; }
+  "<>"|"!="           { yybegin(exprState); return OP_CMP_NOT_EQ; }
+  ">="                { yybegin(exprState); return OP_CMP_GT_EQ; }
+  "<="                { yybegin(exprState); return OP_CMP_LT_EQ; }
+  "<"                 { yybegin(exprState); return OP_CMP_LT; }
+  ">"                 { yybegin(exprState); return OP_CMP_GT; }
+  "&"                 { yybegin(exprState); return OP_BITWISE_AND; }
+  "|"|"!"             { yybegin(exprState); return OP_BITWISE_OR; }
+  "^"                 { yybegin(exprState); return OP_BITWISE_XOR; }
 
-  "<<"                { yybegin(EXPR); return OP_AR_SHIFT_L; }
-  ">>"                { yybegin(EXPR); return OP_AR_SHIFT_R; }
-  "&&"                { yybegin(EXPR); return OP_LOGICAL_AND; }
-  "||"                { yybegin(EXPR); return OP_LOGICAL_OR; }
-  "=="|"="            { yybegin(EXPR); return OP_CMP_EQ; }
-  "<>"|"!="           { yybegin(EXPR); return OP_CMP_NOT_EQ; }
-  ">="                { yybegin(EXPR); return OP_CMP_GT_EQ; }
-  "<="                { yybegin(EXPR); return OP_CMP_LT_EQ; }
-  "<"                 { yybegin(EXPR); return OP_CMP_LT; }
-  ">"                 { yybegin(EXPR); return OP_CMP_GT; }
-  "&"                 { yybegin(EXPR); return OP_BITWISE_AND; }
-  "|"|"!"             { yybegin(EXPR); return OP_BITWISE_OR; }
-  "^"                 { yybegin(EXPR); return OP_BITWISE_XOR; }
 //  ":"                 { return COLON; }
 //  ";"                 { return SEMICOLON; }
 //  "["                 { return SQUARE_L; }
 //  "]"                 { return SQUARE_R; }
-  ","                 { yybegin(EXPR); return SEPARATOR; }
-  "("                 { yybegin(EXPR); return ROUND_L; }
+  ","                 { yybegin(exprState); return SEPARATOR; }
+  "("                 { yybegin(exprState); return ROUND_L; }
   ")"                 { return ROUND_R; }
 //  "."                 { return DOT; }
 //  "$"                 { return DOLLAR; }
-  "~"                 { yybegin(EXPR); return OP_UNARY_COMPL; }
-  "+"                 { yybegin(EXPR); return OP_PLUS; }
-  "-"                 { yybegin(EXPR); return OP_MINUS; }
-  "*"                 { yybegin(EXPR); return OP_AR_MUL; }
-  "%"|"//"            { yybegin(EXPR); return OP_AR_MOD; }
-  "/"                 { yybegin(EXPR); return OP_AR_DIV; }
-
-  {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
+  "~"                 { yybegin(exprState); return OP_UNARY_COMPL; }
+  "+"                 { yybegin(exprState); return OP_PLUS; }
+  "-"                 { yybegin(exprState); return OP_MINUS; }
+  "*"                 { yybegin(exprState); return OP_AR_MUL; }
+  "%"|"//"            { yybegin(exprState); return OP_AR_MOD; }
+  "/"                 { yybegin(exprState); return OP_AR_DIV; }
 }
 
 <ASMOPS> {
-  {WHITE_SPACE}       { return handleEolCommentWhitespace(this); }
-  {EOL}               { yybegin(YYINITIAL); return EOL; }
-
-  {BINARY}            { yybegin(ASMOPS_OP); return BINARY; }
-  {HEXADECIMAL}       { yybegin(ASMOPS_OP); return HEXADECIMAL; }
-  {OCTAL}             { yybegin(ASMOPS_OP); return OCTAL; }
-  {DECIMAL}           { yybegin(ASMOPS_OP); return DECIMAL; }
-  {STRINGLIT}         { yybegin(ASMOPS_OP); return STRINGLIT; }
-
-  {AREG}              { yybegin(ASMOPS_OP); return AREG; }
-  {DREG}              { yybegin(ASMOPS_OP); return DREG; }
-  "sp"|"a7"           { yybegin(ASMOPS_OP); return REG_SP; }
-  "pc"                { yybegin(ASMOPS_OP); return PC; }
-  "ccr"               { yybegin(ASMOPS_OP); return REG_CCR; }
-  "sr"                { yybegin(ASMOPS_OP); return REG_SR; }
-  "usp"               { yybegin(ASMOPS_OP); return REG_USP; }
-  "vbr"               { yybegin(ASMOPS_OP); return REG_VBR; }
-
-  "^"                 { return OP_BITWISE_XOR; }
-  ","                 { return SEPARATOR; }
-  "("                 { return ROUND_L; }
-  ")"                 { yybegin(ASMOPS_OP); return ROUND_R; }
-  "!"                 { return OP_UNARY_NOT; }
-  "~"                 { return OP_UNARY_COMPL; }
-  "+"                 { return OP_PLUS; }
-  "-"                 { return OP_MINUS; }
-  "*"                 { yybegin(ASMOPS_OP); return CURRENT_PC_SYMBOL; }
+  {AREG}              { yybegin(exprOpState); return AREG; }
+  {DREG}              { yybegin(exprOpState); return DREG; }
+  "sp"|"a7"           { yybegin(exprOpState); return REG_SP; }
+  "pc"                { yybegin(exprOpState); return PC; }
+  "ccr"               { yybegin(exprOpState); return REG_CCR; }
+  "sr"                { yybegin(exprOpState); return REG_SR; }
+  "usp"               { yybegin(exprOpState); return REG_USP; }
+  "vbr"               { yybegin(exprOpState); return REG_VBR; }
 
   "#"                 { return HASH; }
 
-  {SYMBOL}            { yybegin(ASMOPS_OP); return SYMBOL; }
-
-  {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
+  {SYMBOL}            { yybegin(exprOpState); return SYMBOL; }
 }
 
 <ASMOPS_OP> {
-  {WHITE_SPACE}       { return handleEolCommentWhitespace(this); }
-  {EOL}               { yybegin(YYINITIAL); return EOL; }
-
   {OPSIZE_BS}         { return OPSIZE_BS; }
   {OPSIZE_W}          { return OPSIZE_W; }
   {OPSIZE_L}          { return OPSIZE_L; }
-
-  "<<"                { yybegin(ASMOPS); return OP_AR_SHIFT_L; }
-  ">>"                { yybegin(ASMOPS); return OP_AR_SHIFT_R; }
-  "&&"                { yybegin(ASMOPS); return OP_LOGICAL_AND; }
-  "||"                { yybegin(ASMOPS); return OP_LOGICAL_OR; }
-  "=="|"="            { yybegin(ASMOPS); return OP_CMP_EQ; }
-  "<>"|"!="           { yybegin(ASMOPS); return OP_CMP_NOT_EQ; }
-  ">="                { yybegin(ASMOPS); return OP_CMP_GT_EQ; }
-  "<="                { yybegin(ASMOPS); return OP_CMP_LT_EQ; }
-  "<"                 { yybegin(ASMOPS); return OP_CMP_LT; }
-  ">"                 { yybegin(ASMOPS); return OP_CMP_GT; }
-  "&"                 { yybegin(ASMOPS); return OP_BITWISE_AND; }
-  "|"|"!"             { yybegin(ASMOPS); return OP_BITWISE_OR; }
-  "^"                 { yybegin(ASMOPS); return OP_BITWISE_XOR; }
-//  ":"                 { return COLON; }
-//  ";"                 { return SEMICOLON; }
-//  "["                 { return SQUARE_L; }
-//  "]"                 { return SQUARE_R; }
-  ","                 { yybegin(ASMOPS); return SEPARATOR; }
-  "("                 { yybegin(ASMOPS); return ROUND_L; }
-  ")"                 { return ROUND_R; }
-//  "."                 { return DOT; }
-//  "$"                 { return DOLLAR; }
-  "~"                 { yybegin(ASMOPS); return OP_UNARY_COMPL; }
-  "+"                 { yybegin(ASMOPS); return OP_PLUS; }
-  "-"                 { yybegin(ASMOPS); return OP_MINUS; }
-  "*"                 { yybegin(ASMOPS); return OP_AR_MUL; }
-  "%"|"//"            { yybegin(ASMOPS); return OP_AR_MOD; }
-  "/"                 { yybegin(ASMOPS); return OP_AR_DIV; }
-
-  {SYMBOL}            { return SYMBOL; }
-
-  {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
 }
 
 <WAITEOL>
