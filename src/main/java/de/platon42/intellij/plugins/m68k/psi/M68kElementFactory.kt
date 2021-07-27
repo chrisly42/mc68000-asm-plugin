@@ -27,6 +27,16 @@ object M68kElementFactory {
         return PsiTreeUtil.findChildOfType(file, M68kSymbolReference::class.java)!!
     }
 
+    fun createMacroDefinition(project: Project, name: String): M68kMacroDefinition {
+        val file = createFile(project, "$name macro\nendm\n")
+        return PsiTreeUtil.findChildOfType(file, M68kMacroDefinition::class.java)!!
+    }
+
+    fun createMacroCall(project: Project, name: String): M68kMacroCall {
+        val file = createFile(project, " $name\n")
+        return PsiTreeUtil.findChildOfType(file, M68kMacroCall::class.java)!!
+    }
+
     fun createFile(project: Project, content: String): M68kFile {
         return PsiFileFactory.getInstance(project).createFileFromText("dummy.m68k", INSTANCE, content) as M68kFile
     }

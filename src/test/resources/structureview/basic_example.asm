@@ -2,6 +2,14 @@ PIC_WIDTH = 320
 PIC_HEIGHT equ 256
 DEBUG_LEVEL set 10
 
+BLTHOGON MACRO
+        foo
+        ENDM
+
+BLTHOGOFF MACRO
+        bar
+        ENDM
+
 entry:
         bsr     init
         bsr     main

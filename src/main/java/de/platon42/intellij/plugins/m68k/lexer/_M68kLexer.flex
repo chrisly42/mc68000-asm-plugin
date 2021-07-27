@@ -89,10 +89,10 @@ PLAIN_MACRO_LINE=[^;\r\n]+
                         if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; }
                         if(isDataDirective(yytext())) { yybegin(EXPR); return DATA_DIRECTIVE; }
                         if(isOtherDirective(yytext())) { yybegin(EXPR); return OTHER_DIRECTIVE; }
-                        yybegin(MACROCALL); eatOneWhitespace = true; return MACRO_INVOKATION;
+                        return handleMacroMode(this);
                       }
 //  {MNEMONIC}          { if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; } else { yybegin(INSTRPART); return SYMBOL; } }
-  {MACRONAME}         { yybegin(MACROCALL); eatOneWhitespace = true; return MACRO_INVOKATION; }
+  {MACRONAME}         { return handleMacroMode(this); }
   {HASH_COMMENT}      { yybegin(YYINITIAL); return COMMENT; }
 }
 
@@ -107,10 +107,10 @@ PLAIN_MACRO_LINE=[^;\r\n]+
                         if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; }
                         if(isDataDirective(yytext())) { yybegin(EXPR); return DATA_DIRECTIVE; }
                         if(isOtherDirective(yytext())) { yybegin(EXPR); return OTHER_DIRECTIVE; }
-                        yybegin(MACROCALL); eatOneWhitespace = true; return MACRO_INVOKATION;
+                        return handleMacroMode(this);
                       }
 //  {MNEMONIC}          { if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; } else { return SYMBOL; } }
-  {MACRONAME}         { yybegin(MACROCALL); eatOneWhitespace = true; return MACRO_INVOKATION; }
+  {MACRONAME}         { return handleMacroMode(this); }
 
   {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
 }
@@ -130,9 +130,9 @@ PLAIN_MACRO_LINE=[^;\r\n]+
   {WHITE_SPACE}       { return handleEolCommentWhitespace(this); }
   {EOL}               { yybegin(YYINITIAL); return EOL; }
 
-  {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
-
   ","                 { return SEPARATOR; }
+
+  {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
 
   {PLAINPARAM}        { return STRINGLIT; }
 }

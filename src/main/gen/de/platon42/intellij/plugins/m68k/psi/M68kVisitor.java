@@ -95,7 +95,7 @@ public class M68kVisitor extends PsiElementVisitor {
     }
 
     public void visitMacroDefinition(@NotNull M68kMacroDefinition o) {
-        visitPsiElement(o);
+        visitNamedElement(o);
     }
 
     public void visitMacroNameDefinition(@NotNull M68kMacroNameDefinition o) {

@@ -1,0 +1,13 @@
+Assembly File: a.asm
+  M68kStatementImpl(STATEMENT)
+    M68kGlobalLabelImpl(GLOBAL_LABEL)
+      PsiElement(M68kTokenType.GLOBAL_LABEL_DEF)('label')
+    PsiWhiteSpace(' ')
+    M68kMacroCallImpl(MACRO_CALL)
+      PsiElement(M68kTokenType.MACRO_INVOCATION)('FOOBAR')
+      PsiWhiteSpace(' ')
+      M68kLiteralExprImpl(LITERAL_EXPR)
+        PsiElement(M68kTokenType.STRINGLIT)('narf')
+  PsiWhiteSpace(' ')
+  PsiComment(M68kTokenType.COMMENT)('; wut?')
+  PsiElement(M68kTokenType.EOL)('\n')

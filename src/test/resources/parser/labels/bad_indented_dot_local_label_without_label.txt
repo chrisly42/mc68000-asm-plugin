@@ -2,5 +2,5 @@ Assembly File: a.asm
   PsiWhiteSpace('   ')
   PsiErrorElement:'.' unexpected
     PsiElement(BAD_CHARACTER)('.')
-  PsiElement(M68kTokenType.MACRO_INVOKATION)('local_label')
+  PsiElement(M68kTokenType.MACRO_INVOCATION)('local_label')
   PsiElement(M68kTokenType.EOL)('\n')

@@ -24,6 +24,8 @@ internal class M68kStructureViewTest : AbstractM68kTest() {
  PIC_WIDTH
  PIC_HEIGHT
  DEBUG_LEVEL
+ BLTHOGON
+ BLTHOGOFF
  entry
  -init
   .looph

@@ -5,6 +5,7 @@ import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.stubs.StubIndex
 import com.intellij.psi.util.PsiTreeUtil
 import de.platon42.intellij.plugins.m68k.stubs.M68kGlobalLabelStubIndex
+import de.platon42.intellij.plugins.m68k.stubs.M68kMacroDefinitionStubIndex
 import de.platon42.intellij.plugins.m68k.stubs.M68kSymbolDefinitionStubIndex
 
 object M68kLookupUtil {
@@ -93,4 +94,47 @@ object M68kLookupUtil {
     }
 
     fun findAllSymbolDefinitionNames(project: Project): Collection<String> = StubIndex.getInstance().getAllKeys(M68kSymbolDefinitionStubIndex.KEY, project)
+
+
+    fun findAllMacroDefinitions(project: Project): List<M68kMacroDefinition> {
+        val results: MutableList<M68kMacroDefinition> = ArrayList()
+        StubIndex.getInstance().processAllKeys(M68kMacroDefinitionStubIndex.KEY, project)
+        {
+            results.addAll(
+                StubIndex.getElements(
+                    M68kMacroDefinitionStubIndex.KEY,
+                    it,
+                    project,
+                    GlobalSearchScope.allScope(project),
+                    M68kMacroDefinition::class.java
+                )
+            )
+            true
+        }
+        return results
+    }
+
+    fun findAllMacroDefinitions(file: M68kFile): List<M68kMacroDefinition> {
+        val results: MutableList<M68kMacroDefinition> = ArrayList()
+        StubIndex.getInstance().processAllKeys(
+            M68kMacroDefinitionStubIndex.KEY,
+            {
+                results.addAll(
+                    StubIndex.getElements(
+                        M68kMacroDefinitionStubIndex.KEY,
+                        it,
+                        file.project,
+                        GlobalSearchScope.fileScope(file),
+                        M68kMacroDefinition::class.java
+                    )
+                )
+                true
+            }, GlobalSearchScope.fileScope(file), null
+        )
+        return results
+    }
+
+    fun findAllMacroDefinitionNames(project: Project): Collection<String> = StubIndex.getInstance().getAllKeys(M68kMacroDefinitionStubIndex.KEY, project)
+
+
 }

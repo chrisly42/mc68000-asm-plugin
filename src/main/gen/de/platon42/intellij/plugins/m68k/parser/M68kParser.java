@@ -551,7 +551,7 @@ public class M68kParser implements PsiParser, LightPsiParser {
     // AsmInstruction | MacroCall
     static boolean Instruction(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "Instruction")) return false;
-        if (!nextTokenIs(b, "", MACRO_INVOKATION, MNEMONIC)) return false;
+        if (!nextTokenIs(b, "", MACRO_INVOCATION, MNEMONIC)) return false;
         boolean r;
         r = AsmInstruction(b, l + 1);
         if (!r) r = MacroCall(b, l + 1);
@@ -638,13 +638,13 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // MACRO_INVOKATION PlainOperands?
+    // MACRO_INVOCATION PlainOperands?
     public static boolean MacroCall(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "MacroCall")) return false;
-        if (!nextTokenIs(b, MACRO_INVOKATION)) return false;
+        if (!nextTokenIs(b, MACRO_INVOCATION)) return false;
         boolean r;
         Marker m = enter_section_(b);
-        r = consumeToken(b, MACRO_INVOKATION);
+        r = consumeToken(b, MACRO_INVOCATION);
         r = r && MacroCall_1(b, l + 1);
         exit_section_(b, m, MACRO_CALL, r);
         return r;
@@ -754,19 +754,27 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // STRINGLIT (SEPARATOR STRINGLIT)*
+    // (expr|AddressingMode) (SEPARATOR (expr|AddressingMode))*
     static boolean PlainOperands(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "PlainOperands")) return false;
-        if (!nextTokenIs(b, STRINGLIT)) return false;
         boolean r;
         Marker m = enter_section_(b);
-        r = consumeToken(b, STRINGLIT);
+        r = PlainOperands_0(b, l + 1);
         r = r && PlainOperands_1(b, l + 1);
         exit_section_(b, m, null, r);
         return r;
     }
 
-    // (SEPARATOR STRINGLIT)*
+    // expr|AddressingMode
+    private static boolean PlainOperands_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "PlainOperands_0")) return false;
+        boolean r;
+        r = expr(b, l + 1, -1);
+        if (!r) r = AddressingMode(b, l + 1);
+        return r;
+    }
+
+    // (SEPARATOR (expr|AddressingMode))*
     private static boolean PlainOperands_1(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "PlainOperands_1")) return false;
         while (true) {
@@ -777,13 +785,23 @@ public class M68kParser implements PsiParser, LightPsiParser {
         return true;
     }
 
-    // SEPARATOR STRINGLIT
+    // SEPARATOR (expr|AddressingMode)
     private static boolean PlainOperands_1_0(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "PlainOperands_1_0")) return false;
         boolean r;
         Marker m = enter_section_(b);
-        r = consumeTokens(b, 0, SEPARATOR, STRINGLIT);
+        r = consumeToken(b, SEPARATOR);
+        r = r && PlainOperands_1_0_1(b, l + 1);
         exit_section_(b, m, null, r);
+        return r;
+    }
+
+    // expr|AddressingMode
+    private static boolean PlainOperands_1_0_1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "PlainOperands_1_0_1")) return false;
+        boolean r;
+        r = expr(b, l + 1, -1);
+        if (!r) r = AddressingMode(b, l + 1);
         return r;
     }
 

@@ -10,6 +10,7 @@ object M68kStubElementTypeFactory {
         return when (name) {
             "GLOBAL_LABEL" -> M68kElementTypes.GLOBAL_LABEL
             "SYMBOL_DEFINITION" -> M68kElementTypes.SYMBOL_DEFINITION
+            "MACRO_DEFINITION" -> M68kElementTypes.MACRO_DEFINITION
             else -> throw RuntimeException("Unknown element type '$name'")
         }
     }

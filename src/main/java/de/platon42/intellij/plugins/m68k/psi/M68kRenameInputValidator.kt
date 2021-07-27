@@ -13,12 +13,13 @@ class M68kRenameInputValidator : RenameInputValidator {
     override fun getPattern(): ElementPattern<out PsiElement?> = StandardPatterns.or(
         PlatformPatterns.psiElement(M68kGlobalLabel::class.java),
         PlatformPatterns.psiElement(M68kLocalLabel::class.java),
-        PlatformPatterns.psiElement(M68kSymbolDefinition::class.java)
+        PlatformPatterns.psiElement(M68kSymbolDefinition::class.java),
+        PlatformPatterns.psiElement(M68kMacroDefinition::class.java)
     )
 
     override fun isInputValid(newName: String, element: PsiElement, context: ProcessingContext): Boolean {
         return when (element) {
-            is M68kGlobalLabel, is M68kSymbolDefinition -> SYMBOL_PATTERN.matcher(newName).matches()
+            is M68kGlobalLabel, is M68kSymbolDefinition, is M68kMacroDefinition -> SYMBOL_PATTERN.matcher(newName).matches()
             is M68kLocalLabel -> LOCAL_LABEL_PATTERN.matcher(newName).matches()
             else -> false
         }

@@ -34,7 +34,7 @@ class M68kSyntaxHighlighter(val project: Project?) : SyntaxHighlighterBase() {
             M68kTypes.MNEMONIC -> arrayOf(MNEMONIC)
             M68kTypes.MACRO_TAG, M68kTypes.MACRO_END_TAG -> arrayOf(MACRO_PREPROCESSOR)
             M68kTypes.MACRO_LINE -> arrayOf(MACRO_LINE)
-            M68kTypes.MACRO_INVOKATION -> arrayOf(MACRO_CALL)
+            M68kTypes.MACRO_INVOCATION -> arrayOf(MACRO_CALL)
             M68kTypes.MACRO_NAME -> arrayOf(MACRO_NAME_DEF)
             M68kTypes.DATA_DIRECTIVE -> arrayOf(DATA_PREPROCESSOR)
             M68kTypes.OTHER_DIRECTIVE, M68kTypes.EQU -> arrayOf(OTHER_PREPROCESSOR)

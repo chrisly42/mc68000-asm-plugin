@@ -51,7 +51,7 @@ public interface M68kTypes {
     IElementType LITERAL_EXPR = new M68kElementType("LITERAL_EXPR");
     IElementType LOCAL_LABEL = new M68kElementType("LOCAL_LABEL");
     IElementType MACRO_CALL = new M68kElementType("MACRO_CALL");
-    IElementType MACRO_DEFINITION = new M68kElementType("MACRO_DEFINITION");
+    IElementType MACRO_DEFINITION = M68kStubElementTypeFactory.stubFactory("MACRO_DEFINITION");
     IElementType MACRO_NAME_DEFINITION = new M68kElementType("MACRO_NAME_DEFINITION");
     IElementType MACRO_PLAIN_LINE = new M68kElementType("MACRO_PLAIN_LINE");
     IElementType OPERAND_SIZE = new M68kElementType("OPERAND_SIZE");
@@ -90,7 +90,7 @@ public interface M68kTypes {
     IElementType HEXADECIMAL = new M68kTokenType("HEXADECIMAL");
     IElementType LOCAL_LABEL_DEF = new M68kTokenType("LOCAL_LABEL_DEF");
     IElementType MACRO_END_TAG = new M68kTokenType("MACRO_END_TAG");
-    IElementType MACRO_INVOKATION = new M68kTokenType("MACRO_INVOKATION");
+    IElementType MACRO_INVOCATION = new M68kTokenType("MACRO_INVOCATION");
     IElementType MACRO_LINE = new M68kTokenType("MACRO_LINE");
     IElementType MACRO_NAME = new M68kTokenType("MACRO_NAME");
     IElementType MACRO_TAG = new M68kTokenType("MACRO_TAG");

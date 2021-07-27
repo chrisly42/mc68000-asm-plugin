@@ -8,10 +8,7 @@ import de.platon42.intellij.jupiter.MyFixture
 import de.platon42.intellij.jupiter.TestDataPath
 import de.platon42.intellij.jupiter.TestDataSubPath
 import de.platon42.intellij.plugins.m68k.AbstractM68kTest
-import de.platon42.intellij.plugins.m68k.psi.M68kGlobalLabel
-import de.platon42.intellij.plugins.m68k.psi.M68kLocalLabel
-import de.platon42.intellij.plugins.m68k.psi.M68kSymbolDefinition
-import de.platon42.intellij.plugins.m68k.psi.M68kSymbolReference
+import de.platon42.intellij.plugins.m68k.psi.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -70,5 +67,23 @@ internal class M68kReferenceContributorTest : AbstractM68kTest() {
         assertThat(reference.variants).isEmpty()
 
         myFixture.checkResultByFile("symbol_assignment_after_rename.asm")
+    }
+
+    @Test
+    @TestDataSubPath("macros")
+    internal fun reference_to_macro_can_be_renamed(@MyFixture myFixture: CodeInsightTestFixture) {
+        val file = myFixture.configureByFile("macros.asm")
+        val elementAtCaret = myFixture.elementAtCaret
+        assertThat(elementAtCaret).isInstanceOf(M68kMacroDefinition::class.java)
+        val macroDef = elementAtCaret as M68kMacroDefinition
+        assertThat(macroDef.macroNameDefinition.text).isEqualTo("PUTMSG")
+
+        myFixture.renameElementAtCaret("PRINTF")
+
+        val reference = file.findReferenceAt(myFixture.editor.caretModel.offset)!!
+        assertThat(reference).isInstanceOf(M68kMacroReference::class.java)
+        assertThat(reference.variants).isEmpty()
+
+        myFixture.checkResultByFile("macros_after_rename.asm")
     }
 }

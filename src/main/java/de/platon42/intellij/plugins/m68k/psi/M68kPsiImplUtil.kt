@@ -4,6 +4,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.util.IncorrectOperationException
 import de.platon42.intellij.plugins.m68k.psi.M68kElementFactory.createGlobalLabel
 import de.platon42.intellij.plugins.m68k.psi.M68kElementFactory.createLocalLabel
+import de.platon42.intellij.plugins.m68k.psi.M68kElementFactory.createMacroDefinition
 import de.platon42.intellij.plugins.m68k.psi.M68kElementFactory.createSymbolDefinition
 
 object M68kPsiImplUtil {
@@ -71,4 +72,26 @@ object M68kPsiImplUtil {
         val text = element.firstChild.text
         return text.startsWith('.') || text.endsWith('$')
     }
+
+
+    // Macro Definition
+    @JvmStatic
+    fun getName(element: M68kMacroDefinition): String? = element.macroNameDefinition.firstChild.text
+
+    @JvmStatic
+    fun setName(element: M68kMacroDefinition, name: String): PsiElement {
+        val nameNode = element.macroNameDefinition
+        val newMacroDefinition = createMacroDefinition(element.project, name)
+        nameNode.replace(newMacroDefinition.firstChild)
+        return element
+    }
+
+    @JvmStatic
+    fun getNameIdentifier(element: M68kMacroDefinition): PsiElement = element.firstChild
+
+
+    // Macro Call
+    @JvmStatic
+    fun getMacroName(element: M68kMacroCall): String = element.firstChild.text
+
 }

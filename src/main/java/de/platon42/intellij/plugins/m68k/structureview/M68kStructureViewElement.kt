@@ -20,6 +20,7 @@ class M68kStructureViewElement(private val myElement: NavigatablePsiElement) : S
             is M68kFile -> {
                 listOf(
                     M68kLookupUtil.findAllSymbolDefinitions(myElement).sortedBy { it.startOffset },
+                    M68kLookupUtil.findAllMacroDefinitions(myElement).sortedBy { it.startOffset },
                     M68kLookupUtil.findAllGlobalLabels(myElement).sortedBy { it.startOffset },
 //                    M68kLookupUtil.findAllSymbolDefinitions(myElement).sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name!! }),
 //                    M68kLookupUtil.findAllGlobalLabels(myElement).sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name!! })

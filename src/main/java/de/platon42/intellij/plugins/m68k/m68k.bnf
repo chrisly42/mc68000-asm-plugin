@@ -173,9 +173,22 @@ PreprocessorDirective ::= Label? (DATA_DIRECTIVE | OTHER_DIRECTIVE)
 MacroPlainLine ::= MACRO_LINE
 MacroNameDefinition ::= MACRO_NAME
 
-MacroDefinition ::= ((MacroNameDefinition MACRO_TAG)|(MACRO_TAG MacroNameDefinition)) MacroPlainLine* MACRO_END_TAG {pin=1}
+MacroDefinition ::= ((MacroNameDefinition MACRO_TAG)|(MACRO_TAG MacroNameDefinition)) MacroPlainLine* MACRO_END_TAG {
+pin=1
+    name = "macro definition"
+    implements = "de.platon42.intellij.plugins.m68k.psi.M68kNamedElement"
+    mixin = "de.platon42.intellij.plugins.m68k.psi.M68kMacroDefinitionMixin"
+    elementTypeFactory = "de.platon42.intellij.plugins.m68k.stubs.M68kStubElementTypeFactory.stubFactory"
+    stubClass = "de.platon42.intellij.plugins.m68k.stubs.M68kMacroDefinitionStub"
+    methods = [getName setName getNameIdentifier]
+}
 
-MacroCall ::= MACRO_INVOKATION PlainOperands?
+
+MacroCall ::= MACRO_INVOCATION PlainOperands? {
+    mixin = "de.platon42.intellij.plugins.m68k.psi.M68kMacroCallMixin"
+    methods = [getMacroName]
+}
+
 AsmInstruction ::= AsmOp AsmOperands?
 private Instruction ::= AsmInstruction | MacroCall
 //external Instruction ::= parseMacroCallOrAsmInstruction
@@ -185,7 +198,7 @@ private AsmOperands ::= AddressingMode (SEPARATOR AddressingMode)?
 private PreprocessorOperands ::= PreprocessorOperand (SEPARATOR PreprocessorOperand)*
 private PreprocessorOperand ::= expr
 
-private PlainOperands ::= STRINGLIT (SEPARATOR STRINGLIT)*
+private PlainOperands ::= (expr|AddressingMode) (SEPARATOR (expr|AddressingMode))*
 
 // TODO This should probably be a ILazyParseableElementType, no idea how to implement that yet
 SymbolReference ::= SYMBOL {

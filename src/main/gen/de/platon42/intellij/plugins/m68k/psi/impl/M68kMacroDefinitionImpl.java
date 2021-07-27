@@ -1,22 +1,26 @@
 // This is a generated file. Not intended for manual editing.
 package de.platon42.intellij.plugins.m68k.psi.impl;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.util.PsiTreeUtil;
-import de.platon42.intellij.plugins.m68k.psi.M68kMacroDefinition;
-import de.platon42.intellij.plugins.m68k.psi.M68kMacroNameDefinition;
-import de.platon42.intellij.plugins.m68k.psi.M68kMacroPlainLine;
-import de.platon42.intellij.plugins.m68k.psi.M68kVisitor;
+import de.platon42.intellij.plugins.m68k.psi.*;
+import de.platon42.intellij.plugins.m68k.stubs.M68kMacroDefinitionStub;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class M68kMacroDefinitionImpl extends ASTWrapperPsiElement implements M68kMacroDefinition {
+public class M68kMacroDefinitionImpl extends M68kMacroDefinitionMixin implements M68kMacroDefinition {
 
     public M68kMacroDefinitionImpl(@NotNull ASTNode node) {
         super(node);
+    }
+
+    public M68kMacroDefinitionImpl(@NotNull M68kMacroDefinitionStub stub, @NotNull IStubElementType<?, ?> nodeType) {
+        super(stub, nodeType);
     }
 
     public void accept(@NotNull M68kVisitor visitor) {
@@ -39,6 +43,24 @@ public class M68kMacroDefinitionImpl extends ASTWrapperPsiElement implements M68
     @NotNull
     public List<M68kMacroPlainLine> getMacroPlainLineList() {
         return PsiTreeUtil.getChildrenOfTypeAsList(this, M68kMacroPlainLine.class);
+    }
+
+    @Override
+    @Nullable
+    public String getName() {
+        return M68kPsiImplUtil.getName(this);
+    }
+
+    @Override
+    @NotNull
+    public PsiElement setName(@NotNull String name) {
+        return M68kPsiImplUtil.setName(this, name);
+    }
+
+    @Override
+    @NotNull
+    public PsiElement getNameIdentifier() {
+        return M68kPsiImplUtil.getNameIdentifier(this);
     }
 
 }

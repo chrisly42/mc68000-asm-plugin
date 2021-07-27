@@ -4,6 +4,7 @@ import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
 import de.platon42.intellij.plugins.m68k.asm.AssemblerDirectives
 import de.platon42.intellij.plugins.m68k.asm.M68kIsa.mnemonics
+import de.platon42.intellij.plugins.m68k.psi.M68kTypes
 
 object LexerUtil {
 
@@ -46,6 +47,17 @@ object LexerUtil {
         }
         lexer.eatOneWhitespace = false
         return TokenType.WHITE_SPACE
+    }
+
+    @JvmStatic
+    fun handleMacroMode(lexer: _M68kLexer): IElementType {
+        if (lexer.lexerPrefs.macroParametersUnparsed) {
+            lexer.yybegin(_M68kLexer.MACROCALL)
+        } else {
+            lexer.yybegin(_M68kLexer.ASMOPS)
+        }
+        lexer.eatOneWhitespace = true
+        return M68kTypes.MACRO_INVOCATION
     }
 
     @JvmStatic

@@ -898,17 +898,13 @@ public class _M68kLexer implements FlexLexer {
                             yybegin(EXPR);
                             return OTHER_DIRECTIVE;
                         }
-                        yybegin(MACROCALL);
-                        eatOneWhitespace = true;
-                        return MACRO_INVOKATION;
+                        return handleMacroMode(this);
                     }
                     // fall through
                     case 116:
                         break;
                     case 8: {
-                        yybegin(MACROCALL);
-                        eatOneWhitespace = true;
-                        return MACRO_INVOKATION;
+                        return handleMacroMode(this);
                     }
                     // fall through
                     case 117:

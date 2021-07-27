@@ -24,6 +24,11 @@ internal class MacroCallTest : AbstractParsingTest() {
     }
 
     @Test
+    internal fun call_with_label(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, "label FOOBAR narf ; wut?\n")
+    }
+
+    @Test
     internal fun putmsg_call_with_specially_bracketed_parameters(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
         // FIXME this doesn't work as intended...
         testGoodSyntax(testCase, "\tPUTMSG 10,<\"%s has left the building at %d:%d\",10,'Yup!'>,a0,$42(a1,d0.w),#42\n")

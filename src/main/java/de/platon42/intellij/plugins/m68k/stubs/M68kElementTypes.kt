@@ -8,11 +8,14 @@ import com.intellij.psi.stubs.*
 import com.intellij.psi.tree.ILightStubFileElementType
 import de.platon42.intellij.plugins.m68k.MC68000Language.Companion.INSTANCE
 import de.platon42.intellij.plugins.m68k.psi.M68kGlobalLabel
+import de.platon42.intellij.plugins.m68k.psi.M68kMacroDefinition
 import de.platon42.intellij.plugins.m68k.psi.M68kSymbolDefinition
 import de.platon42.intellij.plugins.m68k.psi.M68kTypes
 import de.platon42.intellij.plugins.m68k.psi.impl.M68kGlobalLabelImpl
+import de.platon42.intellij.plugins.m68k.psi.impl.M68kMacroDefinitionImpl
 import de.platon42.intellij.plugins.m68k.psi.impl.M68kSymbolDefinitionImpl
 import de.platon42.intellij.plugins.m68k.stubs.impl.M68kGlobalLabelStubImpl
+import de.platon42.intellij.plugins.m68k.stubs.impl.M68kMacroDefinitionStubImpl
 import de.platon42.intellij.plugins.m68k.stubs.impl.M68kSymbolDefinitionStubImpl
 import java.io.IOException
 
@@ -65,6 +68,29 @@ interface M68kElementTypes {
                     M68kSymbolDefinitionStubImpl(parentStub, this, dataStream.readName()!!)
 
                 override fun indexStub(stub: M68kSymbolDefinitionStub, sink: IndexSink) = sink.occurrence(M68kSymbolDefinitionStubIndex.KEY, stub.name!!)
+            }
+
+        @JvmField
+        val MACRO_DEFINITION: IStubElementType<M68kMacroDefinitionStub, M68kMacroDefinition> =
+            object : M68kStubElementType<M68kMacroDefinitionStub, M68kMacroDefinition>("MACRO_DEFINITION") {
+                override fun createPsi(stub: M68kMacroDefinitionStub): M68kMacroDefinition = M68kMacroDefinitionImpl(stub, this)
+
+                override fun createStub(psi: M68kMacroDefinition, parentStub: StubElement<out PsiElement>): M68kMacroDefinitionStub =
+                    M68kMacroDefinitionStubImpl(parentStub, this, psi.name!!)
+
+                override fun createStub(tree: LighterAST, node: LighterASTNode, parentStub: StubElement<*>): M68kMacroDefinitionStub {
+                    val idNode = LightTreeUtil.requiredChildOfType(tree, node, M68kTypes.MACRO_NAME_DEFINITION)
+                    return M68kMacroDefinitionStubImpl(parentStub, this, LightTreeUtil.toFilteredString(tree, idNode, null))
+                }
+
+                @Throws(IOException::class)
+                override fun serialize(stub: M68kMacroDefinitionStub, dataStream: StubOutputStream) = dataStream.writeName(stub.name)
+
+                @Throws(IOException::class)
+                override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>): M68kMacroDefinitionStub =
+                    M68kMacroDefinitionStubImpl(parentStub, this, dataStream.readName()!!)
+
+                override fun indexStub(stub: M68kMacroDefinitionStub, sink: IndexSink) = sink.occurrence(M68kMacroDefinitionStubIndex.KEY, stub.name!!)
             }
 
     }

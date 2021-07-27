@@ -16,7 +16,7 @@ class M68kFindUsagesProvider : FindUsagesProvider {
     override fun getWordsScanner(): WordsScanner =
         DefaultWordsScanner(
             M68kLexer(M68kLexerPrefs()),  // FIXME Oh no! More Prefs!
-            TokenSet.create(M68kTypes.SYMBOLDEF, M68kTypes.GLOBAL_LABEL_DEF, M68kTypes.LOCAL_LABEL_DEF, M68kTypes.SYMBOL),
+            TokenSet.create(M68kTypes.SYMBOLDEF, M68kTypes.GLOBAL_LABEL_DEF, M68kTypes.LOCAL_LABEL_DEF, M68kTypes.MACRO_NAME),
             TokenSet.create(M68kTypes.COMMENT),
             TokenSet.create(M68kTypes.STRINGLIT, M68kTypes.DECIMAL, M68kTypes.HEXADECIMAL, M68kTypes.OCTAL, M68kTypes.BINARY),
             TokenSet.EMPTY
@@ -32,6 +32,8 @@ class M68kFindUsagesProvider : FindUsagesProvider {
             is M68kLocalLabel -> "local label"
             is M68kSymbolDefinition -> "symbol definition"
             is M68kSymbolReference -> "symbol reference"
+            is M68kMacroDefinition -> "macro definition"
+            is M68kMacroCall -> "macro call"
             is M68kRegister -> "register"
             is M68kRefExpr -> "reference expression"
             else -> ""
@@ -44,6 +46,8 @@ class M68kFindUsagesProvider : FindUsagesProvider {
             is M68kLocalLabel -> element.name!!
             is M68kSymbolDefinition -> element.parent.text
             is M68kSymbolReference -> element.symbolName
+            is M68kMacroDefinition -> element.macroNameDefinition.text
+            is M68kMacroCall -> element.macroName
             is M68kRefExpr -> element.symbolReference?.symbolName ?: ""
             is M68kRegister -> element.text
             else -> ""
