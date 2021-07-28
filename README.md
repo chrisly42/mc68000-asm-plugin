@@ -27,8 +27,8 @@ it's "good enough" to get started, and I can return to demo coding with its curr
 - Parser / Lexer for MC68000 (yes, only 68000 right now!) assembly language files in VAsm / DevPac style
 - Syntax highlighting and Color Settings Page (you should really modify the color settings to your likings!)
 - Mnemonics code completion
-- Symbols / Labels code completion
-- References / Refactoring support for local and global labels, and symbol assignments.
+- Symbols / Labels / Macros code completion
+- References / Refactoring support for local and global labels, symbol assignments, and macros.
 - Brace matching
 - Quote handler
 - Goto Symbol support
@@ -36,23 +36,22 @@ it's "good enough" to get started, and I can return to demo coding with its curr
 
 ## Known issues
 
-- No referencing of macro invocations and macro definitions.
-- `Find Usages` always shows _"Unclassified"_ though it shouldn't.
-- Macro definitions may cause syntax errors when using backslash arguments.
+- `Find Usages` always shows _"Unclassified"_ though it shouldn't (?)
 - Macro invocations are not yet evaluated, thus no referencing to symbols defined via macros (e.g. `STRUCT`).
 - No support for includes. Scoping is for global symbols and labels is currently the whole project.
 - No support for register replacement (e.g. registers replaced by `EQUR` or `EQURL` will cause syntax errors)
-- While the Lexer supports the -spaces option (where a space introduces a comment), this cannot be configured yet.
+- While the Lexer supports the -spaces option (where a space introduces a comment), this cannot be configured yet (default is off).
 - No support for other processor instructions, FPU or 68020+ address modes.
 - No semantic checking for allowed address modes or data widths yet.
 - Unit Test coverage is not as good as it could be (ahem).
 - Missing but planned features:
-    - Macro definition and evaluation on invocation
+    - Macro evaluation on invocation
     - Folding
-    - Semantic inspections
-    - Quick fixes
-    - Formatter + Code Style Settings
+        - Semantic inspections
+        - Quick fixes
+        - Formatter + Code Style Settings
     - Register use analysis (but this only makes sense after macro evaluation)
+    - Cycle counting
 
 ## Recommendations
 
@@ -69,7 +68,7 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 
 ## Changelog
 
-### V0.3 (unreleased)
+### V0.3 (28-Jul-21)
 
 - Enhancement: Macro contents are no longer parsed, added syntax highlighting options for macros.
 - Enhancement: Macro definitions are now word and stub indexed, macro calls reference to definition.
@@ -84,8 +83,8 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 ### V0.2 (27-Jul-21)
 
 - Cosmetics: Added (same) icon for plugin as for file type.
-- Performance improvement: Use Word-Index for global labels and symbols instead of iterating over the file.
-- Performance improvement: Use Stub-Index for global labels and symbols.
+- Performance: Use Word-Index for global labels and symbols instead of iterating over the file.
+- Performance: Use Stub-Index for global labels and symbols.
 - Bugfix: No longer reports a syntax error when file lacks terminating End-Of-Line.
 - Enhancement: Registers are now offered for code completion, making editing less annoying.
 

@@ -10,7 +10,7 @@
     <p>
     <a href="https://github.com/chrisly42/mc68000-asm-plugin/blob/main/README.md">Full documentation here...</a>
     ]]></description>
-    <idea-version since-build="193.7288.0"/>
+    <idea-version since-build="193.5233.103"/>
 
     <depends>com.intellij.modules.lang</depends>
 

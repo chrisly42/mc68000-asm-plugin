@@ -56,7 +56,7 @@ runPluginVerifier {
 
 patchPluginXml {
     setChangeNotes("""
-  <h4>V0.3 (unreleased)</h4>
+  <h4>V0.3 (28-Jul-21)</h4>
     <ul>
       <li>Enhancement: Macro contents are no longer parsed, added syntax highlighting options for macros.
       <li>Enhancement: Macro definitions are now word and stub indexed, macro calls reference to definition.
@@ -71,14 +71,10 @@ patchPluginXml {
   <h4>V0.2 (27-Jul-21)</h4>
     <ul>
       <li>Cosmetics: Added (same) icon for plugin as for file type.
-      <li>Performance improvement: Use Word-Index for global labels and symbols instead of iterating over the file.
-      <li>Performance improvement: Use Stub-Index for global labels and symbols.
+      <li>Performance: Use Word-Index for global labels and symbols instead of iterating over the file.
+      <li>Performance: Use Stub-Index for global labels and symbols.
       <li>Bugfix: No longer reports a syntax error when file lacks terminating End-Of-Line.
       <li>Enhancement: Registers are now offered for code completion, making editing less annoying. 
-    </ul>
-  <h4>V0.1 (20-Jul-21)</h4>
-    <ul>
-      <li>Initial public release.
     </ul>
   <p>Full changelog available at <a href="https://github.com/chrisly42/mc68000-asm-plugin#changelog">Github project site</a>.</p>
 """)
