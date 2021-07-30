@@ -70,7 +70,7 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 
 ### V0.4 (unreleased)
 
--
+- Enhancement: Added Structure View filters.
 
 ### V0.3 (28-Jul-21)
 

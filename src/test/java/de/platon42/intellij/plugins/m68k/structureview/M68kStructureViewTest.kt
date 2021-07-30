@@ -36,4 +36,91 @@ internal class M68kStructureViewTest : AbstractM68kTest() {
             )
         }
     }
+
+    @Test
+    internal fun macros_filter_works(@MyFixture myFixture: CodeInsightTestFixture) {
+        myFixture.configureByFile("basic_example.asm")
+        myFixture.testStructureView {
+            val tree = it.tree
+            it.setActionActive(M68kStructureViewModel.MACROS_FILTER_ID, true)
+            PlatformTestUtil.waitWhileBusy(tree)
+            PlatformTestUtil.assertTreeEqual(
+                tree, """-basic_example.asm
+ PIC_WIDTH
+ PIC_HEIGHT
+ DEBUG_LEVEL
+ entry
+ -init
+  .looph
+  .loopw
+ main
+ exit
+"""
+            )
+        }
+    }
+
+    @Test
+    internal fun symbols_filter_works(@MyFixture myFixture: CodeInsightTestFixture) {
+        myFixture.configureByFile("basic_example.asm")
+        myFixture.testStructureView {
+            val tree = it.tree
+            it.setActionActive(M68kStructureViewModel.SYMBOLS_FILTER_ID, true)
+            PlatformTestUtil.waitWhileBusy(tree)
+            PlatformTestUtil.assertTreeEqual(
+                tree, """-basic_example.asm
+ BLTHOGON
+ BLTHOGOFF
+ entry
+ -init
+  .looph
+  .loopw
+ main
+ exit
+"""
+            )
+        }
+    }
+
+    @Test
+    internal fun global_labels_filter_works(@MyFixture myFixture: CodeInsightTestFixture) {
+        myFixture.configureByFile("basic_example.asm")
+        myFixture.testStructureView {
+            val tree = it.tree
+            it.setActionActive(M68kStructureViewModel.GLOBAL_LABEL_FILTER_ID, true)
+            PlatformTestUtil.waitWhileBusy(tree)
+            PlatformTestUtil.assertTreeEqual(
+                tree, """-basic_example.asm
+ PIC_WIDTH
+ PIC_HEIGHT
+ DEBUG_LEVEL
+ BLTHOGON
+ BLTHOGOFF
+"""
+            )
+        }
+    }
+
+    @Test
+    internal fun local_labels_filter_works(@MyFixture myFixture: CodeInsightTestFixture) {
+        myFixture.configureByFile("basic_example.asm")
+        myFixture.testStructureView {
+            val tree = it.tree
+            it.setActionActive(M68kStructureViewModel.LOCAL_LABEL_FILTER_ID, true)
+            PlatformTestUtil.waitWhileBusy(tree)
+            PlatformTestUtil.assertTreeEqual(
+                tree, """-basic_example.asm
+ PIC_WIDTH
+ PIC_HEIGHT
+ DEBUG_LEVEL
+ BLTHOGON
+ BLTHOGOFF
+ entry
+ init
+ main
+ exit
+"""
+            )
+        }
+    }
 }

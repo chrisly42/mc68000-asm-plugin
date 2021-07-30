@@ -57,6 +57,10 @@ runPluginVerifier {
 
 patchPluginXml {
     setChangeNotes("""
+  <h4>V0.4 (unreleased)</h4>
+    <ul>
+      <li>Enhancement: Added Structure View filters.
+    </ul>
   <h4>V0.3 (28-Jul-21)</h4>
     <ul>
       <li>Enhancement: Macro contents are no longer parsed, added syntax highlighting options for macros.
