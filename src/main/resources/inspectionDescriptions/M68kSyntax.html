@@ -1,0 +1,14 @@
+<html>
+<body>
+Reports wrong use of assembler instruction syntax.
+
+The parser allows more combinations than supported by the target CPU.
+This inspection does a strict verification on the allowed addressing modes
+and operation size for each assembly mnemonic.
+<!-- tooltip end -->
+<p>Several different error messages may be the result of this verification,
+    giving hints whether the first or the second addressing mode is unsupported,
+    or if the operands should be swapped to make it a legal instruction.
+</p>
+</body>
+</html>

@@ -5,6 +5,7 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
 import de.platon42.intellij.plugins.m68k.psi.M68kOperandSize;
+import de.platon42.intellij.plugins.m68k.psi.M68kPsiImplUtil;
 import de.platon42.intellij.plugins.m68k.psi.M68kVisitor;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,6 +23,11 @@ public class M68kOperandSizeImpl extends ASTWrapperPsiElement implements M68kOpe
     public void accept(@NotNull PsiElementVisitor visitor) {
         if (visitor instanceof M68kVisitor) accept((M68kVisitor) visitor);
         else super.accept(visitor);
+    }
+
+    @Override
+    public int getSize() {
+        return M68kPsiImplUtil.getSize(this);
     }
 
 }

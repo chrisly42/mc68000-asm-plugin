@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'de.platon42'
-version = '0.3'
+version = '0.4'
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
@@ -60,12 +60,13 @@ patchPluginXml {
   <h4>V0.4 (unreleased)</h4>
     <ul>
       <li>Enhancement: Added Structure View filters.
+      <li>New: Added inspection to validate the correctness of a MC68000 instruction regarding operation size and address modes.
     </ul>
   <h4>V0.3 (28-Jul-21)</h4>
     <ul>
       <li>Enhancement: Macro contents are no longer parsed, added syntax highlighting options for macros.
       <li>Enhancement: Macro definitions are now word and stub indexed, macro calls reference to definition.
-      <li>Enhancement: Macro definition refactoring and find usages support.
+      <li>New: Macro definition refactoring and find usages support.
       <li>Enhancement: Structural View also shows macro definitions. 
       <li>Bugfix: Missing REPT and ENDR assembler directives added.
       <li>Cosmetics: Changed or added some icons at various places.

@@ -161,11 +161,17 @@ GlobalLabel ::= GLOBAL_LABEL_DEF COLON* {
 
 private Label ::= LocalLabel | GlobalLabel
 
-OperandSize ::= (OPSIZE_BS|OPSIZE_W|OPSIZE_L) { name = ".s|.b|.w|.l" }
+OperandSize ::= (OPSIZE_BS|OPSIZE_W|OPSIZE_L) {
+    name = ".s|.b|.w|.l"
+    methods = [getSize]
+}
 AddressSize ::= (OPSIZE_W|OPSIZE_L) { name = ".w|.l" }
 DataWidth ::= (OPSIZE_W|OPSIZE_L) { name = ".w|.l" }
 
-AsmOp ::= MNEMONIC OperandSize?
+AsmOp ::= MNEMONIC OperandSize? {
+    name = "mnemonic"
+    methods = [getMnemonic getOpSize]
+}
 
 PreprocessorDirective ::= Label? (DATA_DIRECTIVE | OTHER_DIRECTIVE)
         PreprocessorOperands?
@@ -174,7 +180,7 @@ MacroPlainLine ::= MACRO_LINE
 MacroNameDefinition ::= MACRO_NAME
 
 MacroDefinition ::= ((MacroNameDefinition MACRO_TAG)|(MACRO_TAG MacroNameDefinition)) MacroPlainLine* MACRO_END_TAG {
-pin=1
+    pin = 1
     name = "macro definition"
     implements = "de.platon42.intellij.plugins.m68k.psi.M68kNamedElement"
     mixin = "de.platon42.intellij.plugins.m68k.psi.M68kMacroDefinitionMixin"

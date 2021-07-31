@@ -364,12 +364,12 @@ public class M68kParser implements PsiParser, LightPsiParser {
     // MNEMONIC OperandSize?
     public static boolean AsmOp(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "AsmOp")) return false;
-        if (!nextTokenIs(b, MNEMONIC)) return false;
+        if (!nextTokenIs(b, "<mnemonic>", MNEMONIC)) return false;
         boolean r;
-        Marker m = enter_section_(b);
+        Marker m = enter_section_(b, l, _NONE_, ASM_OP, "<mnemonic>");
         r = consumeToken(b, MNEMONIC);
         r = r && AsmOp_1(b, l + 1);
-        exit_section_(b, m, ASM_OP, r);
+        exit_section_(b, l, m, r, false, null);
         return r;
     }
 

@@ -3,4 +3,6 @@ package de.platon42.intellij.plugins.m68k.psi;
 
 public interface M68kOperandSize extends M68kPsiElement {
 
+    int getSize();
+
 }

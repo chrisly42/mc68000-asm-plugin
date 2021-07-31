@@ -2,6 +2,7 @@ package de.platon42.intellij.plugins.m68k.psi
 
 import com.intellij.psi.PsiElement
 import com.intellij.util.IncorrectOperationException
+import de.platon42.intellij.plugins.m68k.asm.*
 import de.platon42.intellij.plugins.m68k.psi.M68kElementFactory.createGlobalLabel
 import de.platon42.intellij.plugins.m68k.psi.M68kElementFactory.createLocalLabel
 import de.platon42.intellij.plugins.m68k.psi.M68kElementFactory.createMacroDefinition
@@ -94,4 +95,22 @@ object M68kPsiImplUtil {
     @JvmStatic
     fun getMacroName(element: M68kMacroCall): String = element.firstChild.text
 
+    // AsmOp
+    @JvmStatic
+    fun getMnemonic(element: M68kAsmOp): String = element.firstChild.text
+
+    @JvmStatic
+    fun getOpSize(element: M68kAsmOp): Int = element.operandSize?.size ?: OP_UNSIZED
+
+    // OperandSize
+    @JvmStatic
+    fun getSize(element: M68kOperandSize): Int =
+        when (element.text) {
+            null -> OP_UNSIZED
+            ".w" -> OP_SIZE_W
+            ".l" -> OP_SIZE_L
+            ".b" -> OP_SIZE_B
+            ".s" -> OP_SIZE_S
+            else -> throw IllegalArgumentException("Unknown op size ${element.text}")
+        }
 }

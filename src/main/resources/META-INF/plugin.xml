@@ -40,6 +40,9 @@
         <psi.referenceContributor implementation="de.platon42.intellij.plugins.m68k.refs.M68kReferenceContributor"/>
         <gotoSymbolContributor implementation="de.platon42.intellij.plugins.m68k.refs.M68kChooseByNameContributor"/>
         <renameInputValidator implementation="de.platon42.intellij.plugins.m68k.psi.M68kRenameInputValidator"/>
+
+        <localInspection implementationClass="de.platon42.intellij.plugins.m68k.inspections.M68kSyntaxInspection"
+                         enabledByDefault="true" level="ERROR"/>
     </extensions>
 
     <actions>

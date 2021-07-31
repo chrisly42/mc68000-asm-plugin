@@ -71,12 +71,13 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 ### V0.4 (unreleased)
 
 - Enhancement: Added Structure View filters.
+- New: Added inspection to validate the correctness of a MC68000 instruction regarding operation size and address modes.
 
 ### V0.3 (28-Jul-21)
 
 - Enhancement: Macro contents are no longer parsed, added syntax highlighting options for macros.
 - Enhancement: Macro definitions are now word and stub indexed, macro calls reference to definition.
-- Enhancement: Macro definition refactoring and find usages support.
+- New: Macro definition refactoring and find usages support.
 - Enhancement: Structural View also shows macro definitions.
 - Bugfix: Missing REPT and ENDR assembler directives added.
 - Cosmetics: Changed or added some icons at various places.
