@@ -49,6 +49,11 @@ internal class ExpressionsTest : AbstractParsingTest() {
     }
 
     @Test
+    internal fun uppercase_hexadecimal_string(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l #\$DEADBEEF,d0\n")
+    }
+
+    @Test
     internal fun if_with_single_equals_comparison(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
         testGoodSyntax(testCase, " IF DEBUG=1\n")
     }
