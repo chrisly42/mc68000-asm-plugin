@@ -36,6 +36,7 @@ object AssemblerDirectives {
         "extern", "nref", "xdef", "xref", "globl", "public", "weak",
 
         "reg", "equr", "equrl",
+        "freg", "fequr", "fequrl",
 
         "incdir", "include", "incbin", "output",
 
@@ -45,6 +46,13 @@ object AssemblerDirectives {
         "assert", "fail", "print", "printt", "printv", "echo",
 
         "inline", "einline",
-        "rem", "erem"
+        "rem", "erem",
+
+        "machine", "mc68000", "mc68010", "mc68020", "mc68030", "mc68040", "mc68060",
+        "fpu",
+
+        "basereg", "endb", "far", "near", "initnear",
+
+        "opt"
     )
 }

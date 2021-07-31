@@ -72,6 +72,7 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 
 - Enhancement: Added Structure View filters.
 - New: Added inspection to validate the correctness of a MC68000 instruction regarding operation size and address modes.
+- Bugfix: Added several missing assembler directives (`opt`, `machine`, etc.)
 
 ### V0.3 (28-Jul-21)
 
