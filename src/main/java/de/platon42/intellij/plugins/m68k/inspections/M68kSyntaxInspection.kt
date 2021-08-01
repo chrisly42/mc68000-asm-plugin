@@ -12,6 +12,7 @@ import de.platon42.intellij.plugins.m68k.asm.M68kIsa.findSupportedOpSizes
 import de.platon42.intellij.plugins.m68k.psi.M68kAddressModeUtil.getAddressModeForType
 import de.platon42.intellij.plugins.m68k.psi.M68kAsmInstruction
 import de.platon42.intellij.plugins.m68k.psi.M68kSpecialRegisterDirectAddressingMode
+import de.platon42.intellij.plugins.m68k.utils.M68kIsaUtil
 
 class M68kSyntaxInspection : AbstractBaseM68kLocalInspectionTool() {
 
@@ -27,10 +28,7 @@ class M68kSyntaxInspection : AbstractBaseM68kLocalInspectionTool() {
         private const val UNSUPPORTED_ADDRESSING_MODE_FLIP_MSG_TEMPLATE = "Unsupported addressing modes for operands in this order for '%s'"
         private const val UNSUPPORTED_SIZE_UNSIZED_MSG_TEMPLATE = "Instruction '%s' is unsized"
         private const val UNSUPPORTED_SIZE_MSG_TEMPLATE = "Operation size '#ref' unsupported for '%s"
-        private const val UNSUPPORTED_SIZE_BYTE_MSG = "Operation size '#ref' unsupported (should be .b)"
-        private const val UNSUPPORTED_SIZE_WORD_MSG = "Operation size '#ref' unsupported (should be .w)"
-        private const val UNSUPPORTED_SIZE_LONG_MSG = "Operation size '#ref' unsupported (should be .l)"
-        private const val UNSUPPORTED_SIZE_WORD_OR_LONG_MSG = "Operation size '#ref' unsupported (should be .w or .l)"
+        private const val UNSUPPORTED_SIZE_HINT_MSG_TEMPLATE = "Operation size '#ref' unsupported (should be %s)"
     }
 
     override fun getDisplayName() = DISPLAY_NAME
@@ -147,35 +145,11 @@ class M68kSyntaxInspection : AbstractBaseM68kLocalInspectionTool() {
                             ProblemHighlightType.ERROR,
                             isOnTheFly
                         )
-                    OP_SIZE_B ->
+                    OP_SIZE_B, OP_SIZE_W, OP_SIZE_L, OP_SIZE_WL, OP_SIZE_SBW ->
                         manager.createProblemDescriptor(
                             asmOp.operandSize ?: asmOp,
-                            UNSUPPORTED_SIZE_BYTE_MSG,
+                            UNSUPPORTED_SIZE_HINT_MSG_TEMPLATE.format(M68kIsaUtil.findOpSizeDescription(supportedOpSizes)),
                             null as LocalQuickFix?, // TODO change size to .b?
-                            ProblemHighlightType.ERROR,
-                            isOnTheFly
-                        )
-                    OP_SIZE_W ->
-                        manager.createProblemDescriptor(
-                            asmOp.operandSize ?: asmOp,
-                            UNSUPPORTED_SIZE_WORD_MSG,
-                            null as LocalQuickFix?, // TODO change size to .w?
-                            ProblemHighlightType.ERROR,
-                            isOnTheFly
-                        )
-                    OP_SIZE_L ->
-                        manager.createProblemDescriptor(
-                            asmOp.operandSize ?: asmOp,
-                            UNSUPPORTED_SIZE_LONG_MSG,
-                            null as LocalQuickFix?, // TODO change size to .l?
-                            ProblemHighlightType.ERROR,
-                            isOnTheFly
-                        )
-                    OP_SIZE_WL ->
-                        manager.createProblemDescriptor(
-                            asmOp.operandSize ?: asmOp,
-                            UNSUPPORTED_SIZE_WORD_OR_LONG_MSG,
-                            null as LocalQuickFix?,
                             ProblemHighlightType.ERROR,
                             isOnTheFly
                         )
@@ -187,7 +161,6 @@ class M68kSyntaxInspection : AbstractBaseM68kLocalInspectionTool() {
                             ProblemHighlightType.ERROR,
                             isOnTheFly
                         )
-
                 }
             )
         }

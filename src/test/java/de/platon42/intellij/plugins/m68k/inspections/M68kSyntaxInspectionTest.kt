@@ -73,7 +73,7 @@ internal class M68kSyntaxInspectionTest : AbstractInspectionTest() {
     internal fun shows_error_on_unsupported_op_size_for_w_or_l(@MyFixture myFixture: CodeInsightTestFixture) {
         myFixture.enableInspections(M68kSyntaxInspection::class.java)
         myFixture.configureByText("syntax.asm", " addq.b #5,a0")
-        assertHighlightings(myFixture, 1, "Operation size '.b' unsupported (should be .w or .l)")
+        assertHighlightings(myFixture, 1, "Operation size '.b' unsupported (should be .w|.l)")
     }
 
     @Test
