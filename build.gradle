@@ -48,10 +48,7 @@ intellij {
 }
 
 runPluginVerifier {
-    ideVersions = ["IC-193.5662.53", "IC-212.4746.92", // 2019.3.1 - 2021.2
-                   "CL-193.5233.103", "CL-193.7288.25", // 2019.3
-                   "CL-201.6668.126", "CL-201.8743.17", // 2020.1
-                   "CL-202.6397.106", "CL-202.8194.17", // 2020.2
+    ideVersions = ["IC-203.6682.168", "IC-212.4746.92", // 2020.3 - 2021.2
                    "CL-203.5981.166", "CL-203.8084.11", // 2020.3
                    "CL-211.6693.114", "CL-211.7628.27", // 2021.1
                    "CL-212.4746.93"] // 2021.2
@@ -62,11 +59,14 @@ patchPluginXml {
     setChangeNotes("""
   <h4>V0.4 (unreleased)</h4>
     <ul>
+      <li>Notice: Due to major new API use, this plugin no longer works on IDEs >=2019.3.1, but rather requires >=2020.3.
       <li>Enhancement: Added Structure View filters.
       <li>New: Added inspection to validate the correctness of a MC68000 instruction regarding operation size and address modes.
       <li>Bugfix: Added several missing assembler directives (opt, machine, etc.).
       <li>Bugfix: Uppercase hexadecimal literals were not parsed (JFlex bug?).
       <li>Bugfix: Interpretation of register lists was wrong in BNF.
+      <li>New: Added Documentation Provider for symbol definitions (shows assigned declaration).
+      <li>New: Added Documentation Provider for mnemonics (simple version, generated out of ISA information).
     </ul>
   <h4>V0.3 (28-Jul-21)</h4>
     <ul>

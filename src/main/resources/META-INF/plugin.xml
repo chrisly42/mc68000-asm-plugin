@@ -10,7 +10,7 @@
     <p>
     <a href="https://github.com/chrisly42/mc68000-asm-plugin/blob/main/README.md">Full documentation here...</a>
     ]]></description>
-    <idea-version since-build="193.5233.103"/>
+    <idea-version since-build="203.5981.166"/>
 
     <depends>com.intellij.modules.lang</depends>
 
@@ -33,6 +33,12 @@
                                  implementationClass="de.platon42.intellij.plugins.m68k.refs.M68kSymbolReferenceElementManipulator"/>
         <lang.elementManipulator forClass="de.platon42.intellij.plugins.m68k.psi.M68kMacroCall"
                                  implementationClass="de.platon42.intellij.plugins.m68k.refs.M68kMacroCallElementManipulator"/>
+        <lang.documentationProvider language="MC68000"
+                                    implementationClass="de.platon42.intellij.plugins.m68k.documentation.M68kSymbolDefinitionDocumentationProvider"/>
+        <lang.documentationProvider language="MC68000"
+                                    implementationClass="de.platon42.intellij.plugins.m68k.documentation.M68kRegisterFlowDocumentationProvider"/>
+        <lang.documentationProvider language="MC68000"
+                                    implementationClass="de.platon42.intellij.plugins.m68k.documentation.M68kInstructionDocumentationProvider"/>
         <stubElementTypeHolder class="de.platon42.intellij.plugins.m68k.stubs.M68kElementTypes"/>
         <stubIndex implementation="de.platon42.intellij.plugins.m68k.stubs.M68kGlobalLabelStubIndex"/>
         <stubIndex implementation="de.platon42.intellij.plugins.m68k.stubs.M68kSymbolDefinitionStubIndex"/>
@@ -42,6 +48,7 @@
         <renameInputValidator implementation="de.platon42.intellij.plugins.m68k.psi.M68kRenameInputValidator"/>
 
         <localInspection implementationClass="de.platon42.intellij.plugins.m68k.inspections.M68kSyntaxInspection"
+                         displayName="Assembly instruction validity" groupName="M68k"
                          enabledByDefault="true" level="ERROR"/>
     </extensions>
 

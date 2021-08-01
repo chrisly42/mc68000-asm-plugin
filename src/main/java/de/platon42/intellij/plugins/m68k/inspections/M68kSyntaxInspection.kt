@@ -5,7 +5,7 @@ import com.intellij.codeInspection.LocalQuickFix
 import com.intellij.codeInspection.ProblemDescriptor
 import com.intellij.codeInspection.ProblemHighlightType
 import de.platon42.intellij.plugins.m68k.asm.*
-import de.platon42.intellij.plugins.m68k.asm.M68kIsa.findMatchingInstruction
+import de.platon42.intellij.plugins.m68k.asm.M68kIsa.findMatchingInstructions
 import de.platon42.intellij.plugins.m68k.asm.M68kIsa.findMatchingOpMode
 import de.platon42.intellij.plugins.m68k.asm.M68kIsa.findMatchingOpModeIgnoringSize
 import de.platon42.intellij.plugins.m68k.asm.M68kIsa.findSupportedOpSizes
@@ -38,7 +38,7 @@ class M68kSyntaxInspection : AbstractBaseM68kLocalInspectionTool() {
     override fun checkAsmInstruction(asmInstruction: M68kAsmInstruction, manager: InspectionManager, isOnTheFly: Boolean): Array<ProblemDescriptor>? {
         val asmOp = asmInstruction.asmOp
         val mnemonicWithSize = asmOp.text
-        val isaData = findMatchingInstruction(asmOp.mnemonic)
+        val isaData = findMatchingInstructions(asmOp.mnemonic)
         if (isaData.isEmpty()) {
             return arrayOf(
                 manager.createProblemDescriptor(
@@ -61,16 +61,19 @@ class M68kSyntaxInspection : AbstractBaseM68kLocalInspectionTool() {
                 )
             )
         }
-        val op1 = getAddressModeForType(asmInstruction.addressingModeList.getOrNull(0))
-        val op2 = getAddressModeForType(asmInstruction.addressingModeList.getOrNull(1))
-        val specialReg1 = (asmInstruction.addressingModeList.getOrNull(0) as? M68kSpecialRegisterDirectAddressingMode)?.specialRegister?.text
-        val specialReg2 = (asmInstruction.addressingModeList.getOrNull(1) as? M68kSpecialRegisterDirectAddressingMode)?.specialRegister?.text
+        val amOp1 = asmInstruction.addressingModeList.getOrNull(0)
+        val amOp2 = asmInstruction.addressingModeList.getOrNull(1)
+        val op1 = getAddressModeForType(amOp1)
+        val op2 = getAddressModeForType(amOp2)
+        val specialReg1 = (amOp1 as? M68kSpecialRegisterDirectAddressingMode)?.specialRegister?.text
+        val specialReg2 = (amOp2 as? M68kSpecialRegisterDirectAddressingMode)?.specialRegister?.text
+        val specialReg = specialReg1 ?: specialReg2
         val opSize = asmOp.opSize
-        val matchingModeIsaData = findMatchingOpMode(isaData, op1, op2, opSize, specialReg1 ?: specialReg2)
+        val matchingModeIsaData = findMatchingOpMode(isaData, op1, op2, opSize, specialReg)
         if (matchingModeIsaData.isEmpty()) {
-            val matchingModeIsaDataIgnoringSize = findMatchingOpModeIgnoringSize(isaData, op1, op2, specialReg1 ?: specialReg2)
+            val matchingModeIsaDataIgnoringSize = findMatchingOpModeIgnoringSize(isaData, op1, op2, specialReg)
             if (matchingModeIsaDataIgnoringSize.isEmpty()) {
-                val matchingModeIsaDataSwapped = findMatchingOpModeIgnoringSize(isaData, op2, op1, specialReg1 ?: specialReg2)
+                val matchingModeIsaDataSwapped = findMatchingOpModeIgnoringSize(isaData, op2, op1, specialReg)
                 val supportedModesOp1 = isaData.flatMap { it.modes.flatMap { am -> am.op1 ?: emptySet() } }.toSet()
                 val supportedModesOp2 = isaData.flatMap { it.modes.flatMap { am -> am.op2 ?: emptySet() } }.toSet()
 
@@ -133,7 +136,7 @@ class M68kSyntaxInspection : AbstractBaseM68kLocalInspectionTool() {
             }
 
 
-            val supportedOpSizes = findSupportedOpSizes(matchingModeIsaDataIgnoringSize, op1, op2, specialReg1 ?: specialReg2)
+            val supportedOpSizes = findSupportedOpSizes(matchingModeIsaDataIgnoringSize, op1, op2, specialReg)
             return arrayOf(
                 when (supportedOpSizes) {
                     OP_UNSIZED ->

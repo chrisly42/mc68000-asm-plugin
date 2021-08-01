@@ -34,20 +34,20 @@ enum class Register(val regname: String, val num: Int) {
     }
 }
 
-enum class AddressMode {
-    IMMEDIATE_DATA,
-    ADDRESS_REGISTER_INDIRECT_PRE_DEC,
-    ADDRESS_REGISTER_INDIRECT_POST_INC,
-    ADDRESS_REGISTER_INDIRECT,
-    ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT,
-    PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT,
-    ADDRESS_REGISTER_INDIRECT_WITH_INDEX,
-    PROGRAM_COUNTER_INDIRECT_WITH_INDEX,
-    SPECIAL_REGISTER_DIRECT,
-    DATA_REGISTER_DIRECT,
-    ADDRESS_REGISTER_DIRECT,
-    REGISTER_LIST,
-    ABSOLUTE_ADDRESS
+enum class AddressMode(val description: String, val syntax: String) {
+    DATA_REGISTER_DIRECT("data register direct", "Dn"),
+    ADDRESS_REGISTER_DIRECT("address register direct", "An"),
+    ADDRESS_REGISTER_INDIRECT("address register indirect", "(An)"),
+    ADDRESS_REGISTER_INDIRECT_POST_INC("address register indirect with postincrement", "(An)+"),
+    ADDRESS_REGISTER_INDIRECT_PRE_DEC("address register indirect with predecrement", "-(An)"),
+    ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT("address register indirect with displacement", "(d16,An)"),
+    PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT("program counter indirect with displacement", "(d16,PC)"),
+    ADDRESS_REGISTER_INDIRECT_WITH_INDEX("address register indirect with index", "(d8,An,Xn)"),
+    PROGRAM_COUNTER_INDIRECT_WITH_INDEX("program counter indirect with index", "(d8,PC,Xn)"),
+    SPECIAL_REGISTER_DIRECT("special register", "ccr|usp|vbr"),
+    REGISTER_LIST("register list", "list"),
+    IMMEDIATE_DATA("immediate", "#<xxx>"),
+    ABSOLUTE_ADDRESS("absolute short/long", "(xxx).w|l")
 }
 
 const val OP_UNSIZED = 0
@@ -731,7 +731,7 @@ object M68kIsa {
             }
             .toSet()
 
-    fun findMatchingInstruction(mnemonic: String): List<IsaData> {
+    fun findMatchingInstructions(mnemonic: String): List<IsaData> {
         val lowerMnemonic = mnemonic.lowercase()
         return isaData
             .filter {
@@ -752,6 +752,13 @@ object M68kIsa {
                 isAddressModeMatching(am, op1, op2, specialReg)
                         && ((opSize == null) || ((opSize and am.size) == opSize))
             }
+        }
+    }
+
+    fun findMatchingAddressMode(modes: List<AllowedAdrMode>, op1: AddressMode?, op2: AddressMode?, opSize: Int?, specialReg: String?): List<AllowedAdrMode> {
+        return modes.filter { am ->
+            isAddressModeMatching(am, op1, op2, specialReg)
+                    && ((opSize == null) || ((opSize and am.size) == opSize))
         }
     }
 

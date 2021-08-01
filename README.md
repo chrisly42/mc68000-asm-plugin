@@ -19,12 +19,13 @@ awesome features and is pretty advanced. Check it out. You can install both plug
 
 Big kudos to Yann -- a few features were _inspired_ by his code.
 
-My plugin, on the other hand, is still pretty basic and is the result of about a week's effort. I released a really early first version it because I think
+My plugin, on the other hand, is still pretty basic and is the result of about two weeks of work. I released a really early first version it because I think
 it's "good enough" to get started, and I can return to demo coding with its current state.
 
 ## Features
 
 - Parser / Lexer for MC68000 (yes, only 68000 right now!) assembly language files in VAsm / DevPac style
+- Inspection for validating the syntax the 68000 ISA.
 - Syntax highlighting and Color Settings Page (you should really modify the color settings to your likings!)
 - Mnemonics code completion
 - Symbols / Labels / Macros code completion
@@ -33,6 +34,7 @@ it's "good enough" to get started, and I can return to demo coding with its curr
 - Quote handler
 - Goto Symbol support
 - Structure view
+- Documentation provider for symbol definitions and mnemonics (listing available addressing modes etc.).
 
 ## Known issues
 
@@ -42,7 +44,6 @@ it's "good enough" to get started, and I can return to demo coding with its curr
 - No support for register replacement (e.g. registers replaced by `EQUR` or `EQURL` will cause syntax errors)
 - While the Lexer supports the -spaces option (where a space introduces a comment), this cannot be configured yet (default is off).
 - No support for other processor instructions, FPU or 68020+ address modes.
-- For versions < V0.4: No semantic checking for allowed address modes or data widths yet.
 - Unit Test coverage is not as good as it could be (ahem).
 - Missing but planned features:
     - Macro evaluation on invocation
@@ -70,11 +71,14 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 
 ### V0.4 (unreleased)
 
+- Notice: Due to major new API use, this plugin no longer works on IDEs >=2019.3.1, but rather requires >=2020.3.
 - Enhancement: Added Structure View filters.
 - New: Added inspection to validate the correctness of a MC68000 instruction regarding operation size and address modes.
 - Bugfix: Added several missing assembler directives (`opt`, `machine`, etc.).
 - Bugfix: Uppercase hexadecimal literals were not parsed (JFlex bug?).
 - Bugfix: Interpretation of register lists was wrong in BNF.
+- New: Added Documentation Provider for symbol definitions (shows assigned declaration).
+- New: Added Documentation Provider for mnemonics (simple version, generated out of ISA information).
 
 ### V0.3 (28-Jul-21)
 
