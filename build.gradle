@@ -31,7 +31,10 @@ dependencies {
 }
 
 compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs += "-Xjvm-default=all"
+    }
 }
 
 compileTestKotlin {
@@ -63,6 +66,7 @@ patchPluginXml {
       <li>New: Added inspection to validate the correctness of a MC68000 instruction regarding operation size and address modes.
       <li>Bugfix: Added several missing assembler directives (opt, machine, etc.).
       <li>Bugfix: Uppercase hexadecimal literals were not parsed (JFlex bug?).
+      <li>Bugfix: Interpretation of register lists was wrong in BNF.
     </ul>
   <h4>V0.3 (28-Jul-21)</h4>
     <ul>

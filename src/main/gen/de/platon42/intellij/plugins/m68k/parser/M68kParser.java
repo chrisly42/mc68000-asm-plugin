@@ -1026,27 +1026,27 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // (DataOrAddressRegister|RegisterRange) ((OP_AR_DIV|OP_MINUS) (DataOrAddressRegister|RegisterRange))*
+    // (RegisterRange|DataOrAddressRegister) (OP_AR_DIV (RegisterRange|DataOrAddressRegister))*
     public static boolean RegisterListAddressingMode(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "RegisterListAddressingMode")) return false;
         boolean r;
-        Marker m = enter_section_(b, l, _NONE_, REGISTER_LIST_ADDRESSING_MODE, "<AddressingMode>");
+        Marker m = enter_section_(b, l, _NONE_, REGISTER_LIST_ADDRESSING_MODE, "<register list>");
         r = RegisterListAddressingMode_0(b, l + 1);
         r = r && RegisterListAddressingMode_1(b, l + 1);
         exit_section_(b, l, m, r, false, null);
         return r;
     }
 
-    // DataOrAddressRegister|RegisterRange
+    // RegisterRange|DataOrAddressRegister
     private static boolean RegisterListAddressingMode_0(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "RegisterListAddressingMode_0")) return false;
         boolean r;
-        r = DataOrAddressRegister(b, l + 1);
-        if (!r) r = RegisterRange(b, l + 1);
+        r = RegisterRange(b, l + 1);
+        if (!r) r = DataOrAddressRegister(b, l + 1);
         return r;
     }
 
-    // ((OP_AR_DIV|OP_MINUS) (DataOrAddressRegister|RegisterRange))*
+    // (OP_AR_DIV (RegisterRange|DataOrAddressRegister))*
     private static boolean RegisterListAddressingMode_1(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "RegisterListAddressingMode_1")) return false;
         while (true) {
@@ -1057,44 +1057,58 @@ public class M68kParser implements PsiParser, LightPsiParser {
         return true;
     }
 
-    // (OP_AR_DIV|OP_MINUS) (DataOrAddressRegister|RegisterRange)
+    // OP_AR_DIV (RegisterRange|DataOrAddressRegister)
     private static boolean RegisterListAddressingMode_1_0(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "RegisterListAddressingMode_1_0")) return false;
         boolean r;
         Marker m = enter_section_(b);
-        r = RegisterListAddressingMode_1_0_0(b, l + 1);
+        r = consumeTokenFast(b, OP_AR_DIV);
         r = r && RegisterListAddressingMode_1_0_1(b, l + 1);
         exit_section_(b, m, null, r);
         return r;
     }
 
-    // OP_AR_DIV|OP_MINUS
-    private static boolean RegisterListAddressingMode_1_0_0(PsiBuilder b, int l) {
-        if (!recursion_guard_(b, l, "RegisterListAddressingMode_1_0_0")) return false;
-        boolean r;
-        r = consumeTokenFast(b, OP_AR_DIV);
-        if (!r) r = consumeTokenFast(b, OP_MINUS);
-        return r;
-    }
-
-    // DataOrAddressRegister|RegisterRange
+    // RegisterRange|DataOrAddressRegister
     private static boolean RegisterListAddressingMode_1_0_1(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "RegisterListAddressingMode_1_0_1")) return false;
         boolean r;
-        r = DataOrAddressRegister(b, l + 1);
-        if (!r) r = RegisterRange(b, l + 1);
+        r = RegisterRange(b, l + 1);
+        if (!r) r = DataOrAddressRegister(b, l + 1);
         return r;
     }
 
     /* ********************************************************** */
-    // DataOrAddressRegister OP_MINUS DataOrAddressRegister
-    static boolean RegisterRange(PsiBuilder b, int l) {
+    // (DataRegister OP_MINUS DataRegister) | (AddressRegister OP_MINUS AddressRegister)
+    public static boolean RegisterRange(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "RegisterRange")) return false;
         boolean r;
+        Marker m = enter_section_(b, l, _NONE_, REGISTER_RANGE, "<register range>");
+        r = RegisterRange_0(b, l + 1);
+        if (!r) r = RegisterRange_1(b, l + 1);
+        exit_section_(b, l, m, r, false, null);
+        return r;
+    }
+
+    // DataRegister OP_MINUS DataRegister
+    private static boolean RegisterRange_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "RegisterRange_0")) return false;
+        boolean r;
         Marker m = enter_section_(b);
-        r = DataOrAddressRegister(b, l + 1);
+        r = DataRegister(b, l + 1);
         r = r && consumeToken(b, OP_MINUS);
-        r = r && DataOrAddressRegister(b, l + 1);
+        r = r && DataRegister(b, l + 1);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
+    // AddressRegister OP_MINUS AddressRegister
+    private static boolean RegisterRange_1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "RegisterRange_1")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = AddressRegister(b, l + 1);
+        r = r && consumeToken(b, OP_MINUS);
+        r = r && AddressRegister(b, l + 1);
         exit_section_(b, m, null, r);
         return r;
     }

@@ -35,7 +35,7 @@ public class M68kAddressRegisterIndirectWithDisplacementOldAddressingModeImpl ex
 
     @Override
     @NotNull
-    public M68kExpr getExpr() {
+    public M68kExpr getDisplacement() {
         return notNullChild(PsiTreeUtil.getChildOfType(this, M68kExpr.class));
     }
 

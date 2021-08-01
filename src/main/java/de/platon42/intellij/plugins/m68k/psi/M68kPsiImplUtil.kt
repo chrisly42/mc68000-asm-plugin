@@ -113,4 +113,21 @@ object M68kPsiImplUtil {
             ".s" -> OP_SIZE_S
             else -> throw IllegalArgumentException("Unknown op size ${element.text}")
         }
+
+    // RegisterListAddressingMode
+    @JvmStatic
+    fun getRegisters(element: M68kRegisterListAddressingMode): Set<Register> {
+        val registers: MutableSet<Register> = HashSet()
+        element.registerList.forEach { registers.add(Register.getRegFromName(it.text)) }
+        element.registerRangeList.forEach {
+            var startReg = Register.getRegFromName(it.startRegister.text)
+            val endReg = Register.getRegFromName(it.endRegister!!.text)
+            registers.add(startReg)
+            while (startReg.num < endReg.num) {
+                startReg = Register.getRegFromName(startReg.regname.dropLast(1) + (startReg.num + 1))
+                registers.add(startReg)
+            }
+        }
+        return registers
+    }
 }

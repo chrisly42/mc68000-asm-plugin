@@ -28,7 +28,7 @@ public class M68kProgramCounterIndirectWithDisplacementNewAddressingModeImpl ext
 
     @Override
     @NotNull
-    public M68kExpr getExpr() {
+    public M68kExpr getDisplacement() {
         return notNullChild(PsiTreeUtil.getChildOfType(this, M68kExpr.class));
     }
 

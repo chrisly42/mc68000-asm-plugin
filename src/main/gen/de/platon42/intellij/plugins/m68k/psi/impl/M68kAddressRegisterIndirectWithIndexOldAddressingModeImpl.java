@@ -33,20 +33,20 @@ public class M68kAddressRegisterIndirectWithIndexOldAddressingModeImpl extends M
 
     @Override
     @Nullable
-    public M68kDataWidth getDataWidth() {
-        return PsiTreeUtil.getChildOfType(this, M68kDataWidth.class);
+    public M68kExpr getDisplacement() {
+        return PsiTreeUtil.getChildOfType(this, M68kExpr.class);
     }
 
     @Override
     @NotNull
-    public M68kRegister getRegister() {
+    public M68kRegister getIndexRegister() {
         return notNullChild(PsiTreeUtil.getChildOfType(this, M68kRegister.class));
     }
 
     @Override
     @Nullable
-    public M68kExpr getExpr() {
-        return PsiTreeUtil.getChildOfType(this, M68kExpr.class);
+    public M68kDataWidth getIndexWidth() {
+        return PsiTreeUtil.getChildOfType(this, M68kDataWidth.class);
     }
 
 }

@@ -29,7 +29,7 @@ public class M68kProgramCounterIndirectWithDisplacementOldAddressingModeImpl ext
 
     @Override
     @Nullable
-    public M68kExpr getExpr() {
+    public M68kExpr getDisplacement() {
         return PsiTreeUtil.getChildOfType(this, M68kExpr.class);
     }
 

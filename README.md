@@ -42,14 +42,14 @@ it's "good enough" to get started, and I can return to demo coding with its curr
 - No support for register replacement (e.g. registers replaced by `EQUR` or `EQURL` will cause syntax errors)
 - While the Lexer supports the -spaces option (where a space introduces a comment), this cannot be configured yet (default is off).
 - No support for other processor instructions, FPU or 68020+ address modes.
-- No semantic checking for allowed address modes or data widths yet.
+- For versions < V0.4: No semantic checking for allowed address modes or data widths yet.
 - Unit Test coverage is not as good as it could be (ahem).
 - Missing but planned features:
     - Macro evaluation on invocation
     - Folding
-        - Semantic inspections
-        - Quick fixes
-        - Formatter + Code Style Settings
+    - Semantic inspections
+    - Quick fixes
+    - Formatter + Code Style Settings
     - Register use analysis (but this only makes sense after macro evaluation)
     - Cycle counting
 
@@ -74,6 +74,7 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 - New: Added inspection to validate the correctness of a MC68000 instruction regarding operation size and address modes.
 - Bugfix: Added several missing assembler directives (`opt`, `machine`, etc.).
 - Bugfix: Uppercase hexadecimal literals were not parsed (JFlex bug?).
+- Bugfix: Interpretation of register lists was wrong in BNF.
 
 ### V0.3 (28-Jul-21)
 

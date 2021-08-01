@@ -255,20 +255,116 @@ AddressingMode ::= ImmediateData
 SpecialRegisterDirectAddressingMode ::= SpecialRegister
 DataRegisterDirectAddressingMode ::= DataRegister !(OP_MINUS|OP_AR_DIV)
 AddressRegisterDirectAddressingMode ::= AddressRegister !(OP_MINUS|OP_AR_DIV)
-AddressRegisterIndirectAddressingMode ::= ROUND_L AddressRegister ROUND_R !OP_PLUS
-AddressRegisterIndirectPostIncAddressingMode ::= ROUND_L AddressRegister ROUND_R OP_PLUS
-AddressRegisterIndirectPreDecAddressingMode ::= OP_MINUS ROUND_L AddressRegister ROUND_R
+AddressRegisterIndirectAddressingMode ::= ROUND_L AddressRegister ROUND_R !OP_PLUS { implements = "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect" }
+AddressRegisterIndirectPostIncAddressingMode ::= ROUND_L AddressRegister ROUND_R OP_PLUS { implements = "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect" }
+AddressRegisterIndirectPreDecAddressingMode ::= OP_MINUS ROUND_L AddressRegister ROUND_R { implements = "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect" }
 AddressRegisterIndirectWithDisplacementOldAddressingMode ::= expr ROUND_L AddressRegister ROUND_R
+{
+    implements = [
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithDisplacement"
+    ]
+    methods = [
+        displacement = "expr"
+    ]
+}
 AddressRegisterIndirectWithDisplacementNewAddressingMode ::= ROUND_L expr SEPARATOR AddressRegister ROUND_R
+{
+    implements = [
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithDisplacement"
+    ]
+    methods = [
+        displacement = "expr"
+    ]
+}
+
 AddressRegisterIndirectWithIndexOldAddressingMode ::= expr? ROUND_L AddressRegister SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
+{
+    implements = [
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithDisplacement"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithIndexRegister"
+    ]
+    methods = [
+        displacement = "expr"
+        indexRegister = "Register"
+        indexWidth = "DataWidth"
+    ]
+}
+
 AddressRegisterIndirectWithIndexNewAddressingMode ::= ROUND_L (expr SEPARATOR)? AddressRegister SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
+{
+    implements = [
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithDisplacement"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithIndexRegister"
+    ]
+    methods = [
+        displacement = "expr"
+        indexRegister = "Register"
+        indexWidth = "DataWidth"
+    ]
+}
+
 ProgramCounterIndirectWithDisplacementOldAddressingMode ::= (ROUND_L PC ROUND_R) | (expr ROUND_L PC ROUND_R)
+{
+    implements = ["de.platon42.intellij.plugins.m68k.psi.M68kWithDisplacement"]
+    methods = [
+        displacement = "expr"
+    ]
+}
+
 ProgramCounterIndirectWithDisplacementNewAddressingMode ::= ROUND_L expr SEPARATOR PC ROUND_R
+{
+    implements = ["de.platon42.intellij.plugins.m68k.psi.M68kWithDisplacement"]
+    methods = [
+        displacement = "expr"
+    ]
+}
+
 ProgramCounterIndirectWithIndexOldAddressingMode ::= expr? ROUND_L PC SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
+{
+    implements = [
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithDisplacement"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithIndexRegister"
+    ]
+    methods = [
+        displacement = "expr"
+        indexRegister = "Register"
+        indexWidth = "DataWidth"
+    ]
+}
+
 ProgramCounterIndirectWithIndexNewAddressingMode ::= ROUND_L (expr SEPARATOR)? PC SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
+{
+    implements = [
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithDisplacement"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithIndexRegister"
+    ]
+    methods = [
+        displacement = "expr"
+        indexRegister = "Register"
+        indexWidth = "DataWidth"
+    ]
+}
+
 AbsoluteAddressAddressingMode ::= expr AddressSize? !ROUND_L
-private RegisterRange ::= (DataOrAddressRegister OP_MINUS DataOrAddressRegister)
-RegisterListAddressingMode ::= (DataOrAddressRegister|RegisterRange) ((OP_AR_DIV|OP_MINUS) (DataOrAddressRegister|RegisterRange))*
+
+RegisterRange ::= (DataRegister OP_MINUS DataRegister) | (AddressRegister OP_MINUS AddressRegister) {
+    name = "register range"
+    methods = [
+        startRegister = "Register[0]"
+        endRegister = "Register[1]"
+    ]
+}
+
+RegisterListAddressingMode ::= (RegisterRange|DataOrAddressRegister) (OP_AR_DIV (RegisterRange|DataOrAddressRegister))*
+{
+    name = "register list"
+    methods = [ getRegisters ]
+}
+
 ImmediateData ::= HASH expr {
     name = "immediate data"
     extends = AddressingMode

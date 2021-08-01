@@ -20,30 +20,43 @@ public class M68kVisitor extends PsiElementVisitor {
 
     public void visitAddressRegisterIndirectAddressingMode(@NotNull M68kAddressRegisterIndirectAddressingMode o) {
         visitAddressingMode(o);
+        // visitWithAddressRegisterIndirect(o);
     }
 
     public void visitAddressRegisterIndirectPostIncAddressingMode(@NotNull M68kAddressRegisterIndirectPostIncAddressingMode o) {
         visitAddressingMode(o);
+        // visitWithAddressRegisterIndirect(o);
     }
 
     public void visitAddressRegisterIndirectPreDecAddressingMode(@NotNull M68kAddressRegisterIndirectPreDecAddressingMode o) {
         visitAddressingMode(o);
+        // visitWithAddressRegisterIndirect(o);
     }
 
     public void visitAddressRegisterIndirectWithDisplacementNewAddressingMode(@NotNull M68kAddressRegisterIndirectWithDisplacementNewAddressingMode o) {
         visitAddressingMode(o);
+        // visitWithAddressRegisterIndirect(o);
+        // visitWithDisplacement(o);
     }
 
     public void visitAddressRegisterIndirectWithDisplacementOldAddressingMode(@NotNull M68kAddressRegisterIndirectWithDisplacementOldAddressingMode o) {
         visitAddressingMode(o);
+        // visitWithAddressRegisterIndirect(o);
+        // visitWithDisplacement(o);
     }
 
     public void visitAddressRegisterIndirectWithIndexNewAddressingMode(@NotNull M68kAddressRegisterIndirectWithIndexNewAddressingMode o) {
         visitAddressingMode(o);
+        // visitWithAddressRegisterIndirect(o);
+        // visitWithDisplacement(o);
+        // visitWithIndexRegister(o);
     }
 
     public void visitAddressRegisterIndirectWithIndexOldAddressingMode(@NotNull M68kAddressRegisterIndirectWithIndexOldAddressingMode o) {
         visitAddressingMode(o);
+        // visitWithAddressRegisterIndirect(o);
+        // visitWithDisplacement(o);
+        // visitWithIndexRegister(o);
     }
 
     public void visitAddressSize(@NotNull M68kAddressSize o) {
@@ -116,18 +129,24 @@ public class M68kVisitor extends PsiElementVisitor {
 
     public void visitProgramCounterIndirectWithDisplacementNewAddressingMode(@NotNull M68kProgramCounterIndirectWithDisplacementNewAddressingMode o) {
         visitAddressingMode(o);
+        // visitWithDisplacement(o);
     }
 
     public void visitProgramCounterIndirectWithDisplacementOldAddressingMode(@NotNull M68kProgramCounterIndirectWithDisplacementOldAddressingMode o) {
         visitAddressingMode(o);
+        // visitWithDisplacement(o);
     }
 
     public void visitProgramCounterIndirectWithIndexNewAddressingMode(@NotNull M68kProgramCounterIndirectWithIndexNewAddressingMode o) {
         visitAddressingMode(o);
+        // visitWithDisplacement(o);
+        // visitWithIndexRegister(o);
     }
 
     public void visitProgramCounterIndirectWithIndexOldAddressingMode(@NotNull M68kProgramCounterIndirectWithIndexOldAddressingMode o) {
         visitAddressingMode(o);
+        // visitWithDisplacement(o);
+        // visitWithIndexRegister(o);
     }
 
     public void visitProgramCounterReference(@NotNull M68kProgramCounterReference o) {
@@ -140,6 +159,10 @@ public class M68kVisitor extends PsiElementVisitor {
 
     public void visitRegisterListAddressingMode(@NotNull M68kRegisterListAddressingMode o) {
         visitAddressingMode(o);
+    }
+
+    public void visitRegisterRange(@NotNull M68kRegisterRange o) {
+        visitPsiElement(o);
     }
 
     public void visitSpecialRegister(@NotNull M68kSpecialRegister o) {

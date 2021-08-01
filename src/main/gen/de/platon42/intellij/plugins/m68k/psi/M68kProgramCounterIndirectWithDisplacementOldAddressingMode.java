@@ -3,9 +3,9 @@ package de.platon42.intellij.plugins.m68k.psi;
 
 import org.jetbrains.annotations.Nullable;
 
-public interface M68kProgramCounterIndirectWithDisplacementOldAddressingMode extends M68kAddressingMode {
+public interface M68kProgramCounterIndirectWithDisplacementOldAddressingMode extends M68kAddressingMode, M68kWithDisplacement {
 
     @Nullable
-    M68kExpr getExpr();
+    M68kExpr getDisplacement();
 
 }

@@ -65,6 +65,7 @@ public interface M68kTypes {
     IElementType REF_EXPR = new M68kElementType("REF_EXPR");
     IElementType REGISTER = new M68kElementType("REGISTER");
     IElementType REGISTER_LIST_ADDRESSING_MODE = new M68kElementType("REGISTER_LIST_ADDRESSING_MODE");
+    IElementType REGISTER_RANGE = new M68kElementType("REGISTER_RANGE");
     IElementType SPECIAL_REGISTER = new M68kElementType("SPECIAL_REGISTER");
     IElementType SPECIAL_REGISTER_DIRECT_ADDRESSING_MODE = new M68kElementType("SPECIAL_REGISTER_DIRECT_ADDRESSING_MODE");
     IElementType STATEMENT = new M68kElementType("STATEMENT");
@@ -243,6 +244,8 @@ public interface M68kTypes {
                 return new M68kRefExprImpl(node);
             } else if (type == REGISTER_LIST_ADDRESSING_MODE) {
                 return new M68kRegisterListAddressingModeImpl(node);
+            } else if (type == REGISTER_RANGE) {
+                return new M68kRegisterRangeImpl(node);
             } else if (type == SPECIAL_REGISTER) {
                 return new M68kSpecialRegisterImpl(node);
             } else if (type == SPECIAL_REGISTER_DIRECT_ADDRESSING_MODE) {
