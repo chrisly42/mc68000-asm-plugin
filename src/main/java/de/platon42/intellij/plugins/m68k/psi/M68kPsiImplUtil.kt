@@ -123,8 +123,12 @@ object M68kPsiImplUtil {
             var startReg = Register.getRegFromName(it.startRegister.text)
             val endReg = Register.getRegFromName(it.endRegister!!.text)
             registers.add(startReg)
-            while (startReg.num < endReg.num) {
-                startReg = Register.getRegFromName(startReg.regname.dropLast(1) + (startReg.num + 1))
+            while ((startReg.num < endReg.num) || (startReg.regname.dropLast(1) != endReg.regname.dropLast(1))) {
+                startReg = if (startReg.num < 7) {
+                    Register.getRegFromName(startReg.regname.dropLast(1) + (startReg.num + 1))
+                } else {
+                    Register.A0 // handle wrap around from d7->a0
+                }
                 registers.add(startReg)
             }
         }

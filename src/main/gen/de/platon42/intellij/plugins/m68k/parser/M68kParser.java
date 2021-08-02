@@ -1086,13 +1086,14 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // (DataRegister OP_MINUS DataRegister) | (AddressRegister OP_MINUS AddressRegister)
+    // (DataRegister OP_MINUS DataRegister) | (AddressRegister OP_MINUS AddressRegister) | (DataRegister OP_MINUS AddressRegister)
     public static boolean RegisterRange(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "RegisterRange")) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NONE_, REGISTER_RANGE, "<register range>");
         r = RegisterRange_0(b, l + 1);
         if (!r) r = RegisterRange_1(b, l + 1);
+        if (!r) r = RegisterRange_2(b, l + 1);
         exit_section_(b, l, m, r, false, null);
         return r;
     }
@@ -1115,6 +1116,18 @@ public class M68kParser implements PsiParser, LightPsiParser {
         boolean r;
         Marker m = enter_section_(b);
         r = AddressRegister(b, l + 1);
+        r = r && consumeToken(b, OP_MINUS);
+        r = r && AddressRegister(b, l + 1);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
+    // DataRegister OP_MINUS AddressRegister
+    private static boolean RegisterRange_2(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "RegisterRange_2")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = DataRegister(b, l + 1);
         r = r && consumeToken(b, OP_MINUS);
         r = r && AddressRegister(b, l + 1);
         exit_section_(b, m, null, r);

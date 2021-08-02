@@ -351,7 +351,7 @@ ProgramCounterIndirectWithIndexNewAddressingMode ::= ROUND_L (expr SEPARATOR)? P
 
 AbsoluteAddressAddressingMode ::= expr AddressSize? !ROUND_L
 
-RegisterRange ::= (DataRegister OP_MINUS DataRegister) | (AddressRegister OP_MINUS AddressRegister) {
+RegisterRange ::= (DataRegister OP_MINUS DataRegister) | (AddressRegister OP_MINUS AddressRegister) | (DataRegister OP_MINUS AddressRegister) {
     name = "register range"
     methods = [
         startRegister = "Register[0]"

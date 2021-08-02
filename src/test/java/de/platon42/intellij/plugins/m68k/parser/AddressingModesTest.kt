@@ -99,6 +99,17 @@ internal class AddressingModesTest : AbstractParsingTest() {
     }
 
     @Test
+    internal fun movem_register_list_with_data_address_wrapping(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " movem.l d0-a6,-(sp)\n")
+        val element = testCase.file.findElementAt(9)
+        val regList = PsiTreeUtil.getParentOfType(element, M68kRegisterListAddressingMode::class.java)!!
+        assertThat(regList.registers).containsExactlyInAnyOrder(
+            Register.D0, Register.D1, Register.D2, Register.D3, Register.D4, Register.D5, Register.D6, Register.D7,
+            Register.A0, Register.A1, Register.A2, Register.A3, Register.A4, Register.A5, Register.A6,
+        )
+    }
+
+    @Test
     internal fun immediate_data(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
         testGoodSyntax(testCase, " moveq.l #FOO_BAR,d0\n")
     }

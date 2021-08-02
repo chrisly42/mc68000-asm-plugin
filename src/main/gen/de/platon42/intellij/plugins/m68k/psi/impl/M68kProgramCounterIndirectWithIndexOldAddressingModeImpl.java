@@ -42,4 +42,5 @@ public class M68kProgramCounterIndirectWithIndexOldAddressingModeImpl extends M6
     public M68kDataWidth getIndexWidth() {
         return PsiTreeUtil.getChildOfType(this, M68kDataWidth.class);
     }
+
 }
