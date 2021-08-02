@@ -258,7 +258,7 @@ object M68kIsa {
             "movem", "Move Multiple Registers",
             modes = listOf(
                 AllowedAdrMode(
-                    setOf(AddressMode.REGISTER_LIST),
+                    setOf(AddressMode.REGISTER_LIST, AddressMode.ADDRESS_REGISTER_DIRECT, AddressMode.DATA_REGISTER_DIRECT),
                     setOf(
                         AddressMode.ADDRESS_REGISTER_INDIRECT,
                         AddressMode.ADDRESS_REGISTER_INDIRECT_PRE_DEC,
@@ -275,9 +275,11 @@ object M68kIsa {
                         AddressMode.ADDRESS_REGISTER_INDIRECT_POST_INC,
                         AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT,
                         AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_INDEX,
-                        AddressMode.ABSOLUTE_ADDRESS
+                        AddressMode.ABSOLUTE_ADDRESS,
+                        AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT,
+                        AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX
                     ),
-                    setOf(AddressMode.REGISTER_LIST),
+                    setOf(AddressMode.REGISTER_LIST, AddressMode.ADDRESS_REGISTER_DIRECT, AddressMode.DATA_REGISTER_DIRECT),
                     OP_SIZE_WL,
                     modInfo = RWM_READ_OP1_OPSIZE or RWM_SET_OP2_OPSIZE
                 ),
