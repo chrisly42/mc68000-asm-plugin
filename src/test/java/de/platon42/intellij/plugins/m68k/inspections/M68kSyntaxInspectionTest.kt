@@ -2,6 +2,7 @@ package de.platon42.intellij.plugins.m68k.inspections
 
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import de.platon42.intellij.jupiter.MyFixture
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 internal class M68kSyntaxInspectionTest : AbstractInspectionTest() {
@@ -49,10 +50,31 @@ internal class M68kSyntaxInspectionTest : AbstractInspectionTest() {
     }
 
     @Test
-    internal fun shows_error_on_unsupported_op_size_for_b(@MyFixture myFixture: CodeInsightTestFixture) {
+    internal fun shows_error_for_bchg_on_unsupported_op_size_l(@MyFixture myFixture: CodeInsightTestFixture) {
         myFixture.enableInspections(M68kSyntaxInspection::class.java)
-        myFixture.configureByText("syntax.asm", " btst.l #5,(a0)")
+        myFixture.configureByText("syntax.asm", " bchg.l #5,(a0)")
         assertHighlightings(myFixture, 1, "Operation size '.l' unsupported (should be .b)")
+    }
+
+    @Test
+    internal fun shows_error_for_bchg_on_unsupported_op_size_b(@MyFixture myFixture: CodeInsightTestFixture) {
+        myFixture.enableInspections(M68kSyntaxInspection::class.java)
+        myFixture.configureByText("syntax.asm", " bchg.b #5,d0")
+        assertHighlightings(myFixture, 1, "Operation size '.b' unsupported (should be .l)")
+    }
+
+    @Test
+    internal fun shows_error_for_bchg_on_unsupported_op_size_w(@MyFixture myFixture: CodeInsightTestFixture) {
+        myFixture.enableInspections(M68kSyntaxInspection::class.java)
+        myFixture.configureByText("syntax.asm", " bchg.w #5,d0")
+        assertHighlightings(myFixture, 1, "Operation size '.w' unsupported (should be .l)")
+    }
+
+    @Test
+    internal fun does_not_show_error_for_bchg_without_size(@MyFixture myFixture: CodeInsightTestFixture) {
+        myFixture.enableInspections(M68kSyntaxInspection::class.java)
+        myFixture.configureByText("syntax.asm", " bchg #5,d0")
+        assertThat(myFixture.doHighlighting()).isEmpty()
     }
 
     @Test
