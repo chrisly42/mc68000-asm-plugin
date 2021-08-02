@@ -9,13 +9,10 @@ public interface M68kAddressRegisterIndirectWithIndexNewAddressingMode extends M
     @NotNull
     M68kAddressRegister getAddressRegister();
 
+    @NotNull
+    M68kIndexRegister getIndexRegister();
+
     @Nullable
     M68kExpr getDisplacement();
-
-    @NotNull
-    M68kRegister getIndexRegister();
-
-    @Nullable
-    M68kDataWidth getIndexWidth();
 
 }

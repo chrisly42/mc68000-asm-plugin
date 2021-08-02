@@ -34,6 +34,42 @@ object M68kIsaUtil {
         return matchedIsaData.map { it to M68kIsa.findMatchingAddressMode(it.modes, op1, op2, opSize, specialReg) }
     }
 
+    fun getOpSizeOrDefault(opSize: Int, adrMode: AllowedAdrMode): Int {
+        if (opSize == OP_UNSIZED && (adrMode.size != OP_UNSIZED)) {
+            return if ((adrMode.size and OP_SIZE_W) == OP_SIZE_W) {
+                OP_SIZE_W
+            } else {
+                adrMode.size
+            }
+        }
+        return opSize
+    }
+
+    fun modifyRwmWithOpsize(rwm: Int, opSize: Int): Int {
+        if (opSize == OP_UNSIZED) return rwm
+        return when (rwm) {
+            RWM_READ_OPSIZE -> when (opSize) {
+                OP_SIZE_B -> RWM_READ_B
+                OP_SIZE_W -> RWM_READ_W
+                OP_SIZE_L -> RWM_READ_L
+                else -> rwm
+            }
+            RWM_MODIFY_OPSIZE -> when (opSize) {
+                OP_SIZE_B -> RWM_MODIFY_B
+                OP_SIZE_W -> RWM_MODIFY_W
+                OP_SIZE_L -> RWM_MODIFY_L
+                else -> rwm
+            }
+            RWM_SET_OPSIZE -> when (opSize) {
+                OP_SIZE_B -> RWM_SET_B
+                OP_SIZE_W -> RWM_SET_W
+                OP_SIZE_L -> RWM_SET_L
+                else -> rwm
+            }
+            else -> rwm
+        }
+    }
+
     fun findOpSizeDescription(opSize: Int): String {
         return when (opSize) {
             OP_UNSIZED -> ""
@@ -48,17 +84,17 @@ object M68kIsaUtil {
         }
     }
 
-    fun findOpSizeDescriptions(opSize: Int): Set<String> {
+    fun findOpSizeDescriptions(opSize: Int): List<String> {
         return when (opSize) {
-            OP_UNSIZED -> setOf("")
-            OP_SIZE_B -> setOf(".b")
-            OP_SIZE_W -> setOf(".w")
-            OP_SIZE_L -> setOf(".l")
-            OP_SIZE_S -> setOf(".s")
-            OP_SIZE_BWL -> setOf(".b", ".w", ".l")
-            OP_SIZE_WL -> setOf(".w", ".l")
-            OP_SIZE_SBW -> setOf(".s", ".b", ".w")
-            else -> setOf("?")
+            OP_UNSIZED -> listOf("")
+            OP_SIZE_B -> listOf(".b")
+            OP_SIZE_W -> listOf(".w")
+            OP_SIZE_L -> listOf(".l")
+            OP_SIZE_S -> listOf(".s")
+            OP_SIZE_BWL -> listOf(".b", ".w", ".l")
+            OP_SIZE_WL -> listOf(".w", ".l")
+            OP_SIZE_SBW -> listOf(".s", ".b", ".w")
+            else -> listOf("?")
         }
     }
 }

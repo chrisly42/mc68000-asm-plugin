@@ -17,8 +17,10 @@ internal class M68kInstructionDocumentationProviderTest : AbstractDocumentationP
  mo<caret>veq.l #40,d0
         """
         )
-        assertThat(generateDocumentation(myFixture)).isEqualTo(
-            """<div class="definition"><pre><b>Move Quick</b></pre></div><div class="content"><table class="sections"><tr><td class="section" valign="top">Mnemonic</td><td class="section" valign="top">Op1</td><td class="section" valign="top">Op2</td></tr><tr><td valign="top"><p>moveq.l</p></td><td valign="top"><p>#&lt;xxx&gt;</p></td><td valign="top"><p>Dn</p></td></tr><br/></table></div>"""
+        assertThat(generateDocumentation(myFixture)).isEqualToIgnoringWhitespace(
+            """
+<div class="definition"><pre><b>Move Quick</b></pre></div><div class="content"><table class="sections"><tr><td class="section" valign="top">Mnemonic</td><td class="section" valign="top">Op1</td><td class="section" valign="top">Op2</td></tr><tr><td valign="top"><div>moveq.l</div></td><td valign="top"><div>#&lt;xxx&gt;</div></td><td valign="top"><div>Dn</div></td></tr></table></div>
+"""
         )
     }
 
@@ -29,8 +31,32 @@ internal class M68kInstructionDocumentationProviderTest : AbstractDocumentationP
  bra.<caret>s label
         """
         )
-        assertThat(generateDocumentation(myFixture)).isEqualTo(
-            """<div class="definition"><pre><b>Branch</b></pre></div><div class="content"><table class="sections"><tr><td class="section" valign="top">Mnemonic</td><td class="section" valign="top">Op1</td><td class="section" valign="top">Op2</td></tr><tr><td valign="top"><p>bra.s</p><p>bra.b</p><p>bra.w</p></td><td valign="top"><p>(xxx).w|l</p></td><td valign="top"></td></tr><br/></table></div>"""
+        assertThat(generateDocumentation(myFixture)).isEqualToIgnoringWhitespace(
+            """
+<div class="definition">
+    <pre><b>Branch</b></pre>
+</div>
+<div class="content">
+    <table class="sections">
+        <tr>
+            <td class="section" valign="top">Mnemonic</td>
+            <td class="section" valign="top">Op1</td>
+            <td class="section" valign="top">Op2</td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <div>bra.s</div>
+                <div>bra.b</div>
+                <div>bra.w</div>
+            </td>
+            <td valign="top">
+                <div>(xxx).w|l</div>
+            </td>
+            <td valign="top"></td>
+        </tr>
+    </table>
+</div>
+            """
         )
     }
 
@@ -41,9 +67,7 @@ internal class M68kInstructionDocumentationProviderTest : AbstractDocumentationP
  <caret>reset
         """
         )
-        assertThat(generateDocumentation(myFixture)).isEqualTo(
-            """<div class="definition"><pre><b>Reset External Devices</b></pre><p><font color="red">(privileged)</font></p></div><div class="content"><table class="sections"><tr><td class="section" valign="top">Mnemonic</td><td class="section" valign="top">Op1</td><td class="section" valign="top">Op2</td></tr><tr><td valign="top"><p>reset</p></td><td valign="top"></td><td valign="top"></td></tr><br/></table></div>"""
-        )
+        assertThat(generateDocumentation(myFixture)).contains("Reset External Devices", "(privileged)")
     }
 
     @Test

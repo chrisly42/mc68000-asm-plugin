@@ -36,17 +36,17 @@ class M68kInstructionDocumentationProvider : AbstractDocumentationProvider() {
         val defBuilder = createDefinition(isaData)
         builder.append(defBuilder.wrapWith(DocumentationMarkup.DEFINITION_ELEMENT))
 
-        val bindingRows = HtmlBuilder()
+        val mnemonicInfoRows = HtmlBuilder()
         val headerCells = listOf(
             HtmlChunk.text("Mnemonic").wrapWith(DocumentationMarkup.SECTION_HEADER_CELL),
             HtmlChunk.text("Op1").wrapWith(DocumentationMarkup.SECTION_HEADER_CELL),
             HtmlChunk.text("Op2").wrapWith(DocumentationMarkup.SECTION_HEADER_CELL)
         )
-        bindingRows.append(HtmlChunk.tag("tr").children(headerCells))
+        mnemonicInfoRows.append(HtmlChunk.tag("tr").children(headerCells))
         isaData.modes.forEach { allowedAdrMode ->
             val mnemonics = findOpSizeDescriptions(allowedAdrMode.size)
-                .map { HtmlChunk.text(isaData.mnemonic + it).wrapWith(HtmlChunk.p()) }
-            bindingRows.append(
+                .map { HtmlChunk.text(isaData.mnemonic + it).wrapWith(HtmlChunk.div()) }
+            mnemonicInfoRows.append(
                 HtmlChunk.tag("tr").children(
                     DocumentationMarkup.SECTION_CONTENT_CELL.children(mnemonics),
                     DocumentationMarkup.SECTION_CONTENT_CELL.child(collectAddressModes(allowedAdrMode.op1)),
@@ -56,7 +56,7 @@ class M68kInstructionDocumentationProvider : AbstractDocumentationProvider() {
         }
 
         val contentBuilder = HtmlBuilder()
-        contentBuilder.append(bindingRows.br().wrapWith(DocumentationMarkup.SECTIONS_TABLE))
+        contentBuilder.append(mnemonicInfoRows.wrapWith(DocumentationMarkup.SECTIONS_TABLE))
 
         builder.append(contentBuilder.wrapWith(DocumentationMarkup.CONTENT_ELEMENT))
     }
@@ -77,7 +77,7 @@ class M68kInstructionDocumentationProvider : AbstractDocumentationProvider() {
         val defBuilder = HtmlBuilder()
         defBuilder.append(HtmlChunk.text(isaData.description).bold().wrapWith("pre"))
         if (isaData.isPrivileged) {
-            defBuilder.append(HtmlChunk.font("red").addText("(privileged)").wrapWith("p"))
+            defBuilder.append(HtmlChunk.font("red").addText("(privileged)").wrapWith(HtmlChunk.p()))
         }
         return defBuilder
     }
@@ -86,7 +86,7 @@ class M68kInstructionDocumentationProvider : AbstractDocumentationProvider() {
         if (addressModes == null) return HtmlChunk.text("")
         val modes = HtmlBuilder()
         addressModes.sortedBy(AddressMode::ordinal)
-            .forEach { modes.append(HtmlChunk.text(it.syntax).wrapWith(HtmlChunk.p())) }
+            .forEach { modes.append(HtmlChunk.text(it.syntax).wrapWith(HtmlChunk.div())) }
         return modes.toFragment()
     }
 

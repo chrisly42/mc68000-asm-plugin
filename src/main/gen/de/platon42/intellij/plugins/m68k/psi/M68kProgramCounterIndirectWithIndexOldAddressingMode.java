@@ -6,13 +6,10 @@ import org.jetbrains.annotations.Nullable;
 
 public interface M68kProgramCounterIndirectWithIndexOldAddressingMode extends M68kAddressingMode, M68kWithDisplacement, M68kWithIndexRegister {
 
+    @NotNull
+    M68kIndexRegister getIndexRegister();
+
     @Nullable
     M68kExpr getDisplacement();
-
-    @NotNull
-    M68kRegister getIndexRegister();
-
-    @Nullable
-    M68kDataWidth getIndexWidth();
 
 }

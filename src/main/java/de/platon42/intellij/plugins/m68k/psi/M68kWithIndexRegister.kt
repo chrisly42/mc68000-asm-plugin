@@ -1,12 +1,6 @@
 package de.platon42.intellij.plugins.m68k.psi
 
-interface M68kWithIndexRegister {
+interface M68kWithIndexRegister : M68kAddressingMode {
 
-    val indexRegister: M68kRegister
-
-    val indexWidth: M68kDataWidth?
-
-    fun hasLongWidth(): Boolean {
-        return indexWidth?.text.equals(".l", ignoreCase = true)
-    }
+    val indexRegister: M68kIndexRegister
 }

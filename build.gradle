@@ -68,6 +68,7 @@ patchPluginXml {
       <li>New: Added Documentation Provider for symbol definitions (shows assigned declaration).
       <li>New: Added Documentation Provider for mnemonics (simple version, generated out of ISA information).
       <li>Bugfix: Macro definitions with colons and without space supported (as found in P61a source).
+      <li>New: When asking for documentation on registers, a code flow analysis is done. Cool stuff!
     </ul>
   <h4>V0.3 (28-Jul-21)</h4>
     <ul>

@@ -81,6 +81,7 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 - New: Added Documentation Provider for symbol definitions (shows assigned declaration).
 - New: Added Documentation Provider for mnemonics (simple version, generated out of ISA information).
 - Bugfix: Macro definitions with colons and without space supported (as found in P61a source).
+- New: When asking for documentation on registers, a code flow analysis is done. Cool stuff!
 
 ### V0.3 (28-Jul-21)
 

@@ -48,6 +48,7 @@ public interface M68kTypes {
     IElementType EXPR = new M68kElementType("EXPR");
     IElementType GLOBAL_LABEL = M68kStubElementTypeFactory.stubFactory("GLOBAL_LABEL");
     IElementType IMMEDIATE_DATA = new M68kElementType("IMMEDIATE_DATA");
+    IElementType INDEX_REGISTER = new M68kElementType("INDEX_REGISTER");
     IElementType LITERAL_EXPR = new M68kElementType("LITERAL_EXPR");
     IElementType LOCAL_LABEL = new M68kElementType("LOCAL_LABEL");
     IElementType MACRO_CALL = new M68kElementType("MACRO_CALL");
@@ -212,6 +213,8 @@ public interface M68kTypes {
                 return new M68kGlobalLabelImpl(node);
             } else if (type == IMMEDIATE_DATA) {
                 return new M68kImmediateDataImpl(node);
+            } else if (type == INDEX_REGISTER) {
+                return new M68kIndexRegisterImpl(node);
             } else if (type == LITERAL_EXPR) {
                 return new M68kLiteralExprImpl(node);
             } else if (type == LOCAL_LABEL) {

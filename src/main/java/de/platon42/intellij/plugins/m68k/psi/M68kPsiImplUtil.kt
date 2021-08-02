@@ -134,4 +134,10 @@ object M68kPsiImplUtil {
         }
         return registers
     }
+
+    // IndexRegister
+    @JvmStatic
+    fun isLongWidth(element: M68kIndexRegister): Boolean {
+        return element.dataWidth?.text.equals(".l", ignoreCase = true)
+    }
 }

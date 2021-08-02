@@ -28,7 +28,7 @@ enum class Register(val regname: String, val num: Int) {
     A7("a7", 7);
 
     companion object {
-        private val NAME_TO_REG_MAP = values().associateBy { it.regname }
+        private val NAME_TO_REG_MAP = values().associateBy { it.regname }.plus("sp" to A7)
 
         fun getRegFromName(regname: String) = NAME_TO_REG_MAP[regname.lowercase()]!!
     }
@@ -60,56 +60,58 @@ const val OP_SIZE_BWL = (OP_SIZE_B or OP_SIZE_W or OP_SIZE_L)
 const val OP_SIZE_WL = (OP_SIZE_W or OP_SIZE_L)
 const val OP_SIZE_SBW = (OP_SIZE_B or OP_SIZE_S or OP_SIZE_W)
 
-const val RWM_READ_OPSIZE = 0x10
-const val RWM_READ_B = 0x11
-const val RWM_READ_W = 0x12
-const val RWM_READ_L = 0x13
+const val RWM_OP_MASK = 0xfff
+const val RWM_SIZE_MASK = 0x00e
 
-const val RWM_SET_OPSIZE = 0x20
-const val RWM_SET_B = 0x21
-const val RWM_SET_W = 0x22
-const val RWM_SET_L = 0x23
+const val RWM_SET_OPSIZE = 0x008
+const val RWM_SET_B = 0x009
+const val RWM_SET_W = 0x00b
+const val RWM_SET_L = 0x00f
 
-const val RWM_MODIFY_OPSIZE = 0x30
-const val RWM_MODIFY_B = 0x31
-const val RWM_MODIFY_W = 0x32
-const val RWM_MODIFY_L = 0x33
+const val RWM_READ_OPSIZE = 0x800
+const val RWM_READ_B = 0x900
+const val RWM_READ_W = 0xb00
+const val RWM_READ_L = 0xf00
 
-const val RWM_OP_MASK = 0xff
+const val RWM_MODIFY_OPSIZE = 0x880
+const val RWM_MODIFY_B = 0x990
+const val RWM_MODIFY_W = 0xbb0
+const val RWM_MODIFY_L = 0xff0
+
 const val RWM_OP1_SHIFT = 0
-const val RWM_OP2_SHIFT = 8
+const val RWM_OP2_SHIFT = 12
 
 const val RWM_READ_OP1_OPSIZE = RWM_READ_OPSIZE shl RWM_OP1_SHIFT
 const val RWM_READ_OP1_B = RWM_READ_B shl RWM_OP1_SHIFT
 const val RWM_READ_OP1_W = RWM_READ_W shl RWM_OP1_SHIFT
 const val RWM_READ_OP1_L = RWM_READ_L shl RWM_OP1_SHIFT
 
-const val RWM_SET_OP1_OPSIZE = RWM_SET_OPSIZE shl RWM_OP1_SHIFT
-const val RWM_SET_OP1_B = RWM_SET_B shl RWM_OP1_SHIFT
-const val RWM_SET_OP1_W = RWM_SET_W shl RWM_OP1_SHIFT
-const val RWM_SET_OP1_L = RWM_SET_L shl RWM_OP1_SHIFT
-
 const val RWM_MODIFY_OP1_OPSIZE = RWM_MODIFY_OPSIZE shl RWM_OP1_SHIFT
 const val RWM_MODIFY_OP1_B = RWM_MODIFY_B shl RWM_OP1_SHIFT
 const val RWM_MODIFY_OP1_W = RWM_MODIFY_W shl RWM_OP1_SHIFT
 const val RWM_MODIFY_OP1_L = RWM_MODIFY_L shl RWM_OP1_SHIFT
+
+const val RWM_SET_OP1_OPSIZE = RWM_SET_OPSIZE shl RWM_OP1_SHIFT
+const val RWM_SET_OP1_B = RWM_SET_B shl RWM_OP1_SHIFT
+const val RWM_SET_OP1_W = RWM_SET_W shl RWM_OP1_SHIFT
+const val RWM_SET_OP1_L = RWM_SET_L shl RWM_OP1_SHIFT
 
 const val RWM_READ_OP2_OPSIZE = RWM_READ_OPSIZE shl RWM_OP2_SHIFT
 const val RWM_READ_OP2_B = RWM_READ_B shl RWM_OP2_SHIFT
 const val RWM_READ_OP2_W = RWM_READ_W shl RWM_OP2_SHIFT
 const val RWM_READ_OP2_L = RWM_READ_L shl RWM_OP2_SHIFT
 
-const val RWM_SET_OP2_OPSIZE = RWM_SET_OPSIZE shl RWM_OP2_SHIFT
-const val RWM_SET_OP2_B = RWM_SET_B shl RWM_OP2_SHIFT
-const val RWM_SET_OP2_W = RWM_SET_W shl RWM_OP2_SHIFT
-const val RWM_SET_OP2_L = RWM_SET_L shl RWM_OP2_SHIFT
-
 const val RWM_MODIFY_OP2_OPSIZE = RWM_MODIFY_OPSIZE shl RWM_OP2_SHIFT
 const val RWM_MODIFY_OP2_B = RWM_MODIFY_B shl RWM_OP2_SHIFT
 const val RWM_MODIFY_OP2_W = RWM_MODIFY_W shl RWM_OP2_SHIFT
 const val RWM_MODIFY_OP2_L = RWM_MODIFY_L shl RWM_OP2_SHIFT
 
-const val RWM_MODIFY_STACK = 0x10000
+const val RWM_SET_OP2_OPSIZE = RWM_SET_OPSIZE shl RWM_OP2_SHIFT
+const val RWM_SET_OP2_B = RWM_SET_B shl RWM_OP2_SHIFT
+const val RWM_SET_OP2_W = RWM_SET_W shl RWM_OP2_SHIFT
+const val RWM_SET_OP2_L = RWM_SET_L shl RWM_OP2_SHIFT
+
+const val RWM_MODIFY_STACK = 0x1000000
 
 data class AllowedAdrMode(
     val op1: Set<AddressMode>? = null,

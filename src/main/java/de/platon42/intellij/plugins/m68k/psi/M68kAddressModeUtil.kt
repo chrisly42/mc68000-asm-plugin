@@ -27,31 +27,46 @@ object M68kAddressModeUtil {
         }
     }
 
-    fun getReadWriteModifyRegisters(addressingMode: M68kAddressingMode?, rwm: Int): Set<Pair<Register, Int>> {
-        if (addressingMode == null) return emptySet()
+    fun getOtherReadWriteModifyRegisters(rwm: Int): List<Pair<Register, Int>> {
+        if (rwm and RWM_MODIFY_STACK > 0) {
+            return listOf(Register.A7 to RWM_MODIFY_L)
+        }
+        return emptyList()
+    }
+
+    fun getReadWriteModifyRegisters(addressingMode: M68kAddressingMode?, rwm: Int): List<Pair<Register, Int>> {
+        if (addressingMode == null) return emptyList()
         return when (addressingMode) {
-            is M68kImmediateData -> emptySet()
-            is M68kAddressRegisterIndirectPostIncAddressingMode -> setOf(Register.getRegFromName(addressingMode.addressRegister.text) to RWM_MODIFY_OP1_L)
-            is M68kAddressRegisterIndirectPreDecAddressingMode -> setOf(Register.getRegFromName(addressingMode.addressRegister.text) to RWM_MODIFY_OP1_L)
+            is M68kImmediateData,
+            is M68kSpecialRegisterDirectAddressingMode,
+            is M68kProgramCounterIndirectWithDisplacementNewAddressingMode,
+            is M68kProgramCounterIndirectWithDisplacementOldAddressingMode,
+            is M68kAbsoluteAddressAddressingMode -> emptyList()
+
+            is M68kAddressRegisterIndirectPostIncAddressingMode -> listOf(Register.getRegFromName(addressingMode.addressRegister.text) to RWM_MODIFY_L)
+            is M68kAddressRegisterIndirectPreDecAddressingMode -> listOf(Register.getRegFromName(addressingMode.addressRegister.text) to RWM_MODIFY_L)
             is M68kWithAddressRegisterIndirect -> {
                 if (addressingMode is M68kWithIndexRegister) {
-                    setOf(
-                        Register.getRegFromName(addressingMode.addressRegister.text) to RWM_READ_OP1_L,
-                        Register.getRegFromName(addressingMode.indexRegister.text) to if (addressingMode.hasLongWidth()) RWM_READ_OP1_L else RWM_READ_OP1_W
+                    listOf(
+                        Register.getRegFromName(addressingMode.addressRegister.text) to RWM_READ_L,
+                        Register.getRegFromName(addressingMode.indexRegister.register.text) to if (addressingMode.indexRegister.isLongWidth) RWM_READ_L else RWM_READ_W
                     )
                 } else {
-                    setOf(Register.getRegFromName(addressingMode.addressRegister.text) to RWM_READ_OP1_L)
+                    listOf(Register.getRegFromName(addressingMode.addressRegister.text) to RWM_READ_L)
                 }
             }
-            is M68kWithIndexRegister -> setOf(Register.getRegFromName(addressingMode.indexRegister.text) to if (addressingMode.hasLongWidth()) RWM_READ_OP1_L else RWM_READ_OP1_W)
-            is M68kProgramCounterIndirectWithDisplacementNewAddressingMode -> emptySet()
-            is M68kProgramCounterIndirectWithDisplacementOldAddressingMode -> emptySet()
-            is M68kSpecialRegisterDirectAddressingMode -> emptySet()
-            is M68kDataRegisterDirectAddressingMode -> setOf(Register.getRegFromName(addressingMode.dataRegister.text) to rwm)
-            is M68kAddressRegisterDirectAddressingMode -> setOf(Register.getRegFromName(addressingMode.addressRegister.text) to rwm)
-            is M68kRegisterListAddressingMode -> addressingMode.registers.map { it to rwm }.toSet()
-            is M68kAbsoluteAddressAddressingMode -> emptySet()
+            is M68kWithIndexRegister -> listOf(Register.getRegFromName(addressingMode.indexRegister.register.text) to if (addressingMode.indexRegister.isLongWidth) RWM_READ_L else RWM_READ_W)
+            is M68kDataRegisterDirectAddressingMode -> listOf(Register.getRegFromName(addressingMode.dataRegister.text) to rwm)
+            is M68kAddressRegisterDirectAddressingMode -> listOf(Register.getRegFromName(addressingMode.addressRegister.text) to rwm)
+            is M68kRegisterListAddressingMode -> addressingMode.registers.map { it to rwm }
             else -> throw IllegalArgumentException("Unknown addressing mode $addressingMode")
         }
+    }
+
+    fun mergeReadWriteModifyRegisters(regset: Set<Pair<Register, Int>>): Set<Pair<Register, Int>> {
+        if (regset.size <= 1) return regset
+        return regset.groupBy({ it.first }) { it.second }
+            .map { it.key to if (it.value.size == 1) it.value.single() else it.value.reduce(Int::or) }
+            .toSet()
     }
 }

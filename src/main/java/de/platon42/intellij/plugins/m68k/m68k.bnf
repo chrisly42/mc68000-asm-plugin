@@ -234,6 +234,14 @@ Register ::= DataRegister | AddressRegister | SpecialRegister
 
 private DataOrAddressRegister ::= DataRegister | AddressRegister { name = "data or address register"}
 
+IndexRegister ::= DataOrAddressRegister DataWidth?
+{
+    name = "index register"
+    methods = [
+        isLongWidth
+    ]
+}
+
 AddressingMode ::= ImmediateData
                 | AddressRegisterIndirectPreDecAddressingMode
                 | AddressRegisterIndirectPostIncAddressingMode
@@ -279,7 +287,7 @@ AddressRegisterIndirectWithDisplacementNewAddressingMode ::= ROUND_L expr SEPARA
     ]
 }
 
-AddressRegisterIndirectWithIndexOldAddressingMode ::= expr? ROUND_L AddressRegister SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
+AddressRegisterIndirectWithIndexOldAddressingMode ::= expr? ROUND_L AddressRegister SEPARATOR IndexRegister ROUND_R
 {
     implements = [
         "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect"
@@ -288,12 +296,10 @@ AddressRegisterIndirectWithIndexOldAddressingMode ::= expr? ROUND_L AddressRegis
     ]
     methods = [
         displacement = "expr"
-        indexRegister = "Register"
-        indexWidth = "DataWidth"
     ]
 }
 
-AddressRegisterIndirectWithIndexNewAddressingMode ::= ROUND_L (expr SEPARATOR)? AddressRegister SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
+AddressRegisterIndirectWithIndexNewAddressingMode ::= ROUND_L (expr SEPARATOR)? AddressRegister SEPARATOR IndexRegister ROUND_R
 {
     implements = [
         "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect"
@@ -302,8 +308,6 @@ AddressRegisterIndirectWithIndexNewAddressingMode ::= ROUND_L (expr SEPARATOR)? 
     ]
     methods = [
         displacement = "expr"
-        indexRegister = "Register"
-        indexWidth = "DataWidth"
     ]
 }
 
@@ -323,7 +327,7 @@ ProgramCounterIndirectWithDisplacementNewAddressingMode ::= ROUND_L expr SEPARAT
     ]
 }
 
-ProgramCounterIndirectWithIndexOldAddressingMode ::= expr? ROUND_L PC SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
+ProgramCounterIndirectWithIndexOldAddressingMode ::= expr? ROUND_L PC SEPARATOR IndexRegister ROUND_R
 {
     implements = [
         "de.platon42.intellij.plugins.m68k.psi.M68kWithDisplacement"
@@ -331,12 +335,10 @@ ProgramCounterIndirectWithIndexOldAddressingMode ::= expr? ROUND_L PC SEPARATOR 
     ]
     methods = [
         displacement = "expr"
-        indexRegister = "Register"
-        indexWidth = "DataWidth"
     ]
 }
 
-ProgramCounterIndirectWithIndexNewAddressingMode ::= ROUND_L (expr SEPARATOR)? PC SEPARATOR DataOrAddressRegister DataWidth? ROUND_R
+ProgramCounterIndirectWithIndexNewAddressingMode ::= ROUND_L (expr SEPARATOR)? PC SEPARATOR IndexRegister ROUND_R
 {
     implements = [
         "de.platon42.intellij.plugins.m68k.psi.M68kWithDisplacement"
@@ -344,8 +346,6 @@ ProgramCounterIndirectWithIndexNewAddressingMode ::= ROUND_L (expr SEPARATOR)? P
     ]
     methods = [
         displacement = "expr"
-        indexRegister = "Register"
-        indexWidth = "DataWidth"
     ]
 }
 
