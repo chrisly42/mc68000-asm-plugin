@@ -45,6 +45,7 @@ it's "good enough" to get started, and I can return to demo coding with its curr
 - While the Lexer supports the -spaces option (where a space introduces a comment), this cannot be configured yet (default is off).
 - No support for other processor instructions, FPU or 68020+ address modes.
 - Unit Test coverage is not as good as it could be (ahem).
+- `opt` keyword needs special treatment and will currently show a parsing error
 - Missing but planned features:
     - Macro evaluation on invocation
     - Folding
@@ -79,6 +80,7 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 - Bugfix: Interpretation of register lists was wrong in BNF.
 - New: Added Documentation Provider for symbol definitions (shows assigned declaration).
 - New: Added Documentation Provider for mnemonics (simple version, generated out of ISA information).
+- Bugfix: Macro definitions with colons and without space supported (as found in P61a source).
 
 ### V0.3 (28-Jul-21)
 

@@ -658,7 +658,7 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // ((MacroNameDefinition MACRO_TAG)|(MACRO_TAG MacroNameDefinition)) MacroPlainLine* MACRO_END_TAG
+    // ((MacroNameDefinition COLON? MACRO_TAG)|(MACRO_TAG MacroNameDefinition)) MacroPlainLine* MACRO_END_TAG
     public static boolean MacroDefinition(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "MacroDefinition")) return false;
         if (!nextTokenIs(b, "<macro definition>", MACRO_NAME, MACRO_TAG)) return false;
@@ -672,7 +672,7 @@ public class M68kParser implements PsiParser, LightPsiParser {
         return r || p;
     }
 
-    // (MacroNameDefinition MACRO_TAG)|(MACRO_TAG MacroNameDefinition)
+    // (MacroNameDefinition COLON? MACRO_TAG)|(MACRO_TAG MacroNameDefinition)
     private static boolean MacroDefinition_0(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "MacroDefinition_0")) return false;
         boolean r;
@@ -683,15 +683,23 @@ public class M68kParser implements PsiParser, LightPsiParser {
         return r;
     }
 
-    // MacroNameDefinition MACRO_TAG
+    // MacroNameDefinition COLON? MACRO_TAG
     private static boolean MacroDefinition_0_0(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "MacroDefinition_0_0")) return false;
         boolean r;
         Marker m = enter_section_(b);
         r = MacroNameDefinition(b, l + 1);
+        r = r && MacroDefinition_0_0_1(b, l + 1);
         r = r && consumeToken(b, MACRO_TAG);
         exit_section_(b, m, null, r);
         return r;
+    }
+
+    // COLON?
+    private static boolean MacroDefinition_0_0_1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "MacroDefinition_0_0_1")) return false;
+        consumeToken(b, COLON);
+        return true;
     }
 
     // MACRO_TAG MacroNameDefinition

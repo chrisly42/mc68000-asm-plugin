@@ -51,7 +51,7 @@ LOCAL_LABEL=(\.([:letter:]|_)([:letter:]|[:digit:]|_)*:?)|(([:letter:]|_)([:lett
 LOCAL_LABEL_WC=(\.([:letter:]|_)([:letter:]|[:digit:]|_)*:)|(([:letter:]|_)([:letter:]|[:digit:]|_)*\$:)
 GLOBAL_LABEL=(([:letter:]|_)([:letter:]|[:digit:]|_)*:?:?)
 GLOBAL_LABEL_WC=(([:letter:]|_)([:letter:]|[:digit:]|_)*::?)
-MACRO_DEF_LEFT=(([:letter:]|_)(([:letter:]|[:digit:]|_))*)\p{Blank}+macro\p{Blank}*
+MACRO_DEF_LEFT=(([:letter:]|_)(([:letter:]|[:digit:]|_))*)(\p{Blank}+|:\p{Blank}*)macro\p{Blank}*
 MACRO_END_TAG=\p{Blank}+endm\p{Blank}*[^;\r\n]*
 //MNEMONIC=(([:letter:])+)
 SYMBOL=(([:letter:]|_|\.)(([:letter:]|[:digit:]|[_\$]))*)
@@ -123,7 +123,7 @@ PLAIN_MACRO_LINE=[^;\r\n]+
   {MACRONAME}         { return handleMacroMode(this); }
 }
 
-<INSTRPART> {
+<INSTRPART,MACRODEF> {
   ":"                 { return COLON; }
 //  {MNEMONIC}          { if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; } else { return SYMBOL; } }
 }

@@ -63,4 +63,15 @@ label:  move.w  d0,d1
         )
     }
 
+    @Test
+    internal fun macro_name_with_colon_p61_source_suxxor(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(
+            testCase, """
+structure:macro
+\1:equ 0
+soffset:set \2
+	endm"""
+        )
+    }
+
 }

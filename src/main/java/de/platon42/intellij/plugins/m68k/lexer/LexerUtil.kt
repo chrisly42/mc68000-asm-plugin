@@ -9,7 +9,7 @@ import de.platon42.intellij.plugins.m68k.psi.M68kTypes
 object LexerUtil {
 
     private val ASSIGNMENT_SEPARATORS = charArrayOf(' ', '\t', '=', ':')
-    private val TOKEN_SEPARATORS = charArrayOf(' ', '\t')
+    private val TOKEN_SEPARATORS = charArrayOf(' ', '\t', ':')
 
     @JvmStatic
     fun isAsmMnemonic(text: CharSequence) = mnemonics.contains(text.toString().lowercase())
