@@ -75,6 +75,8 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 
 - Bugfix: `movem` ISA was wrong regarding the `movem.w <ea>,<registerlist>` (sign extends registers).
 - Cosmetics: Changed Register Flow Documentation wording from _reads_ to _uses_ and from _modifies_ to _changes_.
+- Bugfix: Minor fix for `andi/eori/ori to ccr` which were not byte sized in ISA.
+- Bugfix: Added alternate condition code tests `HS (=CC)` and `LO (=CS)`.
 
 ### V0.4 (03-Aug-21)
 

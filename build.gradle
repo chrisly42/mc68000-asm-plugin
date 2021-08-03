@@ -61,6 +61,8 @@ patchPluginXml {
     <ul>
       <li>Bugfix: movem ISA was wrong regarding movem.w <ea>,<registerlist> (sign extends registers).
       <li>Cosmetics: Changed Register Flow Documentation wording from 'reads' to 'uses' and from 'modifies' to 'changes'.
+      <li>Bugfix: Minor fix for `andi/eori/ori to ccr` which were not byte sized in ISA.
+      <li>Bugfix: Added alternate condition code tests HS (=CC) and LO (=CS).
     </ul>
   <h4>V0.4 (03-Aug-21)</h4>
     <ul>
