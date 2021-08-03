@@ -1002,29 +1002,19 @@ object M68kIsa {
         )
     )
 
-    val mnemonics =
-        isaData.asSequence()
-            .flatMap {
-                if (it.conditionCodes.isEmpty()) it.altMnemonics.plus(it.mnemonic) else it.altMnemonics.plus(it.conditionCodes
-                    .map { cc ->
-                        it.mnemonic.replace("CC", cc)
-                    })
-            }
-            .toSet()
+    private val mnemonicLookupMap = isaData.asSequence()
+        .flatMap {
+            (if (it.conditionCodes.isEmpty()) it.altMnemonics.plus(it.mnemonic) else it.altMnemonics.plus(it.conditionCodes
+                .map { cc ->
+                    it.mnemonic.replace("CC", cc)
+                })).map { mnemonic -> mnemonic to it }
+        }
+        .groupBy({ it.first }) { it.second }
+
+    val mnemonics = mnemonicLookupMap.keys
 
     fun findMatchingInstructions(mnemonic: String): List<IsaData> {
-        val lowerMnemonic = mnemonic.lowercase()
-        return isaData
-            .filter {
-                if (it.conditionCodes.isEmpty()) {
-                    (it.mnemonic == lowerMnemonic) || it.altMnemonics.any { altMnemonic -> altMnemonic == lowerMnemonic }
-                } else {
-                    it.altMnemonics.any { altMnemonic -> altMnemonic == lowerMnemonic } ||
-                            it.conditionCodes.any { cc ->
-                                it.mnemonic.replace("CC", cc) == lowerMnemonic
-                            }
-                }
-            }
+        return mnemonicLookupMap.getOrDefault(mnemonic.lowercase(), emptyList())
     }
 
     fun findMatchingOpMode(candidates: List<IsaData>, op1: AddressMode?, op2: AddressMode?, opSize: Int?, specialReg: String?): List<IsaData> {
