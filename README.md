@@ -2,7 +2,7 @@
 
 _MC68000 Assembly Language Plugin_ is plugin for Jetbrains IDEs (CLion, IntelliJ, etc.).
 
-![Example Syntax Highlighting](docs/syntaxhighlighting.png "Example Syntax Highlighting")
+![Example IDE Screenshot](docs/example.png "Example IDE Screenshot")
 
 ## Purpose
 
@@ -19,13 +19,13 @@ awesome features and is pretty advanced. Check it out. You can install both plug
 
 Big kudos to Yann -- a few features were _inspired_ by his code.
 
-My plugin, on the other hand, is still pretty basic and is the result of about two weeks of work. I released a really early first version it because I think
-it's "good enough" to get started, and I can return to demo coding with its current state.
+My plugin, on the other hand, is still pretty basic and is the result of a few weeks of work. I released a really early first version it because I think it's "
+good enough" to get started, and I can return to demo coding with its current state.
 
 ## Features
 
 - Parser / Lexer for MC68000 (yes, only 68000 right now!) assembly language files in VAsm / DevPac style
-- Inspection for validating the syntax the 68000 ISA.
+- Inspection for validating the syntax of the 68000 ISA.
 - Syntax highlighting and Color Settings Page (you should really modify the color settings to your likings!)
 - Mnemonics code completion
 - Symbols / Labels / Macros code completion
@@ -46,7 +46,7 @@ it's "good enough" to get started, and I can return to demo coding with its curr
 - While the Lexer supports the -spaces option (where a space introduces a comment), this cannot be configured yet (default is off).
 - No support for other processor instructions, FPU or 68020+ address modes.
 - Unit Test coverage is not as good as it could be (ahem).
-- `opt` keyword needs special treatment and will currently show a parsing error
+- `opt` keyword needs special treatment and will currently show a parsing error.
 - Missing but planned features:
     - Macro evaluation on invocation
     - Folding
@@ -70,6 +70,11 @@ far (or at least the only one I'm aware of ;) ). The IntelliJ framework actually
 make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.intellij.jupiter```) for your projects (with attribution).
 
 ## Changelog
+
+### V0.5 (unreleased)
+
+- Bugfix: `movem` ISA was wrong regarding the `movem.w <ea>,<registerlist>` (sign extends registers).
+- Cosmetics: Changed Register Flow Documentation wording from _reads_ to _uses_ and from _modifies_ to _changes_.
 
 ### V0.4 (03-Aug-21)
 

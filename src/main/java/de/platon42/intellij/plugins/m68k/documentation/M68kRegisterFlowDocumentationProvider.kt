@@ -189,12 +189,12 @@ class M68kRegisterFlowDocumentationProvider : AbstractDocumentationProvider() {
 
     private fun rwmToDisplayText(rwm: Int, rn: String) =
         when (rwm) {
-            RWM_READ_B -> "reads $rn.b"
-            RWM_READ_W -> "reads $rn.w"
-            RWM_READ_L -> "reads $rn.l"
-            RWM_MODIFY_B -> "modifies $rn.b"
-            RWM_MODIFY_W -> "modifies $rn.w"
-            RWM_MODIFY_L -> "modifies $rn.l"
+            RWM_READ_B -> "uses $rn.b"
+            RWM_READ_W -> "uses $rn.w"
+            RWM_READ_L -> "uses $rn.l"
+            RWM_MODIFY_B -> "changes $rn.b"
+            RWM_MODIFY_W -> "changes $rn.w"
+            RWM_MODIFY_L -> "changes $rn.l"
             RWM_SET_B -> "sets $rn.b"
             RWM_SET_W -> "sets $rn.w"
             RWM_SET_L -> "sets $rn.l"

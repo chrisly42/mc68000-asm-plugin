@@ -283,7 +283,7 @@ object M68kIsa {
                     ),
                     setOf(AddressMode.REGISTER_LIST, AddressMode.ADDRESS_REGISTER_DIRECT, AddressMode.DATA_REGISTER_DIRECT),
                     OP_SIZE_WL,
-                    modInfo = RWM_READ_OP1_OPSIZE or RWM_SET_OP2_OPSIZE
+                    modInfo = RWM_READ_OP1_OPSIZE or RWM_SET_OP2_L
                 ),
                 // according to Yann, specifying the registers as bitmask is also valid
                 AllowedAdrMode(

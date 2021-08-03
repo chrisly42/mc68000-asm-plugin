@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'de.platon42'
-version = '0.4'
+version = '0.5'
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
@@ -57,6 +57,11 @@ runPluginVerifier {
 
 patchPluginXml {
     setChangeNotes("""
+  <h4>V0.5 (unreleased)</h4>
+    <ul>
+      <li>Bugfix: movem ISA was wrong regarding movem.w <ea>,<registerlist> (sign extends registers).
+      <li>Cosmetics: Changed Register Flow Documentation wording from 'reads' to 'uses' and from 'modifies' to 'changes'.
+    </ul>
   <h4>V0.4 (03-Aug-21)</h4>
     <ul>
       <li>Notice: Due to major new API use, this plugin no longer works on IDEs >=2019.3.1, but rather requires >=2020.3.
@@ -81,14 +86,6 @@ patchPluginXml {
       <li>Performance: Reference search for global labels and symbols now uses stub index.
       <li>Compatibility: Restored compatibility with IDE versions < 2021.1.
       <li>Performance: Optimized lexer.
-    </ul>
-  <h4>V0.2 (27-Jul-21)</h4>
-    <ul>
-      <li>Cosmetics: Added (same) icon for plugin as for file type.
-      <li>Performance: Use Word-Index for global labels and symbols instead of iterating over the file.
-      <li>Performance: Use Stub-Index for global labels and symbols.
-      <li>Bugfix: No longer reports a syntax error when file lacks terminating End-Of-Line.
-      <li>Enhancement: Registers are now offered for code completion, making editing less annoying. 
     </ul>
   <p>Full changelog available at <a href="https://github.com/chrisly42/mc68000-asm-plugin#changelog">Github project site</a>.</p>
 """)
