@@ -8,6 +8,8 @@ import com.intellij.openapi.util.text.HtmlChunk
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.ui.ColorUtil
+import com.intellij.ui.JBColor
 import de.platon42.intellij.plugins.m68k.asm.*
 import de.platon42.intellij.plugins.m68k.asm.Register.Companion.getRegFromName
 import de.platon42.intellij.plugins.m68k.psi.*
@@ -21,61 +23,82 @@ class M68kRegisterFlowDocumentationProvider : AbstractDocumentationProvider() {
 
     override fun generateDoc(element: PsiElement, originalElement: PsiElement?): String? {
         if (element is M68kDataRegister || element is M68kAddressRegister) {
-            val register = getRegFromName(element.text)
-            val addressingMode = PsiTreeUtil.getParentOfType(element, M68kAddressingMode::class.java) ?: return null
-            val asmInstruction = PsiTreeUtil.getParentOfType(addressingMode, M68kAsmInstruction::class.java) ?: return null
-
-            val (isaData, adrMode) = findExactIsaDataAndAllowedAdrModeForInstruction(asmInstruction) ?: return "unknown instruction"
-
-            val cursorInstRwmRegs = evaluateRegisterUse(asmInstruction, adrMode, register)
-            val opSize = getOpSizeOrDefault(asmInstruction.asmOp.opSize, adrMode)
-
-            val rn = register.regname
-            val thisInfo = cursorInstRwmRegs
-                .joinToString(separator = ", ", prefix = "${isaData.mnemonic} instruction ") {
-                    rwmToDisplayText(it, rn)
-                }
-            val totalRwm = cursorInstRwmRegs.reduce(Int::or)
-
-            val firstOp = asmInstruction.addressingModeList[0] == addressingMode
-            val cursorRwm = modifyRwmWithOpsize((adrMode.modInfo ushr if (firstOp) RWM_OP1_SHIFT else RWM_OP2_SHIFT) and RWM_OP_MASK, opSize)
-            val analysisBuilder = HtmlBuilder()
-            val missingBits = if (cursorRwm and RWM_SET_L != 0) {
-                if (totalRwm and RWM_SET_L == RWM_SET_L) {
-                    analysisBuilder.append(HtmlChunk.text("Register result is fully defined by this instruction."))
-                    0
-                } else {
-                    (RWM_SET_L and RWM_SIZE_MASK) and totalRwm.inv()
-                }
-            } else {
-                (RWM_SET_L and RWM_SIZE_MASK) and ((cursorRwm and RWM_MODIFY_L) ushr 8)
-            }
-            val backtrace: MutableList<HtmlChunk> = ArrayList()
-            val initialStatement: M68kStatement = asmInstruction.parent as M68kStatement
-            if (missingBits > 0) {
-                val localLabelName = PsiTreeUtil.findChildOfType(initialStatement, M68kLocalLabel::class.java)?.name ?: ""
-                backtrace.add(
-                    HtmlChunk.tag("tr")
-                        .children(DocumentationMarkup.SECTION_CONTENT_CELL.child(HtmlChunk.text(localLabelName)))
-                        .children(highlightRegister(asmInstruction, register).bold().wrapWith(DocumentationMarkup.SECTION_CONTENT_CELL))
-                        .children(DocumentationMarkup.SECTION_CONTENT_CELL.child(HtmlChunk.text(" ; <--")))
-                )
-            }
-
-            backtrace.addAll(analyseFlow(register, missingBits, true, initialStatement) { PsiTreeUtil.getPrevSiblingOfType(it, M68kStatement::class.java) })
-            backtrace.reverse()
-            val traceBits = (cursorRwm or (cursorRwm ushr 8)) and RWM_SIZE_MASK
-            backtrace.addAll(analyseFlow(register, traceBits, false, initialStatement) { PsiTreeUtil.getNextSiblingOfType(it, M68kStatement::class.java) })
-
-            val statementRows = HtmlBuilder()
-            backtrace.forEach(statementRows::append)
-            val builder = HtmlBuilder()
-            builder.append(HtmlChunk.text(thisInfo).wrapWith(DocumentationMarkup.DEFINITION_ELEMENT))
-            builder.append(statementRows.wrapWith(DocumentationMarkup.SECTIONS_TABLE.style("padding-left: 8pt; padding-right: 8pt")))
-            builder.append(analysisBuilder.wrapWith(DocumentationMarkup.CONTENT_ELEMENT))
-            return builder.toString()
+            return createDoc(element as M68kRegister, 100) // TODO make this configurable
         }
         return null
+    }
+
+    override fun generateHoverDoc(element: PsiElement, originalElement: PsiElement?): String? {
+        if (element is M68kDataRegister || element is M68kAddressRegister) {
+            return createDoc(element as M68kRegister, 4) // TODO make this configurable
+        }
+        return null
+    }
+
+    private fun createDoc(element: M68kRegister, linesLimit: Int): String? {
+        val register = getRegFromName(element.text)
+        val addressingMode = PsiTreeUtil.getParentOfType(element, M68kAddressingMode::class.java) ?: return null
+        val asmInstruction = PsiTreeUtil.getParentOfType(addressingMode, M68kAsmInstruction::class.java) ?: return null
+
+        val (isaData, adrMode) = findExactIsaDataAndAllowedAdrModeForInstruction(asmInstruction) ?: return "unknown instruction"
+
+        val cursorInstRwmRegs = evaluateRegisterUse(asmInstruction, adrMode, register)
+        val opSize = getOpSizeOrDefault(asmInstruction.asmOp.opSize, adrMode)
+
+        val rn = register.regname
+        val thisInfo = cursorInstRwmRegs
+            .joinToString(separator = ", ", prefix = "${isaData.mnemonic} instruction ") { rwmToDisplayText(it, rn) }
+        val totalRwm = cursorInstRwmRegs.reduce(Int::or)
+
+        val firstOp = asmInstruction.addressingModeList[0] == addressingMode
+        val cursorRwm = modifyRwmWithOpsize((adrMode.modInfo ushr if (firstOp) RWM_OP1_SHIFT else RWM_OP2_SHIFT) and RWM_OP_MASK, opSize)
+        val backtrace: MutableList<HtmlChunk> = ArrayList()
+        val missingBits = if (cursorRwm and RWM_SET_L != 0) {
+            if (totalRwm and RWM_SET_L == RWM_SET_L) {
+                backtrace.add(
+                    HtmlChunk.tag("tr")
+                        .children(
+                            DocumentationMarkup.SECTION_CONTENT_CELL.attr("colspan", "3")
+                                .child(HtmlChunk.text("Register result is fully defined by this instruction."))
+                        )
+                )
+                0
+            } else {
+                (RWM_SET_L and RWM_SIZE_MASK) and totalRwm.inv()
+            }
+        } else {
+            (RWM_SET_L and RWM_SIZE_MASK) and ((cursorRwm and RWM_MODIFY_L) ushr 8)
+        }
+        val initialStatement: M68kStatement = asmInstruction.parent as M68kStatement
+        val localLabelName = PsiTreeUtil.findChildOfType(initialStatement, M68kLocalLabel::class.java)?.name ?: "-->"
+        backtrace.add(
+            HtmlChunk.tag("tr")
+                .children(DocumentationMarkup.SECTION_CONTENT_CELL.child(HtmlChunk.text(localLabelName)))
+                .children(highlightRegister(asmInstruction, register).bold().wrapWith(DocumentationMarkup.SECTION_CONTENT_CELL))
+                .children(DocumentationMarkup.SECTION_CONTENT_CELL.child(HtmlChunk.text(" ; <--")))
+        )
+
+        backtrace.addAll(analyseFlow(register, missingBits, true, initialStatement, linesLimit) {
+            PsiTreeUtil.getPrevSiblingOfType(
+                it,
+                M68kStatement::class.java
+            )
+        })
+        backtrace.reverse()
+        val traceBits = (cursorRwm or (cursorRwm ushr 8)) and RWM_SIZE_MASK
+        backtrace.addAll(analyseFlow(register, traceBits, false, initialStatement, linesLimit) {
+            PsiTreeUtil.getNextSiblingOfType(
+                it,
+                M68kStatement::class.java
+            )
+        })
+
+        val statementRows = HtmlBuilder()
+        backtrace.forEach(statementRows::append)
+        val builder = HtmlBuilder()
+        builder.append(HtmlChunk.text(thisInfo).wrapWith(DocumentationMarkup.DEFINITION_ELEMENT))
+        builder.append(statementRows.wrapWith(DocumentationMarkup.SECTIONS_TABLE.style("padding-left: 8pt; padding-right: 8pt")))
+        return builder.toString()
     }
 
     private fun analyseFlow(
@@ -83,21 +106,21 @@ class M68kRegisterFlowDocumentationProvider : AbstractDocumentationProvider() {
         rwmBits: Int,
         globalLabelBreaksOnInitialStatement: Boolean,
         startingStatement: M68kStatement,
+        linesLimit: Int,
         direction: (statement: M68kStatement) -> M68kStatement?
     ): MutableList<HtmlChunk> {
         var missingBits = rwmBits
         var currStatement = startingStatement
-        val backtrace: MutableList<HtmlChunk> = ArrayList()
+        val statementLines: MutableList<HtmlChunk> = ArrayList()
         val rn = register.regname
         var addAbrevDots = false
+        var lines = 0
         while (missingBits > 0) {
             val globalLabel = PsiTreeUtil.findChildOfType(currStatement, M68kGlobalLabel::class.java)
             if ((globalLabel != null) && (globalLabelBreaksOnInitialStatement || (currStatement !== startingStatement))) {
-                backtrace.add(
+                statementLines.add(
                     HtmlChunk.tag("tr")
-                        .children(DocumentationMarkup.SECTION_CONTENT_CELL.child(HtmlChunk.text(globalLabel.name!!).bold()))
-                        .children(DocumentationMarkup.SECTION_CONTENT_CELL.child(HtmlChunk.nbsp()))
-                        .children(DocumentationMarkup.SECTION_CONTENT_CELL.child(HtmlChunk.nbsp()))
+                        .children(DocumentationMarkup.SECTION_CONTENT_CELL.attr("colspan", "3").child(HtmlChunk.text(globalLabel.name!!).bold()))
                 )
                 break
             }
@@ -105,37 +128,35 @@ class M68kRegisterFlowDocumentationProvider : AbstractDocumentationProvider() {
             val currAsmInstruction = PsiTreeUtil.getChildOfType(currStatement, M68kAsmInstruction::class.java) ?: continue
             if (checkIfInstructionUsesRegister(currAsmInstruction, register)) {
                 if (addAbrevDots) {
-                    backtrace.add(
-                        HtmlChunk.tag("tr")
-                            .children(DocumentationMarkup.SECTION_CONTENT_CELL.child(HtmlChunk.nbsp()))
-                            .children(
-                                DocumentationMarkup.SECTION_CONTENT_CELL.child(
-                                    HtmlChunk.text("[...]").wrapWith(HtmlChunk.div().attr("class", "grayed"))
-                                )
-                            )
-                            .children(DocumentationMarkup.SECTION_CONTENT_CELL.child(HtmlChunk.nbsp()))
-                    )
+                    ++lines
+                    statementLines.add(createAbbreviationDots())
+                }
+                if (++lines > linesLimit) {
+                    if (!addAbrevDots) {
+                        statementLines.add(createAbbreviationDots())
+                    }
+                    break
                 }
                 addAbrevDots = false
                 val (_, currAdrMode) = findExactIsaDataAndAllowedAdrModeForInstruction(currAsmInstruction) ?: continue
 
-                val localLabelName = PsiTreeUtil.findChildOfType(currStatement, M68kLocalLabel::class.java)?.name ?: ""
+                val localLabelName = PsiTreeUtil.findChildOfType(currStatement, M68kLocalLabel::class.java)?.name ?: "        "
                 val currRwms = evaluateRegisterUse(currAsmInstruction, currAdrMode, register)
                 val currTotalRwm = currRwms.reduce(Int::or)
-                if ((currTotalRwm and RWM_SET_L) > 0) {
-                    missingBits = missingBits and currTotalRwm.inv()
-                }
                 val lineInfo = currRwms
                     .map {
                         val text = HtmlChunk.text(rwmToDisplayText(it, rn))
-                        if ((missingBits and it) > 0) text.bold() else text.italic()
+                        if ((missingBits and it) > 0) text.wrapWith(HtmlChunk.font("#" + ColorUtil.toHex(JBColor.GREEN))) else text
                     }
+                if ((currTotalRwm and RWM_SET_L) > 0) {
+                    missingBits = missingBits and currTotalRwm.inv()
+                }
                 val lineBuilder = HtmlBuilder()
                 lineBuilder.append(" ; ")
                 lineBuilder.appendWithSeparators(HtmlChunk.text(", "), lineInfo)
                     .wrapWith(HtmlChunk.div())
 
-                backtrace.add(
+                statementLines.add(
                     HtmlChunk.tag("tr")
                         .children(DocumentationMarkup.SECTION_CONTENT_CELL.child(HtmlChunk.text(localLabelName)))
                         .children(highlightRegister(currAsmInstruction, register).wrapWith(DocumentationMarkup.SECTION_CONTENT_CELL))
@@ -145,7 +166,7 @@ class M68kRegisterFlowDocumentationProvider : AbstractDocumentationProvider() {
                 addAbrevDots = true
             }
         }
-        return backtrace
+        return statementLines
     }
 
     private fun highlightRegister(currAsmInstruction: M68kAsmInstruction, register: Register): HtmlChunk {
@@ -158,7 +179,7 @@ class M68kRegisterFlowDocumentationProvider : AbstractDocumentationProvider() {
             if (indexPos >= 0) {
                 builder.append(HtmlChunk.text(plainText.substring(startPos until indexPos)))
                 startPos = indexPos + register.regname.length
-                builder.append(HtmlChunk.text(plainText.substring(indexPos until startPos)).wrapWith(HtmlChunk.font("red")))
+                builder.append(HtmlChunk.text(plainText.substring(indexPos until startPos)).wrapWith(HtmlChunk.font("#" + ColorUtil.toHex(JBColor.ORANGE))))
             } else {
                 builder.append(HtmlChunk.text(plainText.substring(startPos)))
             }
@@ -179,6 +200,15 @@ class M68kRegisterFlowDocumentationProvider : AbstractDocumentationProvider() {
             RWM_SET_L -> "sets $rn.l"
             else -> "uhm?"
         }
+
+    private fun createAbbreviationDots() = HtmlChunk.tag("tr")
+        .children(DocumentationMarkup.SECTION_CONTENT_CELL.child(HtmlChunk.nbsp()))
+        .children(
+            DocumentationMarkup.SECTION_CONTENT_CELL.child(
+                HtmlChunk.text("[...]").wrapWith(HtmlChunk.div().attr("class", "grayed"))
+            )
+        )
+        .children(DocumentationMarkup.SECTION_CONTENT_CELL.child(HtmlChunk.nbsp()))
 
     private fun evaluateRegisterUse(
         asmInstruction: M68kAsmInstruction,

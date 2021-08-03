@@ -37,14 +37,14 @@ nextlabel
 <div class="definition">move instruction reads d0.w</div>
 <table class="sections" style="padding-left: 8pt; padding-right: 8pt">
     <tr>
-        <td valign="top"></td>
-        <td valign="top"><code>moveq.l #0,<font color="red">d0</font></code></td>
-        <td valign="top"> ; <i>sets d0.l</i></td>
+        <td valign="top">        </td>
+        <td valign="top"><code>moveq.l #0,<font color="#ffc800">d0</font></code></td>
+        <td valign="top"> ; <font color="#00ff00">sets d0.l</font></td>
     </tr>
     <tr>
-        <td valign="top"></td>
-        <td valign="top"><code>add.w #1,<font color="red">d0</font></code></td>
-        <td valign="top"> ; <i>modifies d0.w</i></td>
+        <td valign="top">        </td>
+        <td valign="top"><code>add.w #1,<font color="#ffc800">d0</font></code></td>
+        <td valign="top"> ; modifies d0.w</td>
     </tr>
     <tr>
         <td valign="top">&nbsp;</td>
@@ -54,29 +54,29 @@ nextlabel
         <td valign="top">&nbsp;</td>
     </tr>
     <tr>
-        <td valign="top"></td>
-        <td valign="top"><code>move.w <font color="red">d0</font>,d1</code></td>
-        <td valign="top"> ; <i>reads d0.w</i></td>
+        <td valign="top">        </td>
+        <td valign="top"><code>move.w <font color="#ffc800">d0</font>,d1</code></td>
+        <td valign="top"> ; reads d0.w</td>
     </tr>
     <tr>
-        <td valign="top"></td>
-        <td valign="top"><code>move.b d2,<font color="red">d0</font></code></td>
-        <td valign="top"> ; <i>sets d0.b</i></td>
+        <td valign="top">        </td>
+        <td valign="top"><code>move.b d2,<font color="#ffc800">d0</font></code></td>
+        <td valign="top"> ; <font color="#00ff00">sets d0.b</font></td>
     </tr>
     <tr>
-        <td valign="top"></td>
-        <td valign="top"><code>addq.b #1,<font color="red">d0</font></code></td>
-        <td valign="top"> ; <i>modifies d0.b</i></td>
+        <td valign="top">        </td>
+        <td valign="top"><code>addq.b #1,<font color="#ffc800">d0</font></code></td>
+        <td valign="top"> ; modifies d0.b</td>
     </tr>
     <tr>
-        <td valign="top"></td>
-        <td valign="top"><b><code>move.w <font color="red">d0</font>,d1</code></b></td>
+        <td valign="top">--&gt;</td>
+        <td valign="top"><b><code>move.w <font color="#ffc800">d0</font>,d1</code></b></td>
         <td valign="top"> ; &lt;--</td>
     </tr>
     <tr>
-        <td valign="top"></td>
-        <td valign="top"><code>move.l <font color="red">d0</font>,d2</code></td>
-        <td valign="top"> ; <i>reads d0.l</i></td>
+        <td valign="top">        </td>
+        <td valign="top"><code>move.l <font color="#ffc800">d0</font>,d2</code></td>
+        <td valign="top"> ; reads d0.l</td>
     </tr>
     <tr>
         <td valign="top">&nbsp;</td>
@@ -86,17 +86,16 @@ nextlabel
         <td valign="top">&nbsp;</td>
     </tr>
     <tr>
-        <td valign="top"></td>
-        <td valign="top"><code>clr.b <font color="red">d0</font></code></td>
-        <td valign="top"> ; <i>sets d0.b</i></td>
+        <td valign="top">        </td>
+        <td valign="top"><code>clr.b <font color="#ffc800">d0</font></code></td>
+        <td valign="top"> ; <font color="#00ff00">sets d0.b</font></td>
     </tr>
     <tr>
-        <td valign="top"></td>
-        <td valign="top"><code>moveq.l #0,<font color="red">d0</font></code></td>
-        <td valign="top"> ; <i>sets d0.l</i></td>
+        <td valign="top">        </td>
+        <td valign="top"><code>moveq.l #0,<font color="#ffc800">d0</font></code></td>
+        <td valign="top"> ; <font color="#00ff00">sets d0.l</font></td>
     </tr>
 </table>
-<div class="content"/>
             """.trimIndent()
             )
     }

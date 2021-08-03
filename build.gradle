@@ -57,7 +57,7 @@ runPluginVerifier {
 
 patchPluginXml {
     setChangeNotes("""
-  <h4>V0.4 (unreleased)</h4>
+  <h4>V0.4 (03-Aug-21)</h4>
     <ul>
       <li>Notice: Due to major new API use, this plugin no longer works on IDEs >=2019.3.1, but rather requires >=2020.3.
       <li>Enhancement: Added Structure View filters.

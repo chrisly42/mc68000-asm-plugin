@@ -30,6 +30,7 @@ it's "good enough" to get started, and I can return to demo coding with its curr
 - Mnemonics code completion
 - Symbols / Labels / Macros code completion
 - References / Refactoring support for local and global labels, symbol assignments, and macros.
+- Simple register usage flow (hover over register or press F1 for full flow)
 - Brace matching
 - Quote handler
 - Goto Symbol support
@@ -70,7 +71,7 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 
 ## Changelog
 
-### V0.4 (unreleased)
+### V0.4 (03-Aug-21)
 
 - Notice: Due to major new API use, this plugin no longer works on IDEs >=2019.3.1, but rather requires >=2020.3.
 - Enhancement: Added Structure View filters.
