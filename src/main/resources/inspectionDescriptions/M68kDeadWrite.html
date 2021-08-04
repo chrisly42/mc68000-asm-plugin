@@ -1,0 +1,11 @@
+<html>
+<body>
+Finds dead writes to registers, i.e. writes that will not have any effect.
+
+Issues a weak warning if the instruction affects only condition codes that are later tested.
+
+Analysis is terminated at the next global label or instruction that reads the register or changes control flow.
+<!-- tooltip end -->
+<p>Note: As there is no evaluation of macros right now, the inspection might report some false positives.</p>
+</body>
+</html>

@@ -72,11 +72,13 @@ const val RWM_READ_OPSIZE = 0x800
 const val RWM_READ_B = 0x900
 const val RWM_READ_W = 0xb00
 const val RWM_READ_L = 0xf00
+const val RWM_READ_SHIFT = 8
 
-const val RWM_MODIFY_OPSIZE = 0x880
-const val RWM_MODIFY_B = 0x990
-const val RWM_MODIFY_W = 0xbb0
-const val RWM_MODIFY_L = 0xff0
+const val RWM_MODIFY_OPSIZE = 0x080
+const val RWM_MODIFY_B = 0x090
+const val RWM_MODIFY_W = 0x0b0
+const val RWM_MODIFY_L = 0x0f0
+const val RWM_MODIFY_SHIFT = 4
 
 const val RWM_OP1_SHIFT = 0
 const val RWM_OP2_SHIFT = 12
@@ -133,6 +135,7 @@ data class IsaData(
     val isPrivileged: Boolean = false,
     val hasOps: Boolean = true,
     val modes: List<AllowedAdrMode> = listOf(AllowedAdrMode()),
+    val changesControlFlow: Boolean = false
 )
 
 object M68kIsa {
@@ -389,7 +392,7 @@ object M68kIsa {
                     setOf(AddressMode.DATA_REGISTER_DIRECT, AddressMode.ADDRESS_REGISTER_DIRECT),
                     setOf(AddressMode.DATA_REGISTER_DIRECT, AddressMode.ADDRESS_REGISTER_DIRECT),
                     OP_SIZE_L,
-                    modInfo = RWM_SET_OP1_L or RWM_SET_OP2_L
+                    modInfo = RWM_MODIFY_OP1_L or RWM_MODIFY_OP2_L // exchanging registers does not set value to a defined state
                 )
             )
         ),
@@ -687,13 +690,19 @@ object M68kIsa {
         // Program Control Instructions
         IsaData(
             "bCC", "Branch Conditionally", conditionCodes = conditionCodesBcc,
-            modes = listOf(AllowedAdrMode(setOf(AddressMode.ABSOLUTE_ADDRESS), null, OP_SIZE_SBW, testedCc = cc("-????")))
+            modes = listOf(AllowedAdrMode(setOf(AddressMode.ABSOLUTE_ADDRESS), null, OP_SIZE_SBW, testedCc = cc("-????"))),
+            changesControlFlow = true
         ),
-        IsaData("bra", "Branch", modes = listOf(AllowedAdrMode(setOf(AddressMode.ABSOLUTE_ADDRESS), null, OP_SIZE_SBW))),
+        IsaData(
+            "bra", "Branch",
+            modes = listOf(AllowedAdrMode(setOf(AddressMode.ABSOLUTE_ADDRESS), null, OP_SIZE_SBW)),
+            changesControlFlow = true
+        ),
         IsaData(
             "bsr",
             "Branch to Subroutine",
-            modes = listOf(AllowedAdrMode(setOf(AddressMode.ABSOLUTE_ADDRESS), null, OP_SIZE_SBW, modInfo = RWM_MODIFY_STACK))
+            modes = listOf(AllowedAdrMode(setOf(AddressMode.ABSOLUTE_ADDRESS), null, OP_SIZE_SBW, modInfo = RWM_MODIFY_STACK)),
+            changesControlFlow = true
         ),
 
         IsaData(
@@ -701,12 +710,8 @@ object M68kIsa {
             "Test Condition, Decrement, and Branch",
             altMnemonics = listOf("dbra"),
             conditionCodes = conditionCodes,
-            modes = listOf(
-                AllowedAdrMode(
-                    DREG_ONLY, setOf(AddressMode.ABSOLUTE_ADDRESS), OP_SIZE_W, modInfo = RWM_MODIFY_OP1_W,
-                    testedCc = cc("-????")
-                )
-            )
+            modes = listOf(AllowedAdrMode(DREG_ONLY, setOf(AddressMode.ABSOLUTE_ADDRESS), OP_SIZE_W, modInfo = RWM_MODIFY_OP1_W, testedCc = cc("-????"))),
+            changesControlFlow = true
         ),
         IsaData(
             "sCC", "Set Conditionally", conditionCodes = conditionCodes,
@@ -726,7 +731,8 @@ object M68kIsa {
                         AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX
                     ), null, OP_UNSIZED
                 )
-            )
+            ),
+            changesControlFlow = true
         ),
         IsaData(
             "jsr", "Jump to Subroutine",
@@ -741,7 +747,8 @@ object M68kIsa {
                         AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX
                     ), null, OP_UNSIZED, modInfo = RWM_MODIFY_STACK
                 )
-            )
+            ),
+            changesControlFlow = true
         ),
         IsaData("nop", "No Operation", hasOps = false, modes = NO_OPS_UNSIZED),
 
@@ -749,9 +756,14 @@ object M68kIsa {
             "rtr",
             "Return and Restore",
             hasOps = false,
-            modes = listOf(AllowedAdrMode(size = OP_UNSIZED, modInfo = RWM_MODIFY_STACK, affectedCc = cc("*****")))
+            modes = listOf(AllowedAdrMode(size = OP_UNSIZED, modInfo = RWM_MODIFY_STACK, affectedCc = cc("*****"))),
+            changesControlFlow = true
         ),
-        IsaData("rts", "Return from Subroutine", hasOps = false, modes = listOf(AllowedAdrMode(size = OP_UNSIZED, modInfo = RWM_MODIFY_STACK))),
+        IsaData(
+            "rts", "Return from Subroutine", hasOps = false,
+            modes = listOf(AllowedAdrMode(size = OP_UNSIZED, modInfo = RWM_MODIFY_STACK)),
+            changesControlFlow = true
+        ),
 
         IsaData(
             "tst", "Test Operand", modes = listOf(
@@ -823,7 +835,8 @@ object M68kIsa {
         IsaData("reset", "Reset External Devices", isPrivileged = true, hasOps = false, modes = NO_OPS_UNSIZED),
         IsaData(
             "rte", "Return from Exception", isPrivileged = true, hasOps = false,
-            modes = listOf(AllowedAdrMode(size = OP_UNSIZED, modInfo = RWM_MODIFY_STACK))
+            modes = listOf(AllowedAdrMode(size = OP_UNSIZED, modInfo = RWM_MODIFY_STACK)),
+            changesControlFlow = true
         ),
         IsaData(
             "stop", "Stop", isPrivileged = true,
@@ -834,9 +847,13 @@ object M68kIsa {
             "chk", "Check Register Against Bound",
             modes = listOf(AllowedAdrMode(ALL_EXCEPT_AREG, DREG_ONLY, OP_SIZE_W, modInfo = RWM_READ_OP1_W or RWM_READ_OP2_W, affectedCc = cc("-*UUU")))
         ),
-        IsaData("illegal", "Take Illegal Instruction Trap", hasOps = false, modes = NO_OPS_UNSIZED),
-        IsaData("trap", "Trap", modes = listOf(AllowedAdrMode(setOf(AddressMode.IMMEDIATE_DATA), null, OP_UNSIZED))),
-        IsaData("trapv", "Trap on Overflow", hasOps = false, modes = NO_OPS_UNSIZED),
+        IsaData("illegal", "Take Illegal Instruction Trap", hasOps = false, modes = NO_OPS_UNSIZED, changesControlFlow = true),
+        IsaData("trap", "Trap", modes = listOf(AllowedAdrMode(setOf(AddressMode.IMMEDIATE_DATA), null, OP_UNSIZED)), changesControlFlow = true),
+        IsaData(
+            "trapv", "Trap on Overflow", hasOps = false,
+            modes = listOf(AllowedAdrMode(size = OP_UNSIZED, testedCc = cc("---?-"))),
+            changesControlFlow = true
+        ),
 
         IsaData(
             "andi", "AND Immediate to Condition Code Register", id = "andi to CCR", altMnemonics = listOf("and"),

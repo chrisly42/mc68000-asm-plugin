@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(LightCodeInsightExtension::class)
 @TestDataPath("src/test/resources/inspections")
 abstract class AbstractInspectionTest : AbstractM68kTest() {
+
     protected fun assertHighlightings(myFixture: CodeInsightTestFixture, count: Int, snippet: String) {
         assertThat(myFixture.doHighlighting())
             .areExactly(count, Condition({ it.description?.contains(snippet) ?: false }, "containing"))

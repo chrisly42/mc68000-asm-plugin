@@ -13,8 +13,8 @@ import com.intellij.ui.JBColor
 import de.platon42.intellij.plugins.m68k.asm.*
 import de.platon42.intellij.plugins.m68k.asm.Register.Companion.getRegFromName
 import de.platon42.intellij.plugins.m68k.psi.*
-import de.platon42.intellij.plugins.m68k.psi.M68kAddressModeUtil.getOtherReadWriteModifyRegisters
-import de.platon42.intellij.plugins.m68k.psi.M68kAddressModeUtil.getReadWriteModifyRegisters
+import de.platon42.intellij.plugins.m68k.utils.M68kIsaUtil.checkIfInstructionUsesRegister
+import de.platon42.intellij.plugins.m68k.utils.M68kIsaUtil.evaluateRegisterUse
 import de.platon42.intellij.plugins.m68k.utils.M68kIsaUtil.findExactIsaDataAndAllowedAdrModeForInstruction
 import de.platon42.intellij.plugins.m68k.utils.M68kIsaUtil.getOpSizeOrDefault
 import de.platon42.intellij.plugins.m68k.utils.M68kIsaUtil.modifyRwmWithOpsize
@@ -64,10 +64,10 @@ class M68kRegisterFlowDocumentationProvider : AbstractDocumentationProvider() {
                 )
                 0
             } else {
-                (RWM_SET_L and RWM_SIZE_MASK) and totalRwm.inv()
+                RWM_SIZE_MASK and totalRwm.inv()
             }
         } else {
-            (RWM_SET_L and RWM_SIZE_MASK) and ((cursorRwm and RWM_MODIFY_L) ushr 8)
+            RWM_SIZE_MASK and (((cursorRwm and RWM_MODIFY_L) ushr RWM_MODIFY_SHIFT) or ((cursorRwm and RWM_READ_L) ushr RWM_READ_SHIFT))
         }
         val initialStatement: M68kStatement = asmInstruction.parent as M68kStatement
         val localLabelName = PsiTreeUtil.findChildOfType(initialStatement, M68kLocalLabel::class.java)?.name ?: "-->"
@@ -85,7 +85,7 @@ class M68kRegisterFlowDocumentationProvider : AbstractDocumentationProvider() {
             )
         })
         backtrace.reverse()
-        val traceBits = (cursorRwm or (cursorRwm ushr 8)) and RWM_SIZE_MASK
+        val traceBits = (cursorRwm or (cursorRwm ushr RWM_MODIFY_SHIFT) or (cursorRwm ushr RWM_READ_SHIFT)) and RWM_SIZE_MASK
         backtrace.addAll(analyseFlow(register, traceBits, false, initialStatement, linesLimit) {
             PsiTreeUtil.getNextSiblingOfType(
                 it,
@@ -209,30 +209,6 @@ class M68kRegisterFlowDocumentationProvider : AbstractDocumentationProvider() {
             )
         )
         .children(DocumentationMarkup.SECTION_CONTENT_CELL.child(HtmlChunk.nbsp()))
-
-    private fun evaluateRegisterUse(
-        asmInstruction: M68kAsmInstruction,
-        adrMode: AllowedAdrMode,
-        register: Register
-    ): List<Int> {
-        val opSize = getOpSizeOrDefault(asmInstruction.asmOp.opSize, adrMode)
-
-        val rwm1 = modifyRwmWithOpsize((adrMode.modInfo ushr RWM_OP1_SHIFT) and RWM_OP_MASK, opSize)
-        val rwm2 = if (asmInstruction.addressingModeList.size > 1) modifyRwmWithOpsize((adrMode.modInfo ushr RWM_OP2_SHIFT) and RWM_OP_MASK, opSize) else 0
-        return getReadWriteModifyRegisters(asmInstruction.addressingModeList[0], rwm1).asSequence()
-            .plus(getReadWriteModifyRegisters(asmInstruction.addressingModeList.getOrNull(1), rwm2))
-            .plus(getOtherReadWriteModifyRegisters(adrMode.modInfo))
-            .filter { it.first == register }
-            .map { it.second }
-            .toList()
-    }
-
-    private fun checkIfInstructionUsesRegister(instruction: M68kAsmInstruction, register: Register): Boolean {
-        if (instruction.addressingModeList.isEmpty()) {
-            return false
-        }
-        return instruction.addressingModeList.any { aml -> getReadWriteModifyRegisters(aml, 0).any { it.first == register } }
-    }
 
     override fun getCustomDocumentationElement(editor: Editor, file: PsiFile, contextElement: PsiElement?, targetOffset: Int): PsiElement? {
         if (contextElement == null) return null

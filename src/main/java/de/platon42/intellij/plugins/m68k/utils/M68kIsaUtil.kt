@@ -1,6 +1,7 @@
 package de.platon42.intellij.plugins.m68k.utils
 
 import de.platon42.intellij.plugins.m68k.asm.*
+import de.platon42.intellij.plugins.m68k.asm.ConditionCode.Companion.getCcFromMnemonic
 import de.platon42.intellij.plugins.m68k.psi.M68kAddressModeUtil
 import de.platon42.intellij.plugins.m68k.psi.M68kAsmInstruction
 import de.platon42.intellij.plugins.m68k.psi.M68kSpecialRegisterDirectAddressingMode
@@ -33,6 +34,30 @@ object M68kIsaUtil {
             M68kIsa.findMatchingOpMode(isaDataCandidates, op1, op2, opSize, specialReg)
         return matchedIsaData.map { it to M68kIsa.findMatchingAddressMode(it.modes, op1, op2, opSize, specialReg) }
     }
+
+    fun checkIfInstructionUsesRegister(instruction: M68kAsmInstruction, register: Register): Boolean {
+        if (instruction.addressingModeList.isEmpty()) {
+            return false
+        }
+        return instruction.addressingModeList.any { aml -> M68kAddressModeUtil.getReadWriteModifyRegisters(aml, 0).any { it.first == register } }
+    }
+
+    fun evaluateRegisterUse(asmInstruction: M68kAsmInstruction, adrMode: AllowedAdrMode, register: Register): List<Int> {
+        val opSize = getOpSizeOrDefault(asmInstruction.asmOp.opSize, adrMode)
+
+        val rwm1 = modifyRwmWithOpsize((adrMode.modInfo ushr RWM_OP1_SHIFT) and RWM_OP_MASK, opSize)
+        val rwm2 = if (asmInstruction.addressingModeList.size > 1) modifyRwmWithOpsize((adrMode.modInfo ushr RWM_OP2_SHIFT) and RWM_OP_MASK, opSize) else 0
+        return M68kAddressModeUtil.getReadWriteModifyRegisters(asmInstruction.addressingModeList[0], rwm1).asSequence()
+            .plus(M68kAddressModeUtil.getReadWriteModifyRegisters(asmInstruction.addressingModeList.getOrNull(1), rwm2))
+            .plus(M68kAddressModeUtil.getOtherReadWriteModifyRegisters(adrMode.modInfo))
+            .filter { it.first == register }
+            .map { it.second }
+            .distinct()
+            .toList()
+    }
+
+    fun getConcreteTestedCcFromMnemonic(mnemonic: String, isaData: IsaData, adrMode: AllowedAdrMode) =
+        if (isaData.conditionCodes.isNotEmpty()) getCcFromMnemonic(isaData.mnemonic, mnemonic).testedCc else adrMode.testedCc
 
     fun getOpSizeOrDefault(opSize: Int, adrMode: AllowedAdrMode): Int {
         if (opSize == OP_UNSIZED && (adrMode.size != OP_UNSIZED)) {

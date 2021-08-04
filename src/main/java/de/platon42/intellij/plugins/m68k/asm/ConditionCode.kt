@@ -187,12 +187,12 @@ enum class ConditionCode(val cc: String, val testedCc: Int) {
 
         fun getCcFromName(cc: String) = NAME_TO_CC_MAP[cc.lowercase()]!!
 
-        fun getCcFromMnemonic(mnemonic: String) =
+        fun getCcFromMnemonic(originalMnemonic: String, mnemonic: String) =
             // handle special case for dbra
             if (mnemonic.equals("dbra", ignoreCase = true)) {
                 FALSE
             } else {
-                NAME_TO_CC_MAP[mnemonic.substring(mnemonic.length - 2).lowercase()]!!
+                NAME_TO_CC_MAP[mnemonic.removePrefix(originalMnemonic.removeSuffix("CC")).lowercase()]!!
             }
     }
 }

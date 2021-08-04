@@ -43,8 +43,8 @@ object M68kAddressModeUtil {
             is M68kProgramCounterIndirectWithDisplacementOldAddressingMode,
             is M68kAbsoluteAddressAddressingMode -> emptyList()
 
-            is M68kAddressRegisterIndirectPostIncAddressingMode -> listOf(Register.getRegFromName(addressingMode.addressRegister.text) to RWM_MODIFY_L)
-            is M68kAddressRegisterIndirectPreDecAddressingMode -> listOf(Register.getRegFromName(addressingMode.addressRegister.text) to RWM_MODIFY_L)
+            is M68kAddressRegisterIndirectPostIncAddressingMode -> listOf(Register.getRegFromName(addressingMode.addressRegister.text) to (RWM_READ_L or RWM_MODIFY_L))
+            is M68kAddressRegisterIndirectPreDecAddressingMode -> listOf(Register.getRegFromName(addressingMode.addressRegister.text) to (RWM_READ_L or RWM_MODIFY_L))
             is M68kWithAddressRegisterIndirect -> {
                 if (addressingMode is M68kWithIndexRegister) {
                     listOf(

@@ -65,6 +65,8 @@ patchPluginXml {
       <li>Bugfix: Added alternate condition code tests HS (=CC) and LO (=CS).
       <li>Performance: Optimized mnemonic lookup.
       <li>Enhancement: Reworked Instruction Documentation provider, now shows condition codes.
+      <li>Bugfix: In ISA exg is no longer treated as setting a definitive value.
+      <li>New: Added inspection find dead writes to registers!
     </ul>
   <h4>V0.4 (03-Aug-21)</h4>
     <ul>
@@ -78,18 +80,6 @@ patchPluginXml {
       <li>New: Added Documentation Provider for mnemonics (simple version, generated out of ISA information).
       <li>Bugfix: Macro definitions with colons and without space supported (as found in P61a source).
       <li>New: When asking for documentation on registers, a code flow analysis is done. Cool stuff!
-    </ul>
-  <h4>V0.3 (28-Jul-21)</h4>
-    <ul>
-      <li>Enhancement: Macro contents are no longer parsed, added syntax highlighting options for macros.
-      <li>Enhancement: Macro definitions are now word and stub indexed, macro calls reference to definition.
-      <li>New: Macro definition refactoring and find usages support.
-      <li>Enhancement: Structural View also shows macro definitions. 
-      <li>Bugfix: Missing REPT and ENDR assembler directives added.
-      <li>Cosmetics: Changed or added some icons at various places.
-      <li>Performance: Reference search for global labels and symbols now uses stub index.
-      <li>Compatibility: Restored compatibility with IDE versions < 2021.1.
-      <li>Performance: Optimized lexer.
     </ul>
   <p>Full changelog available at <a href="https://github.com/chrisly42/mc68000-asm-plugin#changelog">Github project site</a>.</p>
 """)

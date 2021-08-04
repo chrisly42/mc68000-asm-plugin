@@ -50,6 +50,9 @@
         <localInspection implementationClass="de.platon42.intellij.plugins.m68k.inspections.M68kSyntaxInspection"
                          displayName="Assembly instruction validity" groupName="M68k"
                          enabledByDefault="true" level="ERROR"/>
+        <localInspection implementationClass="de.platon42.intellij.plugins.m68k.inspections.M68kDeadWriteInspection"
+                         displayName="Dead writes to registers" groupName="M68k"
+                         enabledByDefault="true" level="WARNING"/>
     </extensions>
 
     <actions>

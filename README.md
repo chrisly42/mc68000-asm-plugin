@@ -79,6 +79,8 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 - Bugfix: Added alternate condition code tests `HS (=CC)` and `LO (=CS)`.
 - Performance: Optimized mnemonic lookup.
 - Enhancement: Reworked Instruction Documentation provider, now shows condition codes.
+- Bugfix: In ISA `exg` is no longer treated as setting a definitive value.
+- New: Added inspection find dead writes to registers!
 
 ### V0.4 (03-Aug-21)
 
