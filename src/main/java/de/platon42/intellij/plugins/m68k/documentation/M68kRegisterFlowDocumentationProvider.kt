@@ -52,7 +52,7 @@ class M68kRegisterFlowDocumentationProvider : AbstractDocumentationProvider() {
 
         val firstOp = asmInstruction.addressingModeList[0] == addressingMode
         val cursorRwm = modifyRwmWithOpsize((adrMode.modInfo ushr if (firstOp) RWM_OP1_SHIFT else RWM_OP2_SHIFT) and RWM_OP_MASK, opSize)
-        val backtrace: MutableList<HtmlChunk> = ArrayList()
+        val backtrace = ArrayList<HtmlChunk>()
         val missingBits = if (cursorRwm and RWM_SET_L != 0) {
             if (totalRwm and RWM_SET_L == RWM_SET_L) {
                 backtrace.add(
@@ -108,10 +108,10 @@ class M68kRegisterFlowDocumentationProvider : AbstractDocumentationProvider() {
         startingStatement: M68kStatement,
         linesLimit: Int,
         direction: (statement: M68kStatement) -> M68kStatement?
-    ): MutableList<HtmlChunk> {
+    ): List<HtmlChunk> {
         var missingBits = rwmBits
         var currStatement = startingStatement
-        val statementLines: MutableList<HtmlChunk> = ArrayList()
+        val statementLines = ArrayList<HtmlChunk>()
         val rn = register.regname
         var addAbrevDots = false
         var lines = 0

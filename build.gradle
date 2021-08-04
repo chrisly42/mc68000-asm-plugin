@@ -64,6 +64,7 @@ patchPluginXml {
       <li>Bugfix: Minor fix for `andi/eori/ori to ccr` which were not byte sized in ISA.
       <li>Bugfix: Added alternate condition code tests HS (=CC) and LO (=CS).
       <li>Performance: Optimized mnemonic lookup.
+      <li>Enhancement: Reworked Instruction Documentation provider, now shows condition codes.
     </ul>
   <h4>V0.4 (03-Aug-21)</h4>
     <ul>

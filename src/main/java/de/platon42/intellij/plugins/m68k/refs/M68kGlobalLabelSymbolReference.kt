@@ -28,7 +28,7 @@ class M68kGlobalLabelSymbolReference(element: M68kSymbolReference) :
             val refName = ref.element.symbolName
             val project = ref.element.project
 
-            val targets: MutableList<M68kNamedElement> = SmartList()
+            val targets = SmartList<M68kNamedElement>()
             StubIndex.getInstance()
                 .processElements(M68kGlobalLabelStubIndex.KEY, refName, project, GlobalSearchScope.allScope(project), M68kGlobalLabel::class.java)
                 {

@@ -21,7 +21,7 @@ class M68kLocalLabelReference(element: M68kSymbolReference) : PsiPolyVariantRefe
 
         fun findLocalLabels(element: M68kSymbolReference, predicate: (M68kLocalLabel) -> Boolean): List<M68kLocalLabel> {
             val statement = PsiTreeUtil.getStubOrPsiParentOfType(element, M68kStatement::class.java)!!
-            val results: MutableList<M68kLocalLabel> = SmartList()
+            val results = SmartList<M68kLocalLabel>()
             // go backward
             var currentStatement = PsiTreeUtil.getPrevSiblingOfType(statement, M68kStatement::class.java)
             while (currentStatement != null) {

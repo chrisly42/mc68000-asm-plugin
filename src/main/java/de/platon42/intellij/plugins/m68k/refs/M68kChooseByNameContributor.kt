@@ -19,7 +19,7 @@ class M68kChooseByNameContributor : ChooseByNameContributorEx {
 //    }
 
 //    override fun getItemsByName(name: String, pattern: String, project: Project, includeNonProjectItems: Boolean): Array<NavigationItem> {
-//        val result: MutableList<NavigationItem> = ArrayList()
+//        val result = ArrayList<NavigationItem>()
 //        processElementsWithName(name, result::add, FindSymbolParameters.wrap(pattern, project, includeNonProjectItems))
 //        return result.toTypedArray()
 //    }

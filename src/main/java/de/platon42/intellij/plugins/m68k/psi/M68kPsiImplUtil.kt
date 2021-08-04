@@ -117,7 +117,7 @@ object M68kPsiImplUtil {
     // RegisterListAddressingMode
     @JvmStatic
     fun getRegisters(element: M68kRegisterListAddressingMode): Set<Register> {
-        val registers: MutableSet<Register> = HashSet()
+        val registers = HashSet<Register>()
         element.registerList.forEach { registers.add(Register.getRegFromName(it.text)) }
         element.registerRangeList.forEach {
             var startReg = Register.getRegFromName(it.startRegister.text)

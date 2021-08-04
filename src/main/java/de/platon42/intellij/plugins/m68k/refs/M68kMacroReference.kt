@@ -25,7 +25,7 @@ class M68kMacroReference(element: M68kMacroCall) :
             val macroName = ref.element.macroName
             val project = ref.element.project
 
-            val targets: MutableList<M68kMacroDefinition> = SmartList()
+            val targets = SmartList<M68kMacroDefinition>()
             StubIndex.getInstance()
                 .processElements(M68kMacroDefinitionStubIndex.KEY, macroName, project, GlobalSearchScope.allScope(project), M68kMacroDefinition::class.java)
                 {

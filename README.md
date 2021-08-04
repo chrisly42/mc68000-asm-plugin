@@ -78,6 +78,7 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 - Bugfix: Minor fix for `andi/eori/ori to ccr` which were not byte sized in ISA.
 - Bugfix: Added alternate condition code tests `HS (=CC)` and `LO (=CS)`.
 - Performance: Optimized mnemonic lookup.
+- Enhancement: Reworked Instruction Documentation provider, now shows condition codes.
 
 ### V0.4 (03-Aug-21)
 

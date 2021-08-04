@@ -11,7 +11,7 @@ import de.platon42.intellij.plugins.m68k.stubs.M68kSymbolDefinitionStubIndex
 object M68kLookupUtil {
 
     fun findAllGlobalLabels(project: Project): List<M68kGlobalLabel> {
-        val results: MutableList<M68kGlobalLabel> = ArrayList()
+        val results = ArrayList<M68kGlobalLabel>()
         StubIndex.getInstance().processAllKeys(M68kGlobalLabelStubIndex.KEY, project)
         {
             results.addAll(StubIndex.getElements(M68kGlobalLabelStubIndex.KEY, it, project, GlobalSearchScope.allScope(project), M68kGlobalLabel::class.java))
@@ -21,7 +21,7 @@ object M68kLookupUtil {
     }
 
     fun findAllGlobalLabels(file: M68kFile): List<M68kGlobalLabel> {
-        val results: MutableList<M68kGlobalLabel> = ArrayList()
+        val results = ArrayList<M68kGlobalLabel>()
         StubIndex.getInstance().processAllKeys(
             M68kGlobalLabelStubIndex.KEY,
             {
@@ -44,7 +44,7 @@ object M68kLookupUtil {
 
     fun findAllLocalLabels(globalLabel: M68kGlobalLabel): List<M68kLocalLabel> {
         val statement = PsiTreeUtil.getStubOrPsiParentOfType(globalLabel, M68kStatement::class.java)!!
-        val results: MutableList<M68kLocalLabel> = ArrayList()
+        val results = ArrayList<M68kLocalLabel>()
         var currentStatement = PsiTreeUtil.getNextSiblingOfType(statement, M68kStatement::class.java)
         while (currentStatement != null) {
             val child = currentStatement.firstChild
@@ -56,7 +56,7 @@ object M68kLookupUtil {
     }
 
     fun findAllSymbolDefinitions(project: Project): List<M68kSymbolDefinition> {
-        val results: MutableList<M68kSymbolDefinition> = ArrayList()
+        val results = ArrayList<M68kSymbolDefinition>()
         StubIndex.getInstance().processAllKeys(M68kSymbolDefinitionStubIndex.KEY, project)
         {
             results.addAll(
@@ -74,7 +74,7 @@ object M68kLookupUtil {
     }
 
     fun findAllSymbolDefinitions(file: M68kFile): List<M68kSymbolDefinition> {
-        val results: MutableList<M68kSymbolDefinition> = ArrayList()
+        val results = ArrayList<M68kSymbolDefinition>()
         StubIndex.getInstance().processAllKeys(
             M68kSymbolDefinitionStubIndex.KEY,
             {
@@ -97,7 +97,7 @@ object M68kLookupUtil {
 
 
     fun findAllMacroDefinitions(project: Project): List<M68kMacroDefinition> {
-        val results: MutableList<M68kMacroDefinition> = ArrayList()
+        val results = ArrayList<M68kMacroDefinition>()
         StubIndex.getInstance().processAllKeys(M68kMacroDefinitionStubIndex.KEY, project)
         {
             results.addAll(
@@ -115,7 +115,7 @@ object M68kLookupUtil {
     }
 
     fun findAllMacroDefinitions(file: M68kFile): List<M68kMacroDefinition> {
-        val results: MutableList<M68kMacroDefinition> = ArrayList()
+        val results = ArrayList<M68kMacroDefinition>()
         StubIndex.getInstance().processAllKeys(
             M68kMacroDefinitionStubIndex.KEY,
             {
@@ -135,6 +135,4 @@ object M68kLookupUtil {
     }
 
     fun findAllMacroDefinitionNames(project: Project): Collection<String> = StubIndex.getInstance().getAllKeys(M68kMacroDefinitionStubIndex.KEY, project)
-
-
 }

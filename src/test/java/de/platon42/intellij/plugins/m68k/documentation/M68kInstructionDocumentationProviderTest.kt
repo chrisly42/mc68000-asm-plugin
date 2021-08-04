@@ -19,7 +19,47 @@ internal class M68kInstructionDocumentationProviderTest : AbstractDocumentationP
         )
         assertThat(generateDocumentation(myFixture)).isEqualToIgnoringWhitespace(
             """
-<div class="definition"><pre><b>Move Quick</b></pre></div><div class="content"><table class="sections"><tr><td class="section" valign="top">Mnemonic</td><td class="section" valign="top">Op1</td><td class="section" valign="top">Op2</td></tr><tr><td valign="top"><div>moveq.l</div></td><td valign="top"><div>#&lt;xxx&gt;</div></td><td valign="top"><div>Dn</div></td></tr></table></div>
+<div class="definition">
+    <pre><b>Move Quick</b></pre>
+</div>
+<div class="content">
+    <table class="sections">
+        <tr>
+            <td class="section" valign="top">Mnemonic / CCs</td>
+            <td class="section" valign="top">Operand 1</td>
+            <td class="section" valign="top">Operand 2</td>
+        </tr>
+        <tr>
+            <td valign="top">moveq.l
+                <hr/>
+                Condition Codes: <br/>
+                <table class="sections">
+                    <tr>
+                        <td class="section" valign="top">X</td>
+                        <td class="section" valign="top">N</td>
+                        <td class="section" valign="top">Z</td>
+                        <td class="section" valign="top">V</td>
+                        <td class="section" valign="top">C</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">-</td>
+                        <td valign="top">*</td>
+                        <td valign="top">*</td>
+                        <td valign="top">0</td>
+                        <td valign="top">0</td>
+                    </tr>
+                </table>
+                X - Not affected<br/>N - From result (usually if negative)<br/>Z - From result (usually if zero)<br/>V - Always cleared<br/>C - Always cleared
+            </td>
+            <td valign="top">
+                <div>#&lt;xxx&gt;</div>
+            </td>
+            <td valign="top">
+                <div>Dn</div>
+            </td>
+        </tr>
+    </table>
+</div>
 """
         )
     }
@@ -39,15 +79,13 @@ internal class M68kInstructionDocumentationProviderTest : AbstractDocumentationP
 <div class="content">
     <table class="sections">
         <tr>
-            <td class="section" valign="top">Mnemonic</td>
-            <td class="section" valign="top">Op1</td>
-            <td class="section" valign="top">Op2</td>
+            <td class="section" valign="top">Mnemonic / CCs</td>
+            <td class="section" valign="top">Operand</td>
         </tr>
         <tr>
-            <td valign="top">
-                <div>bra.s</div>
-                <div>bra.b</div>
-                <div>bra.w</div>
+            <td valign="top">bra.s<br/>bra.b<br/>bra.w
+                <hr/>
+                Condition Codes: <br/>Not affected.
             </td>
             <td valign="top">
                 <div>(xxx).w|l</div>
