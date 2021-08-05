@@ -132,8 +132,7 @@ class M68kSyntaxInspection : AbstractBaseM68kLocalInspectionTool() {
                     )
                 )
             }
-
-
+            
             val supportedOpSizes = findSupportedOpSizes(matchingModeIsaDataIgnoringSize, op1, op2, specialReg)
             return arrayOf(
                 when (supportedOpSizes) {

@@ -7,10 +7,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.SmartList
 import de.platon42.intellij.plugins.m68k.asm.*
 import de.platon42.intellij.plugins.m68k.asm.M68kIsa.findMatchingInstructions
-import de.platon42.intellij.plugins.m68k.psi.M68kAddressModeUtil
-import de.platon42.intellij.plugins.m68k.psi.M68kAsmInstruction
-import de.platon42.intellij.plugins.m68k.psi.M68kGlobalLabel
-import de.platon42.intellij.plugins.m68k.psi.M68kStatement
+import de.platon42.intellij.plugins.m68k.psi.*
 import de.platon42.intellij.plugins.m68k.utils.M68kIsaUtil
 import de.platon42.intellij.plugins.m68k.utils.M68kIsaUtil.checkIfInstructionUsesRegister
 import de.platon42.intellij.plugins.m68k.utils.M68kIsaUtil.evaluateRegisterUse
@@ -63,7 +60,7 @@ class M68kDeadWriteInspection : AbstractBaseM68kLocalInspectionTool() {
                 currStatement = PsiTreeUtil.getNextSiblingOfType(currStatement, M68kStatement::class.java) ?: break
                 val globalLabel = PsiTreeUtil.findChildOfType(currStatement, M68kGlobalLabel::class.java)
                 if (globalLabel != null) break
-
+                if (PsiTreeUtil.getChildOfType(currStatement, M68kPreprocessorDirective::class.java) != null) break
                 val currAsmInstruction = PsiTreeUtil.getChildOfType(currStatement, M68kAsmInstruction::class.java) ?: continue
                 val (isaData, currAdrMode) = findExactIsaDataAndAllowedAdrModeForInstruction(currAsmInstruction) ?: continue
                 if (isaData.changesControlFlow) break
@@ -95,7 +92,6 @@ class M68kDeadWriteInspection : AbstractBaseM68kLocalInspectionTool() {
                     }
                 }
             }
-
         }
         return hints.toTypedArray()
     }

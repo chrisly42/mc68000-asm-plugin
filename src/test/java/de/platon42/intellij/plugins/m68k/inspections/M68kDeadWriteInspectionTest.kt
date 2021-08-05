@@ -154,4 +154,19 @@ internal class M68kDeadWriteInspectionTest : AbstractInspectionTest() {
         )
         assertHighlightings(myFixture, 1, "Register d3 is overwritten later without being used")
     }
+
+    @Test
+    internal fun conditional_write_does_not_cause_a_warning(@MyFixture myFixture: CodeInsightTestFixture) {
+        myFixture.enableInspections(M68kDeadWriteInspection::class.java)
+        myFixture.configureByText(
+            "deadwrite.asm", """
+    IF  0
+    move.w  #123,d3
+    ELSE
+    clr.w   d3
+    ENDC
+        """
+        )
+        assertThat(myFixture.doHighlighting()).isEmpty()
+    }
 }
