@@ -66,7 +66,8 @@ patchPluginXml {
       <li>Performance: Optimized mnemonic lookup.
       <li>Enhancement: Reworked Instruction Documentation provider, now shows condition codes.
       <li>Bugfix: In ISA exg is no longer treated as setting a definitive value.
-      <li>New: Added inspection find dead writes to registers!
+      <li>New: Added inspection to find dead writes to registers!
+      <li>New: Added inspection to warn about unexpected condition code unaffecting instructions before conditional instructions.
     </ul>
   <h4>V0.4 (03-Aug-21)</h4>
     <ul>

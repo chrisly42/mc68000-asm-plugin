@@ -1,0 +1,18 @@
+<html>
+<body>
+Usually, it is expected that an instruction checking the condition codes or using
+the condition codes is preceded by an instruction that actually affects the condition
+codes. This inspection checks that this is the case.
+
+For example, the 'movea' and 'adda' instructions (which can be (and are!) often written
+as 'move' and 'add') do not affect the condition codes and a conditional branch
+will not work as expected.
+
+However, this does not need to be a programming error. Advanced coders sometimes
+make use of the fact that instructions do not change condition codes and thus
+optimize the order of execution.
+
+<!-- tooltip end -->
+Analysis is terminated at the next global label, macrocall or preprocessor statement.
+</body>
+</html>

@@ -37,6 +37,70 @@ good enough" to get started, and I can return to demo coding with its current st
 - Structure view
 - Documentation provider for symbol definitions and mnemonics (listing available addressing modes etc.).
 
+### Inspections
+
+#### M68kSyntaxInspection - Assembly instruction validity
+
+Checks the validity of the current instruction. If an instruction is not recognized, you may get one of the following errors:
+
+- Instruction _mnemonic_ not supported on selected cpu (you won't get this currently as only MC68000 is supported)
+- No operands expected for _mnemonic_
+- Second operand _op_ unexpected for _mnemonic_
+- Unsupported addressing mode for _mnemonic_
+- Unsupported addressing mode _op_ for first operand of _mnemonic_
+- Unsupported addressing mode _op_ for second operand of _mnemonic_
+- Unsupported addressing modes for operands in this order for _mnemonic_ (try swapping)
+- Instruction _mnemonic_ is unsized (you tried to specify `.b`, `.w` or `.l`)
+- Operation size _(.b,.w,.l)_ unsupported for _mnemonic_
+- Operation size _(.b,.w,.l)_ unsupported (should be _(.b,.w,.l)_)
+
+#### M68kDeadWriteInspection - Dead writes to registers
+
+This inspection looks at register writes and tries to find instructions that renders a write moot because it was overwritten by another instruction before
+anything useful was done with it.
+
+Analysis is aborted at global labels, flow control instructions, directives
+(e.g. conditional assembly) and macros with the register names as parameter.
+
+The inspection tries to take condition code changing into account and puts out a weak warning if the statement merely changes condition codes before the
+contents of the register are overwritten. In this case, it is sometimes better to replace `move` by `tst`.
+
+#### M68kUnexpectedConditionalInstructionInspection - Unaffected condition codes before conditional instruction
+
+Especially for novice coders, it is not clear that some instructions do not affect the condition codes for a subsequent condition branch or `scc` instruction.
+`movea`, `adda` and `suba` come to my mind.
+
+The inspection will report such suspicious instruction sequences.
+
+However, this does not need to be a programming error. Advanced coders sometimes make use of the fact that instructions do not change condition codes and thus
+optimize the order of execution.
+
+### Documentation provider
+
+#### M68kSymbolDefinitionDocumentationProvider
+
+Provides the assigned value of a `=`, `set` or `equ` symbol definition when hovering over a symbol.
+
+#### M68kRegisterFlowDocumentationProvider
+
+When hovering over or placing the cursor at a data or address register, the documentation will scan through the instructions backwards and forwards and will
+show all read, changes of the register contents. It does this until an instruction is found that defines (sets) the contents of the register
+(according to the size of the instruction where the cursor was placed).
+
+The analysis ignores all code flow instructions and might be inaccurate for branches, macro use, etc. It also stops at global labels.
+
+The documentation will search up to 100 instructions in each direction, but only four when hovering over the register
+(so if you need the whole analysis, use the documentation window).
+
+#### M68kInstructionDocumentationProvider
+
+When hovering over a mnemonic, it will show a short description of the assembly instruction.
+
+For the documentation window, affected condition codes, allowed operation sizes and addressing modes are listed for the selected instruction
+(so only stuff from `cmpa` is listed when you're looking at a `cmp.w a0,a1` instruction).
+
+If the current statement has no valid syntax, the instruction details of all matching mnemonics will be shown instead.
+
 ## Known issues
 
 - `Find Usages` always shows _"Unclassified"_ though it shouldn't (?)
@@ -80,7 +144,8 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 - Performance: Optimized mnemonic lookup.
 - Enhancement: Reworked Instruction Documentation provider, now shows condition codes.
 - Bugfix: In ISA `exg` is no longer treated as setting a definitive value.
-- New: Added inspection find dead writes to registers!
+- New: Added inspection to find dead writes to registers!
+- New: Added inspection to warn about unexpected condition code unaffecting instructions before conditional instructions.
 
 ### V0.4 (03-Aug-21)
 

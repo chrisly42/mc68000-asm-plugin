@@ -19,8 +19,8 @@ class M68kDeadWriteInspection : AbstractBaseM68kLocalInspectionTool() {
     companion object {
         private const val DISPLAY_NAME = "Dead writes to registers"
 
-        private const val DEAD_WRITE_MSG = "Register %s is overwritten later without being used"
-        private const val POSSIBLY_DEAD_WRITE_MSG = "Register %s is overwritten later (only CC evaluated?)"
+        private const val DEAD_WRITE_MSG_TEMPLATE = "Register %s is overwritten later without being used"
+        private const val POSSIBLY_DEAD_WRITE_MSG_TEMPLATE = "Register %s is overwritten later (only CC evaluated?)"
     }
 
     override fun getDisplayName() = DISPLAY_NAME
@@ -69,7 +69,7 @@ class M68kDeadWriteInspection : AbstractBaseM68kLocalInspectionTool() {
                 val currAsmInstruction = PsiTreeUtil.getChildOfType(currStatement, M68kAsmInstruction::class.java) ?: continue
                 val (isaData, currAdrMode) = findExactIsaDataAndAllowedAdrModeForInstruction(currAsmInstruction) ?: continue
                 if (isaData.changesControlFlow) break
-                val testedCc = getConcreteTestedCcFromMnemonic(currAsmInstruction.asmOp.mnemonic, isaData, adrMode)
+                val testedCc = getConcreteTestedCcFromMnemonic(currAsmInstruction.asmOp.mnemonic, isaData, currAdrMode)
                 if (((testedCc and ccModification) > 0) && !ccOverwritten) ccTested = true
                 if (currAdrMode.affectedCc != 0) ccOverwritten = true
                 if (checkIfInstructionUsesRegister(currAsmInstruction, register)) {
@@ -89,7 +89,7 @@ class M68kDeadWriteInspection : AbstractBaseM68kLocalInspectionTool() {
                             manager.createProblemDescriptor(
                                 asmInstruction,
                                 asmInstruction,
-                                (if (ccTested) POSSIBLY_DEAD_WRITE_MSG else DEAD_WRITE_MSG).format(register.regname),
+                                (if (ccTested) POSSIBLY_DEAD_WRITE_MSG_TEMPLATE else DEAD_WRITE_MSG_TEMPLATE).format(register.regname),
                                 if (ccTested) ProblemHighlightType.WEAK_WARNING else ProblemHighlightType.WARNING,
                                 isOnTheFly
                             )
