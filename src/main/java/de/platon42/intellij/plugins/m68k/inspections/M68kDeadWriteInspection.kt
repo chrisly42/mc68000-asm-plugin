@@ -48,7 +48,7 @@ class M68kDeadWriteInspection : AbstractBaseM68kLocalInspectionTool() {
         val hints = SmartList<ProblemDescriptor>()
         for (regPair in regsWritten) {
             val register = regPair.first
-            val rwm = regPair.second
+            var rwm = regPair.second
             var currStatement = asmInstruction.parent as M68kStatement
 
             var ccModification = adrMode.affectedCc
@@ -61,6 +61,11 @@ class M68kDeadWriteInspection : AbstractBaseM68kLocalInspectionTool() {
                 val globalLabel = PsiTreeUtil.findChildOfType(currStatement, M68kGlobalLabel::class.java)
                 if (globalLabel != null) break
                 if (PsiTreeUtil.getChildOfType(currStatement, M68kPreprocessorDirective::class.java) != null) break
+
+                // as we cannot evaluate macros right now, abort at macros containing the register name (only lower case for simplicity)
+                val macroCall = PsiTreeUtil.getChildOfType(currStatement, M68kMacroCall::class.java)
+                if (macroCall?.exprList?.any { it.textMatches(register.regname) } == true) break
+
                 val currAsmInstruction = PsiTreeUtil.getChildOfType(currStatement, M68kAsmInstruction::class.java) ?: continue
                 val (isaData, currAdrMode) = findExactIsaDataAndAllowedAdrModeForInstruction(currAsmInstruction) ?: continue
                 if (isaData.changesControlFlow) break
@@ -74,6 +79,7 @@ class M68kDeadWriteInspection : AbstractBaseM68kLocalInspectionTool() {
                         hasModification = true
                         ccOverwritten = false
                         ccModification = ccModification or currAdrMode.affectedCc
+                        rwm = (totalRwms ushr RWM_MODIFY_SHIFT) and RWM_SET_L
                     }
                     if (totalRwms and RWM_SET_L >= rwm) {
                         if (ccTested && hasModification) {

@@ -7,6 +7,9 @@ Issues a weak warning if the instruction affects only condition codes that are l
 Analysis is terminated at the next global label or instruction that reads the register or changes control flow
 (or preprocessor statements, like conditional IF statements).
 <!-- tooltip end -->
-<p>Note: As there is no evaluation of macros right now, the inspection might report some false positives.</p>
+<p>Note: As there is no evaluation of macros right now, the inspection might report some false positives.
+
+    As an attempt to reduce these false positives, macros containing the register name will abort the analysis.
+</p>
 </body>
 </html>

@@ -169,4 +169,43 @@ internal class M68kDeadWriteInspectionTest : AbstractInspectionTest() {
         )
         assertThat(myFixture.doHighlighting()).isEmpty()
     }
+
+    @Test
+    internal fun modification_extending_width_does_not_cause_a_warning_on_smaller_write_later(@MyFixture myFixture: CodeInsightTestFixture) {
+        myFixture.enableInspections(M68kDeadWriteInspection::class.java)
+        myFixture.configureByText(
+            "deadwrite.asm", """
+	move.b  (a0)+,d0
+	lsl     #8,d0
+	move.b  (a0)+,d0
+        """
+        )
+        assertThat(myFixture.doHighlighting()).isEmpty()
+    }
+
+    @Test
+    internal fun macro_call_with_register_name_will_not_cause_a_warning(@MyFixture myFixture: CodeInsightTestFixture) {
+        myFixture.enableInspections(M68kDeadWriteInspection::class.java)
+        myFixture.configureByText(
+            "deadwrite.asm", """
+    moveq.l #-1,d0
+    COPRMOVE d0,bltafwm
+    move.l  pd_CurrPlanesPtr(a4),d0
+        """
+        )
+        assertThat(myFixture.doHighlighting()).isEmpty()
+    }
+
+    @Test
+    internal fun macro_call_with_different_register_name_will_cause_a_warning(@MyFixture myFixture: CodeInsightTestFixture) {
+        myFixture.enableInspections(M68kDeadWriteInspection::class.java)
+        myFixture.configureByText(
+            "deadwrite.asm", """
+    moveq.l #-1,d0
+    COPRMOVE d1,bltafwm
+    move.l  pd_CurrPlanesPtr(a4),d0
+        """
+        )
+        assertHighlightings(myFixture, 1, "Register d0 is overwritten later without being used")
+    }
 }
