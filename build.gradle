@@ -57,7 +57,7 @@ runPluginVerifier {
 
 patchPluginXml {
     setChangeNotes("""
-  <h4>V0.5 (unreleased)</h4>
+  <h4>V0.5 (06-Aug-21)</h4>
     <ul>
       <li>Bugfix: movem ISA was wrong regarding movem.w <ea>,<registerlist> (sign extends registers).
       <li>Cosmetics: Changed Register Flow Documentation wording from 'reads' to 'uses' and from 'modifies' to 'changes'.

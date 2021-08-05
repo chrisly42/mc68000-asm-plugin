@@ -114,9 +114,9 @@ If the current statement has no valid syntax, the instruction details of all mat
 - Missing but planned features:
     - Macro evaluation on invocation
     - Folding
-    - Semantic inspections
+    - More semantic inspections
     - Quick fixes
-    - Formatter + Code Style Settings
+    - Maybe formatter + Code Style Settings
     - Register use analysis (but this only makes sense after macro evaluation)
     - Cycle counting
 
@@ -133,9 +133,18 @@ It is probably the only plugin (besides [Cajon](https://github.com/chrisly42/caj
 far (or at least the only one I'm aware of ;) ). The IntelliJ framework actually uses the JUnit 3 TestCase for plugin testing, and it took me quite a while to
 make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.intellij.jupiter```) for your projects (with attribution).
 
+## Private TODO list
+
+- code completion suggestion for unresolved local labels, global labels and symbols
+- support `include` directive
+- support `opt` directive
+- suppression support via comments
+- inspection: Unresolved local label
+- inspection: Unresolved macro
+
 ## Changelog
 
-### V0.5 (unreleased)
+### V0.5 (06-Aug-21)
 
 - Bugfix: `movem` ISA was wrong regarding the `movem.w <ea>,<registerlist>` (sign extends registers).
 - Cosmetics: Changed Register Flow Documentation wording from _reads_ to _uses_ and from _modifies_ to _changes_.
