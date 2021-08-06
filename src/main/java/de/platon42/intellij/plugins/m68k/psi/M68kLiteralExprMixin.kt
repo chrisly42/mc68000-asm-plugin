@@ -2,21 +2,13 @@ package de.platon42.intellij.plugins.m68k.psi
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
+import de.platon42.intellij.plugins.m68k.lexer.LexerUtil
 
 abstract class M68kLiteralExprMixin(node: ASTNode) : ASTWrapperPsiElement(node), M68kLiteralExpr {
     override fun getValue(): Any? {
         val childNode = firstChild.node
         when (childNode.elementType) {
-            M68kTypes.STRINGLIT -> {
-                return text.run {
-                    when {
-                        startsWith('"') -> removeSurrounding("\"")
-                        startsWith('\'') -> removeSurrounding("'")
-                        startsWith('<') -> removeSurrounding(">")
-                        else -> this
-                    }
-                }
-            }
+            M68kTypes.STRINGLIT -> LexerUtil.unquoteString(childNode.text)
             M68kTypes.DECIMAL -> {
                 try {
                     return childNode.text.toInt()
@@ -46,6 +38,6 @@ abstract class M68kLiteralExprMixin(node: ASTNode) : ASTWrapperPsiElement(node),
                 }
             }
         }
-        return text
+        return childNode.text
     }
 }

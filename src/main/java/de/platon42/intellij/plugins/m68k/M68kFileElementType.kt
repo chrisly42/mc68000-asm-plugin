@@ -10,7 +10,7 @@ class M68kFileElementType private constructor() : ILightStubFileElementType<PsiF
         @JvmField
         val INSTANCE = M68kFileElementType()
 
-        const val STUB_VERSION = 5
+        const val STUB_VERSION = 6
         const val STUB_EXTERNAL_ID_PREFIX = "MC68000."
         const val EXTERNAL_ID = STUB_EXTERNAL_ID_PREFIX + "FILE"
     }

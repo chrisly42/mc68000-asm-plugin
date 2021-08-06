@@ -46,6 +46,7 @@
         <psi.referenceContributor implementation="de.platon42.intellij.plugins.m68k.refs.M68kReferenceContributor"/>
         <gotoSymbolContributor implementation="de.platon42.intellij.plugins.m68k.refs.M68kChooseByNameContributor"/>
         <renameInputValidator implementation="de.platon42.intellij.plugins.m68k.psi.M68kRenameInputValidator"/>
+        <include.provider implementation="de.platon42.intellij.plugins.m68k.scanner.M68kIncludeFileProvider"/>
 
         <localInspection implementationClass="de.platon42.intellij.plugins.m68k.inspections.M68kSyntaxInspection"
                          displayName="Assembly instruction validity" groupName="M68k"

@@ -817,14 +817,14 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // Label? (DATA_DIRECTIVE | OTHER_DIRECTIVE)
+    // Label? PreprocessorKeyword
     //         PreprocessorOperands?
     public static boolean PreprocessorDirective(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "PreprocessorDirective")) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NONE_, PREPROCESSOR_DIRECTIVE, "<preprocessor directive>");
         r = PreprocessorDirective_0(b, l + 1);
-        r = r && PreprocessorDirective_1(b, l + 1);
+        r = r && PreprocessorKeyword(b, l + 1);
         r = r && PreprocessorDirective_2(b, l + 1);
         exit_section_(b, l, m, r, false, null);
         return r;
@@ -837,20 +837,24 @@ public class M68kParser implements PsiParser, LightPsiParser {
         return true;
     }
 
-    // DATA_DIRECTIVE | OTHER_DIRECTIVE
-    private static boolean PreprocessorDirective_1(PsiBuilder b, int l) {
-        if (!recursion_guard_(b, l, "PreprocessorDirective_1")) return false;
-        boolean r;
-        r = consumeToken(b, DATA_DIRECTIVE);
-        if (!r) r = consumeToken(b, OTHER_DIRECTIVE);
-        return r;
-    }
-
     // PreprocessorOperands?
     private static boolean PreprocessorDirective_2(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "PreprocessorDirective_2")) return false;
         PreprocessorOperands(b, l + 1);
         return true;
+    }
+
+    /* ********************************************************** */
+    // DATA_DIRECTIVE | OTHER_DIRECTIVE
+    public static boolean PreprocessorKeyword(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "PreprocessorKeyword")) return false;
+        if (!nextTokenIs(b, "<preprocessor keyword>", DATA_DIRECTIVE, OTHER_DIRECTIVE)) return false;
+        boolean r;
+        Marker m = enter_section_(b, l, _NONE_, PREPROCESSOR_KEYWORD, "<preprocessor keyword>");
+        r = consumeToken(b, DATA_DIRECTIVE);
+        if (!r) r = consumeToken(b, OTHER_DIRECTIVE);
+        exit_section_(b, l, m, r, false, null);
+        return r;
     }
 
     /* ********************************************************** */

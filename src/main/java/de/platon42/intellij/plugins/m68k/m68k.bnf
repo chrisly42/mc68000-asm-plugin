@@ -173,7 +173,9 @@ AsmOp ::= MNEMONIC OperandSize? {
     methods = [getMnemonic getOpSize]
 }
 
-PreprocessorDirective ::= Label? (DATA_DIRECTIVE | OTHER_DIRECTIVE)
+PreprocessorKeyword ::= (DATA_DIRECTIVE | OTHER_DIRECTIVE)
+
+PreprocessorDirective ::= Label? PreprocessorKeyword
         PreprocessorOperands?
 
 MacroPlainLine ::= MACRO_LINE

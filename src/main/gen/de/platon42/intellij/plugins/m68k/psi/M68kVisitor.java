@@ -131,6 +131,10 @@ public class M68kVisitor extends PsiElementVisitor {
         visitPsiElement(o);
     }
 
+    public void visitPreprocessorKeyword(@NotNull M68kPreprocessorKeyword o) {
+        visitPsiElement(o);
+    }
+
     public void visitProgramCounterIndirectWithDisplacementNewAddressingMode(@NotNull M68kProgramCounterIndirectWithDisplacementNewAddressingMode o) {
         visitAddressingMode(o);
         // visitWithDisplacement(o);

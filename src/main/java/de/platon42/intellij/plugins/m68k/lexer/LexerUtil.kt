@@ -72,4 +72,13 @@ object LexerUtil {
         lexer.yybegin(_M68kLexer.MACROLINE)
         return TokenType.WHITE_SPACE
     }
+
+    fun unquoteString(string: String) = string.run {
+        when {
+            startsWith('"') -> removeSurrounding("\"")
+            startsWith('\'') -> removeSurrounding("'")
+            startsWith('<') -> removeSurrounding("<", ">")
+            else -> this
+        }
+    }
 }

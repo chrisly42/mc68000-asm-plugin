@@ -41,6 +41,12 @@ public class M68kPreprocessorDirectiveImpl extends ASTWrapperPsiElement implemen
 
     @Override
     @NotNull
+    public M68kPreprocessorKeyword getPreprocessorKeyword() {
+        return notNullChild(PsiTreeUtil.getChildOfType(this, M68kPreprocessorKeyword.class));
+    }
+
+    @Override
+    @NotNull
     public List<M68kExpr> getExprList() {
         return PsiTreeUtil.getChildrenOfTypeAsList(this, M68kExpr.class);
     }

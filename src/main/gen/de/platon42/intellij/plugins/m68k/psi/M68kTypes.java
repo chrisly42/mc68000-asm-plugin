@@ -58,6 +58,7 @@ public interface M68kTypes {
     IElementType OPERAND_SIZE = new M68kElementType("OPERAND_SIZE");
     IElementType PAREN_EXPR = new M68kElementType("PAREN_EXPR");
     IElementType PREPROCESSOR_DIRECTIVE = new M68kElementType("PREPROCESSOR_DIRECTIVE");
+    IElementType PREPROCESSOR_KEYWORD = new M68kElementType("PREPROCESSOR_KEYWORD");
     IElementType PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT_NEW_ADDRESSING_MODE = new M68kElementType("PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT_NEW_ADDRESSING_MODE");
     IElementType PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT_OLD_ADDRESSING_MODE = new M68kElementType("PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT_OLD_ADDRESSING_MODE");
     IElementType PROGRAM_COUNTER_INDIRECT_WITH_INDEX_NEW_ADDRESSING_MODE = new M68kElementType("PROGRAM_COUNTER_INDIRECT_WITH_INDEX_NEW_ADDRESSING_MODE");
@@ -233,6 +234,8 @@ public interface M68kTypes {
                 return new M68kParenExprImpl(node);
             } else if (type == PREPROCESSOR_DIRECTIVE) {
                 return new M68kPreprocessorDirectiveImpl(node);
+            } else if (type == PREPROCESSOR_KEYWORD) {
+                return new M68kPreprocessorKeywordImpl(node);
             } else if (type == PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT_NEW_ADDRESSING_MODE) {
                 return new M68kProgramCounterIndirectWithDisplacementNewAddressingModeImpl(node);
             } else if (type == PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT_OLD_ADDRESSING_MODE) {

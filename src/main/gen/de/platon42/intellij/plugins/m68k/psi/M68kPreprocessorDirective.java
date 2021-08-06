@@ -15,6 +15,9 @@ public interface M68kPreprocessorDirective extends M68kPsiElement {
     M68kLocalLabel getLocalLabel();
 
     @NotNull
+    M68kPreprocessorKeyword getPreprocessorKeyword();
+
+    @NotNull
     List<M68kExpr> getExprList();
 
 }
