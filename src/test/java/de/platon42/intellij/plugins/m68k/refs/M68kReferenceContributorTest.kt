@@ -2,6 +2,8 @@ package de.platon42.intellij.plugins.m68k.refs
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.psi.PsiElement
+import com.intellij.psi.search.FilenameIndex
+import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import de.platon42.intellij.jupiter.LightCodeInsightExtension
 import de.platon42.intellij.jupiter.MyFixture
@@ -85,5 +87,45 @@ internal class M68kReferenceContributorTest : AbstractM68kTest() {
         assertThat(reference.variants).isEmpty()
 
         myFixture.checkResultByFile("macros_after_rename.asm")
+    }
+
+    @Test
+    internal fun reference_to_file_can_be_renamed(@MyFixture myFixture: CodeInsightTestFixture) {
+        myFixture.addFileToProject("otherfile.asm", "; oh no!")
+        val file = myFixture.configureByText(
+            "fileref.asm", """
+ include "otherfil<caret>e.asm"
+        """
+        )
+        val reference = file.findReferenceAt(myFixture.editor.caretModel.offset)
+        assertThat(reference).isInstanceOf(M68kIncludeFileReference::class.java)
+        val otherfile = reference!!.resolve() as M68kFile
+        assertThat(otherfile.text).isEqualTo("; oh no!")
+
+        myFixture.renameElementAtCaret("foobar.asm")
+        val files = FilenameIndex.getFilesByName(myFixture.project, "foobar.asm", GlobalSearchScope.allScope(myFixture.project))
+        assertThat(files).hasSize(1)
+
+        assertThat(file.text).isEqualToIgnoringWhitespace("include \"foobar.asm\"")
+    }
+
+    @Test
+    internal fun reference_to_file_in_a_subdirectory_can_be_renamed(@MyFixture myFixture: CodeInsightTestFixture) {
+        myFixture.addFileToProject("foobar/otherfile.asm", "; oh no!")
+        val file = myFixture.configureByText(
+            "fileref.asm", """
+ include "foobar/otherfil<caret>e.asm"
+        """
+        )
+        val reference = file.findReferenceAt(myFixture.editor.caretModel.offset)
+        assertThat(reference).isInstanceOf(M68kIncludeFileReference::class.java)
+        val otherfile = reference!!.resolve() as M68kFile
+        assertThat(otherfile.text).isEqualTo("; oh no!")
+
+        myFixture.renameElementAtCaret("foobar.asm")
+        val files = FilenameIndex.getFilesByName(myFixture.project, "foobar.asm", GlobalSearchScope.allScope(myFixture.project))
+        assertThat(files).hasSize(1)
+
+        assertThat(file.text).isEqualToIgnoringWhitespace("include \"foobar/foobar.asm\"")
     }
 }

@@ -45,7 +45,7 @@ class M68kIncludeFileProvider : FileIncludeProvider() {
             }
             .mapNotNull {
                 val pathNode = LightTreeUtil.firstChildOfType(tree, it.second, M68kTypes.LITERAL_EXPR) ?: return@mapNotNull null
-                val path = LexerUtil.unquoteString(LightTreeUtil.toFilteredString(tree, pathNode, null)).replace("\\", "/")
+                val path = LexerUtil.unquoteString(LightTreeUtil.toFilteredString(tree, pathNode, null)).replace('\\', '/')
                 if (it.first.equals("include", true)) {
                     FileIncludeInfo(path)
                 } else {

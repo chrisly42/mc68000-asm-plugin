@@ -148,6 +148,7 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 
 - Enhancement: `opt` and several other directives (`printt`, `fail` etc.) no longer causes a syntax error when unquoted.
 - Enhancement: `include`, `incdir` and `incbin` and `output` with `<pathname>` quotes no longer cause syntax error.
+- New: Files in `include` directives can be referenced and renamed/refactored.
 
 ### V0.5 (06-Aug-21)
 

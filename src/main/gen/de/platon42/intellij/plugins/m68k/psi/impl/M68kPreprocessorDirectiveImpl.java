@@ -1,7 +1,6 @@
 // This is a generated file. Not intended for manual editing.
 package de.platon42.intellij.plugins.m68k.psi.impl;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -11,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class M68kPreprocessorDirectiveImpl extends ASTWrapperPsiElement implements M68kPreprocessorDirective {
+public class M68kPreprocessorDirectiveImpl extends M68kPreprocessorDirectiveMixin implements M68kPreprocessorDirective {
 
     public M68kPreprocessorDirectiveImpl(@NotNull ASTNode node) {
         super(node);

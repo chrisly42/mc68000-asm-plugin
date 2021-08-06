@@ -37,6 +37,11 @@ object M68kElementFactory {
         return PsiTreeUtil.findChildOfType(file, M68kMacroCall::class.java)!!
     }
 
+    fun createIncludeStatement(project: Project, path: String): M68kPreprocessorDirective {
+        val file = createFile(project, " include \"$path\"\n")
+        return PsiTreeUtil.findChildOfType(file, M68kPreprocessorDirective::class.java)!!
+    }
+
     fun createFile(project: Project, content: String): M68kFile {
         return PsiFileFactory.getInstance(project).createFileFromText("dummy.m68k", INSTANCE, content) as M68kFile
     }

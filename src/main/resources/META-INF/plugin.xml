@@ -33,6 +33,8 @@
                                  implementationClass="de.platon42.intellij.plugins.m68k.refs.M68kSymbolReferenceElementManipulator"/>
         <lang.elementManipulator forClass="de.platon42.intellij.plugins.m68k.psi.M68kMacroCall"
                                  implementationClass="de.platon42.intellij.plugins.m68k.refs.M68kMacroCallElementManipulator"/>
+        <lang.elementManipulator forClass="de.platon42.intellij.plugins.m68k.psi.M68kPreprocessorDirective"
+                                 implementationClass="de.platon42.intellij.plugins.m68k.refs.M68kPreprocessorDirectiveElementManipulator"/>
         <lang.documentationProvider language="MC68000"
                                     implementationClass="de.platon42.intellij.plugins.m68k.documentation.M68kSymbolDefinitionDocumentationProvider"/>
         <lang.documentationProvider language="MC68000"

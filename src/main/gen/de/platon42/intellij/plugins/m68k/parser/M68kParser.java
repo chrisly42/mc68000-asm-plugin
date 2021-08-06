@@ -817,8 +817,7 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // Label? PreprocessorKeyword
-    //         PreprocessorOperands?
+    // Label? PreprocessorKeyword PreprocessorOperands?
     public static boolean PreprocessorDirective(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "PreprocessorDirective")) return false;
         boolean r;

@@ -175,8 +175,9 @@ AsmOp ::= MNEMONIC OperandSize? {
 
 PreprocessorKeyword ::= (DATA_DIRECTIVE | OTHER_DIRECTIVE)
 
-PreprocessorDirective ::= Label? PreprocessorKeyword
-        PreprocessorOperands?
+PreprocessorDirective ::= Label? PreprocessorKeyword PreprocessorOperands? {
+    mixin = "de.platon42.intellij.plugins.m68k.psi.M68kPreprocessorDirectiveMixin"
+}
 
 MacroPlainLine ::= MACRO_LINE
 MacroNameDefinition ::= MACRO_NAME

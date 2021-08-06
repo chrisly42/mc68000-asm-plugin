@@ -1,5 +1,6 @@
 package de.platon42.intellij.plugins.m68k.scanner
 
+import com.intellij.lang.HelpID
 import com.intellij.lang.cacheBuilder.DefaultWordsScanner
 import com.intellij.lang.cacheBuilder.WordsScanner
 import com.intellij.lang.findUsages.FindUsagesProvider
@@ -22,14 +23,19 @@ class M68kFindUsagesProvider : FindUsagesProvider {
             TokenSet.EMPTY
         )
 
-    override fun canFindUsagesFor(psiElement: PsiElement): Boolean = psiElement is M68kNamedElement
+    override fun canFindUsagesFor(psiElement: PsiElement): Boolean =
+        when (psiElement) {
+            is M68kNamedElement, is M68kSymbolReference, is M68kMacroCall, is M68kFile, is M68kRegister -> true
+            else -> false
+        }
 
-    override fun getHelpId(psiElement: PsiElement): @NonNls String? = null
+    override fun getHelpId(psiElement: PsiElement): @NonNls String = HelpID.FIND_OTHER_USAGES
 
     override fun getType(element: PsiElement): @Nls String {
         return when (element) {
             is M68kGlobalLabel -> "global label"
             is M68kLocalLabel -> "local label"
+            is M68kPreprocessorDirective -> "preprocessor directive"
             is M68kSymbolDefinition -> "symbol definition"
             is M68kSymbolReference -> "symbol reference"
             is M68kMacroDefinition -> "macro definition"
@@ -44,6 +50,7 @@ class M68kFindUsagesProvider : FindUsagesProvider {
         return when (element) {
             is M68kGlobalLabel -> element.name!!
             is M68kLocalLabel -> element.name!!
+            is M68kPreprocessorDirective -> element.text
             is M68kSymbolDefinition -> element.parent.text
             is M68kSymbolReference -> element.symbolName
             is M68kMacroDefinition -> element.macroNameDefinition.text
