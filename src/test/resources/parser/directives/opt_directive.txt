@@ -1,0 +1,11 @@
+Assembly File: a.asm
+  PsiWhiteSpace(' ')
+  M68kStatementImpl(STATEMENT)
+    M68kPreprocessorDirectiveImpl(PREPROCESSOR_DIRECTIVE)
+      PsiElement(M68kTokenType.OTHER_DIRECTIVE)('opt')
+      PsiWhiteSpace(' ')
+      M68kLiteralExprImpl(LITERAL_EXPR)
+        PsiElement(M68kTokenType.STRINGLIT)('o+')
+      PsiElement(M68kTokenType.SEPARATOR)(',')
+      M68kLiteralExprImpl(LITERAL_EXPR)
+        PsiElement(M68kTokenType.STRINGLIT)('w-')

@@ -867,6 +867,10 @@ public class _M68kLexer implements FlexLexer {
                             startExpr(EXPR, EXPR_OP);
                             return DATA_DIRECTIVE;
                         }
+                        if (isPlainDirective(yytext())) {
+                            yybegin(MACROCALL);
+                            return OTHER_DIRECTIVE;
+                        }
                         if (isOtherDirective(yytext())) {
                             startExpr(EXPR, EXPR_OP);
                             return OTHER_DIRECTIVE;

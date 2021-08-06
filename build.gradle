@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'de.platon42'
-version = '0.5'
+version = '0.6'
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
@@ -57,9 +57,14 @@ runPluginVerifier {
 
 patchPluginXml {
     setChangeNotes("""
+  <h4>V0.6 (unreleased)</h4>
+    <ul>
+      <li>Enhancement: 'opt' and several other directives ('printt', 'fail' etc.) no longer causes a syntax error when unquoted.
+      <li<Enhancement: 'include', 'incdir' and 'incbin' and 'output' with '&lt;pathname&gt;' quotes no longer cause syntax error.
+    </ul>
   <h4>V0.5 (06-Aug-21)</h4>
     <ul>
-      <li>Bugfix: movem ISA was wrong regarding movem.w <ea>,<registerlist> (sign extends registers).
+      <li>Bugfix: movem ISA was wrong regarding movem.w &lt;ea&gt;,&lt;registerlist&gt; (sign extends registers).
       <li>Cosmetics: Changed Register Flow Documentation wording from 'reads' to 'uses' and from 'modifies' to 'changes'.
       <li>Bugfix: Minor fix for `andi/eori/ori to ccr` which were not byte sized in ISA.
       <li>Bugfix: Added alternate condition code tests HS (=CC) and LO (=CS).
@@ -71,7 +76,7 @@ patchPluginXml {
     </ul>
   <h4>V0.4 (03-Aug-21)</h4>
     <ul>
-      <li>Notice: Due to major new API use, this plugin no longer works on IDEs >=2019.3.1, but rather requires >=2020.3.
+      <li>Notice: Due to major new API use, this plugin no longer works on IDEs &gt;=2019.3.1, but rather requires &gt;=2020.3.
       <li>Enhancement: Added Structure View filters.
       <li>New: Added inspection to validate the correctness of a MC68000 instruction regarding operation size and address modes.
       <li>Bugfix: Added several missing assembler directives (opt, machine, etc.).

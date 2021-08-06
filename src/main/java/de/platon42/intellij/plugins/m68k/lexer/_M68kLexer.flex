@@ -1,6 +1,5 @@
 package de.platon42.intellij.plugins.m68k.lexer;
 
-import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
@@ -72,7 +71,7 @@ HASH_COMMENT=([#;*].*+)
 SKIP_TO_EOL=[^\r\n]+
 PLAIN_MACRO_LINE=[^;\r\n]+
 
-%state NOSOL,INSTRPART,ASMINSTR,ASMOPS,ASMOPS_OP,ASSIGNMENT,EXPR,EXPR_OP,MACROCALL,WAITEOL,MACRODEF,MACROLINE,MACROTERMINATION,MACROWAITEOL
+%state NOSOL,INSTRPART,ASMINSTR,ASMOPS,ASMOPS_OP,ASSIGNMENT,EXPR,EXPR_OP,PLAINPARAMS,WAITEOL,MACRODEF,MACROLINE,MACROTERMINATION,MACROWAITEOL
 
 %%
 <YYINITIAL, NOSOL>
@@ -81,7 +80,7 @@ PLAIN_MACRO_LINE=[^;\r\n]+
   {HASH_COMMENT}      { yybegin(YYINITIAL); return COMMENT; }
 }
 
-<INSTRPART,ASMINSTR,MACROCALL,ASSIGNMENT,EXPR,EXPR_OP,ASMOPS,ASMOPS_OP>
+<INSTRPART,ASMINSTR,PLAINPARAMS,ASSIGNMENT,EXPR,EXPR_OP,ASMOPS,ASMOPS_OP>
 {
   {EOL}               { yybegin(YYINITIAL); return EOL; }
   {COMMENT}           { yybegin(WAITEOL); return COMMENT; }
@@ -92,7 +91,7 @@ PLAIN_MACRO_LINE=[^;\r\n]+
   {WHITE_SPACE}       { return WHITE_SPACE; }
 }
 
-<MACROCALL, EXPR, EXPR_OP, ASMOPS, ASMOPS_OP> {
+<PLAINPARAMS, EXPR, EXPR_OP, ASMOPS, ASMOPS_OP> {
   {WHITE_SPACE}       { return handleEolCommentWhitespace(this); }
 }
 
@@ -117,6 +116,7 @@ PLAIN_MACRO_LINE=[^;\r\n]+
                         if(isAsmMnemonicWithSize(yytext())) { yybegin(ASMINSTR); yypushback(2); return MNEMONIC; }
                         if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; }
                         if(isDataDirective(yytext())) { startExpr(EXPR, EXPR_OP); return DATA_DIRECTIVE; }
+                        if(isPlainDirective(yytext())) { yybegin(PLAINPARAMS); return OTHER_DIRECTIVE; }
                         if(isOtherDirective(yytext())) { startExpr(EXPR, EXPR_OP); return OTHER_DIRECTIVE; }
                         return handleMacroMode(this);
                       }
@@ -136,7 +136,7 @@ PLAIN_MACRO_LINE=[^;\r\n]+
   {OPSIZE_L}          { return OPSIZE_L; }
 }
 
-<MACROCALL> {
+<PLAINPARAMS> {
   ","                 { return SEPARATOR; }
 
   {PLAINPARAM}        { return STRINGLIT; }

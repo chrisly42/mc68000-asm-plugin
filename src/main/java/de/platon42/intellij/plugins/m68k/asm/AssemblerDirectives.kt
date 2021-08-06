@@ -22,7 +22,15 @@ object AssemblerDirectives {
         "rsset", "clrfo", "clrso", "setfo", "setso"
     )
 
-    val otherDirective: Set<String> = setOf(
+    val plainDirectives: Set<String> = setOf(
+        "incdir", "include", "incbin", "output", "idnt",
+
+        "printt", "echo", "fail",
+
+        "opt"
+    )
+
+    val otherDirectives: Set<String> = setOf(
         "if",
         "ifeq", "ifne", "ifgt", "ifge", "iflt", "ifle", "ifb", "ifnb", "ifc", "ifnc",
         "ifd", "ifnd", "ifmacrod", "ifmacrond",
@@ -38,12 +46,10 @@ object AssemblerDirectives {
         "reg", "equr", "equrl",
         "freg", "fequr", "fequrl",
 
-        "incdir", "include", "incbin", "output",
-
         "list", "nlist", "nolist", "llen", "nopage", "page", "spc",
         "org",
 
-        "assert", "fail", "print", "printt", "printv", "echo",
+        "assert", "printv",
 
         "inline", "einline",
         "rem", "erem",
@@ -51,8 +57,6 @@ object AssemblerDirectives {
         "machine", "mc68000", "mc68010", "mc68020", "mc68030", "mc68040", "mc68060",
         "fpu",
 
-        "basereg", "endb", "far", "near", "initnear",
-
-        "opt"
+        "basereg", "endb", "far", "near", "initnear"
     )
 }

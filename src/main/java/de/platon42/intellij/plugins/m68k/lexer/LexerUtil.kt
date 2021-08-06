@@ -23,7 +23,10 @@ object LexerUtil {
     fun isDataDirective(text: CharSequence) = AssemblerDirectives.dataDirectives.contains(text.toString().lowercase())
 
     @JvmStatic
-    fun isOtherDirective(text: CharSequence) = AssemblerDirectives.otherDirective.contains(text.toString().lowercase())
+    fun isPlainDirective(text: CharSequence) = AssemblerDirectives.plainDirectives.contains(text.toString().lowercase())
+
+    @JvmStatic
+    fun isOtherDirective(text: CharSequence) = AssemblerDirectives.otherDirectives.contains(text.toString().lowercase())
 
     @JvmStatic
     fun pushbackAssignment(text: CharSequence): Int {

@@ -144,6 +144,11 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 
 ## Changelog
 
+### V0.6 (unreleased)
+
+- Enhancement: `opt` and several other directives (`printt`, `fail` etc.) no longer causes a syntax error when unquoted.
+- Enhancement: `include`, `incdir` and `incbin` and `output` with `<pathname>` quotes no longer cause syntax error.
+
 ### V0.5 (06-Aug-21)
 
 - Bugfix: `movem` ISA was wrong regarding the `movem.w <ea>,<registerlist>` (sign extends registers).

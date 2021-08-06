@@ -1,0 +1,8 @@
+Assembly File: a.asm
+  PsiWhiteSpace(' ')
+  M68kStatementImpl(STATEMENT)
+    M68kPreprocessorDirectiveImpl(PREPROCESSOR_DIRECTIVE)
+      PsiElement(M68kTokenType.OTHER_DIRECTIVE)('include')
+      PsiWhiteSpace('\t')
+      M68kLiteralExprImpl(LITERAL_EXPR)
+        PsiElement(M68kTokenType.STRINGLIT)('<Engine/A500/System/Copper.i>')
