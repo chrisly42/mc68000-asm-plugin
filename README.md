@@ -135,7 +135,7 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 
 ## Private TODO list
 
-- code completion suggestion for unresolved local labels, global labels and symbols
+- code completion suggestion for unresolved global labels and symbols
 - support `include` directive
 - support `opt` directive
 - suppression support via comments
@@ -149,6 +149,7 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 - Enhancement: `opt` and several other directives (`printt`, `fail` etc.) no longer causes a syntax error when unquoted.
 - Enhancement: `include`, `incdir` and `incbin` and `output` with `<pathname>` quotes no longer cause syntax error.
 - New: Files in `include` directives can be referenced and renamed/refactored.
+- New: Code completion for local label definitions, suggesting undefined labels already referenced.
 
 ### V0.5 (06-Aug-21)
 

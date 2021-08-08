@@ -24,6 +24,7 @@
         <colorSettingsPage implementation="de.platon42.intellij.plugins.m68k.syntax.M68kColorSettingsPage"/>
         <completion.contributor language="MC68000" implementationClass="de.platon42.intellij.plugins.m68k.asm.M68kMnemonicCompletionContributor"/>
         <completion.contributor language="MC68000" implementationClass="de.platon42.intellij.plugins.m68k.refs.M68kGlobalLabelSymbolCompletionContributor"/>
+        <completion.contributor language="MC68000" implementationClass="de.platon42.intellij.plugins.m68k.refs.M68kLocalLabelDefCompletionContributor"/>
         <completion.contributor language="MC68000" implementationClass="de.platon42.intellij.plugins.m68k.refs.M68kMacroCallCompletionContributor"/>
         <lang.braceMatcher language="MC68000" implementationClass="de.platon42.intellij.plugins.m68k.syntax.M68kPairedBraceMatcher"/>
         <lang.quoteHandler language="MC68000" implementationClass="de.platon42.intellij.plugins.m68k.M68kStringQuoteHandler"/>

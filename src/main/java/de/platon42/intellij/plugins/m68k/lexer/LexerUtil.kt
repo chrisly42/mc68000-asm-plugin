@@ -55,7 +55,7 @@ object LexerUtil {
     @JvmStatic
     fun handleMacroMode(lexer: _M68kLexer): IElementType {
         if (lexer.lexerPrefs.macroParametersUnparsed) {
-            lexer.yybegin(_M68kLexer.MACROCALL)
+            lexer.yybegin(_M68kLexer.PLAINPARAMS)
         } else {
             lexer.yybegin(_M68kLexer.ASMOPS)
         }

@@ -123,9 +123,9 @@ private line ::= !<<eof>> (MacroDefinition | statement) (<<eof>>|EOL)
 statement ::= (Assignment
             | PreprocessorDirective
             | LabelInsts)
-            {pin=1 recoverWhile=statement_recover};
+            {pin = 1 recoverWhile = statement_recover}
 
-private statement_recover ::= !(EOL)
+private statement_recover ::= !(EOL) { consumeTokenMethod = "consumeTokenFast" }
 
 SymbolDefinition ::= SYMBOLDEF {
     implements = "de.platon42.intellij.plugins.m68k.psi.M68kNamedElement"

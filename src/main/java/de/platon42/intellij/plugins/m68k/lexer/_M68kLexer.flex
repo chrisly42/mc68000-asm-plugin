@@ -1,5 +1,6 @@
 package de.platon42.intellij.plugins.m68k.lexer;
 
+import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
@@ -101,6 +102,7 @@ PLAIN_MACRO_LINE=[^;\r\n]+
   {MACRO_DEF_LEFT}    { yybegin(MACRODEF); yypushback(pushbackAfterFirstToken(yytext())); return MACRO_NAME; }
   {LOCAL_LABEL}       { yybegin(INSTRPART); eatOneWhitespace = false; yypushback(pushbackLabelColons(yytext())); return LOCAL_LABEL_DEF; }
   {GLOBAL_LABEL}      { yybegin(INSTRPART); eatOneWhitespace = false; yypushback(pushbackLabelColons(yytext())); return GLOBAL_LABEL_DEF; }
+  "."                 { yybegin(INSTRPART); eatOneWhitespace = false; return LOCAL_LABEL_DEF; }
 }
 
 <NOSOL> {

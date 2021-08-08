@@ -40,7 +40,7 @@ public class _M68kLexer implements FlexLexer {
     public static final int ASSIGNMENT = 12;
     public static final int EXPR = 14;
     public static final int EXPR_OP = 16;
-    public static final int MACROCALL = 18;
+    public static final int PLAINPARAMS = 18;
     public static final int WAITEOL = 20;
     public static final int MACRODEF = 22;
     public static final int MACROLINE = 24;
@@ -194,23 +194,23 @@ public class _M68kLexer implements FlexLexer {
     private static final int[] ZZ_ACTION = zzUnpackAction();
 
     private static final String ZZ_ACTION_PACKED_0 =
-            "\17\0\1\1\2\2\1\3\1\4\1\1\1\5\1\6" +
-                    "\1\7\1\10\1\1\1\7\2\11\1\7\1\10\1\12" +
-                    "\1\13\1\14\1\1\1\15\1\16\1\17\4\16\1\1" +
-                    "\1\16\5\1\1\20\1\21\1\22\1\23\1\24\1\25" +
-                    "\1\26\1\27\1\30\1\31\2\16\1\32\1\33\1\34" +
-                    "\1\35\1\36\1\37\1\40\1\41\1\42\1\43\1\44" +
-                    "\1\45\1\46\1\47\1\42\1\50\2\1\1\51\1\16" +
-                    "\1\52\1\11\4\52\1\53\1\11\2\54\2\55\1\56" +
-                    "\1\57\3\60\1\57\1\60\1\0\1\4\1\61\2\62" +
-                    "\1\63\3\0\1\7\1\64\1\65\1\66\1\67\1\70" +
-                    "\1\71\1\16\1\72\1\73\1\16\1\74\1\75\2\0" +
-                    "\1\76\4\0\1\77\1\16\1\32\1\100\1\101\1\102" +
-                    "\1\103\1\104\1\105\1\106\3\0\1\52\1\0\1\52" +
-                    "\1\0\1\52\1\0\1\52\1\55\1\57\3\0\1\4" +
-                    "\1\62\1\63\1\7\1\107\1\7\1\110\1\111\1\112" +
-                    "\1\113\1\0\1\52\3\0\1\55\1\57\3\0\1\7" +
-                    "\1\55\1\57\2\0\1\114\1\115\1\116\1\0\1\117";
+            "\17\0\1\1\2\2\1\3\1\4\1\5\1\6\1\7" +
+                    "\1\10\1\11\1\1\1\10\2\12\1\10\1\11\1\13" +
+                    "\1\14\1\15\1\1\1\16\1\17\1\20\4\17\1\1" +
+                    "\1\17\5\1\1\21\1\22\1\23\1\24\1\25\1\26" +
+                    "\1\27\1\30\1\31\1\32\2\17\1\33\1\34\1\35" +
+                    "\1\36\1\37\1\40\1\41\1\42\1\43\1\44\1\45" +
+                    "\1\46\1\47\1\50\1\43\1\51\2\1\1\52\1\17" +
+                    "\1\53\1\12\4\53\1\54\1\12\2\55\2\56\1\57" +
+                    "\1\60\3\61\1\60\1\61\1\0\1\4\1\62\2\63" +
+                    "\1\64\3\0\1\10\1\65\1\66\1\67\1\70\1\71" +
+                    "\1\72\1\17\1\73\1\74\1\17\1\75\1\76\2\0" +
+                    "\1\77\4\0\1\100\1\17\1\33\1\101\1\102\1\103" +
+                    "\1\104\1\105\1\106\1\107\3\0\1\53\1\0\1\53" +
+                    "\1\0\1\53\1\0\1\53\1\56\1\60\3\0\1\4" +
+                    "\1\63\1\64\1\10\1\110\1\10\1\111\1\112\1\113" +
+                    "\1\114\1\0\1\53\3\0\1\56\1\60\3\0\1\10" +
+                    "\1\56\1\60\2\0\1\115\1\116\1\117\1\0\1\120";
 
     private static int[] zzUnpackAction() {
         int[] result = new int[184];
@@ -814,14 +814,14 @@ public class _M68kLexer implements FlexLexer {
                         return BAD_CHARACTER;
                     }
                     // fall through
-                    case 80:
+                    case 81:
                         break;
                     case 2: {
                         yybegin(YYINITIAL);
                         return WHITE_SPACE;
                     }
                     // fall through
-                    case 81:
+                    case 82:
                         break;
                     case 3: {
                         yybegin(NOSOL);
@@ -829,7 +829,7 @@ public class _M68kLexer implements FlexLexer {
                         return WHITE_SPACE;
                     }
                     // fall through
-                    case 82:
+                    case 83:
                         break;
                     case 4: {
                         yybegin(INSTRPART);
@@ -838,22 +838,30 @@ public class _M68kLexer implements FlexLexer {
                         return GLOBAL_LABEL_DEF;
                     }
                     // fall through
-                    case 83:
-                        break;
-                    case 5: {
-                        yybegin(YYINITIAL);
-                        return COMMENT;
-                    }
-                    // fall through
                     case 84:
                         break;
-                    case 6: {
-                        return WHITE_SPACE;
+                    case 5: {
+                        yybegin(INSTRPART);
+                        eatOneWhitespace = false;
+                        return LOCAL_LABEL_DEF;
                     }
                     // fall through
                     case 85:
                         break;
+                    case 6: {
+                        yybegin(YYINITIAL);
+                        return COMMENT;
+                    }
+                    // fall through
+                    case 86:
+                        break;
                     case 7: {
+                        return WHITE_SPACE;
+                    }
+                    // fall through
+                    case 87:
+                        break;
+                    case 8: {
                         if (isAsmMnemonicWithSize(yytext())) {
                             yybegin(ASMINSTR);
                             yypushback(2);
@@ -868,7 +876,7 @@ public class _M68kLexer implements FlexLexer {
                             return DATA_DIRECTIVE;
                         }
                         if (isPlainDirective(yytext())) {
-                            yybegin(MACROCALL);
+                            yybegin(PLAINPARAMS);
                             return OTHER_DIRECTIVE;
                         }
                         if (isOtherDirective(yytext())) {
@@ -878,498 +886,498 @@ public class _M68kLexer implements FlexLexer {
                         return handleMacroMode(this);
                     }
                     // fall through
-                    case 86:
-                        break;
-                    case 8: {
-                        return handleMacroMode(this);
-                    }
-                    // fall through
-                    case 87:
-                        break;
-                    case 9: {
-                        yybegin(YYINITIAL);
-                        return EOL;
-                    }
-                    // fall through
                     case 88:
                         break;
-                    case 10: {
-                        return COLON;
+                    case 9: {
+                        return handleMacroMode(this);
                     }
                     // fall through
                     case 89:
                         break;
-                    case 11: {
-                        yybegin(WAITEOL);
-                        return COMMENT;
+                    case 10: {
+                        yybegin(YYINITIAL);
+                        return EOL;
                     }
                     // fall through
                     case 90:
                         break;
-                    case 12: {
-                        startExpr(ASMOPS, ASMOPS_OP);
-                        return WHITE_SPACE;
+                    case 11: {
+                        return COLON;
                     }
                     // fall through
                     case 91:
                         break;
-                    case 13: {
-                        return handleEolCommentWhitespace(this);
+                    case 12: {
+                        yybegin(WAITEOL);
+                        return COMMENT;
                     }
                     // fall through
                     case 92:
                         break;
-                    case 14: {
-                        yybegin(exprOpState);
-                        return SYMBOL;
+                    case 13: {
+                        startExpr(ASMOPS, ASMOPS_OP);
+                        return WHITE_SPACE;
                     }
                     // fall through
                     case 93:
                         break;
-                    case 15: {
-                        yybegin(exprOpState);
-                        return DECIMAL;
+                    case 14: {
+                        return handleEolCommentWhitespace(this);
                     }
                     // fall through
                     case 94:
                         break;
-                    case 16: {
-                        return SEPARATOR;
+                    case 15: {
+                        yybegin(exprOpState);
+                        return SYMBOL;
                     }
                     // fall through
                     case 95:
                         break;
-                    case 17: {
-                        return HASH;
+                    case 16: {
+                        yybegin(exprOpState);
+                        return DECIMAL;
                     }
                     // fall through
                     case 96:
                         break;
-                    case 18: {
-                        return OP_BITWISE_XOR;
+                    case 17: {
+                        return SEPARATOR;
                     }
                     // fall through
                     case 97:
                         break;
-                    case 19: {
-                        return ROUND_L;
+                    case 18: {
+                        return HASH;
                     }
                     // fall through
                     case 98:
                         break;
-                    case 20: {
-                        yybegin(exprOpState);
-                        return ROUND_R;
+                    case 19: {
+                        return OP_BITWISE_XOR;
                     }
                     // fall through
                     case 99:
                         break;
-                    case 21: {
-                        return OP_UNARY_NOT;
+                    case 20: {
+                        return ROUND_L;
                     }
                     // fall through
                     case 100:
                         break;
-                    case 22: {
-                        return OP_UNARY_COMPL;
+                    case 21: {
+                        yybegin(exprOpState);
+                        return ROUND_R;
                     }
                     // fall through
                     case 101:
                         break;
-                    case 23: {
-                        return OP_PLUS;
+                    case 22: {
+                        return OP_UNARY_NOT;
                     }
                     // fall through
                     case 102:
                         break;
-                    case 24: {
-                        return OP_MINUS;
+                    case 23: {
+                        return OP_UNARY_COMPL;
                     }
                     // fall through
                     case 103:
                         break;
-                    case 25: {
-                        yybegin(exprOpState);
-                        return CURRENT_PC_SYMBOL;
+                    case 24: {
+                        return OP_PLUS;
                     }
                     // fall through
                     case 104:
                         break;
-                    case 26: {
-                        yybegin(exprState);
-                        return OP_CMP_EQ;
+                    case 25: {
+                        return OP_MINUS;
                     }
                     // fall through
                     case 105:
                         break;
-                    case 27: {
-                        yybegin(exprState);
-                        return OP_AR_MOD;
+                    case 26: {
+                        yybegin(exprOpState);
+                        return CURRENT_PC_SYMBOL;
                     }
                     // fall through
                     case 106:
                         break;
-                    case 28: {
+                    case 27: {
                         yybegin(exprState);
-                        return OP_CMP_LT;
+                        return OP_CMP_EQ;
                     }
                     // fall through
                     case 107:
                         break;
-                    case 29: {
+                    case 28: {
                         yybegin(exprState);
-                        return OP_CMP_GT;
+                        return OP_AR_MOD;
                     }
                     // fall through
                     case 108:
                         break;
-                    case 30: {
+                    case 29: {
                         yybegin(exprState);
-                        return SEPARATOR;
+                        return OP_CMP_LT;
                     }
                     // fall through
                     case 109:
                         break;
-                    case 31: {
+                    case 30: {
                         yybegin(exprState);
-                        return OP_BITWISE_XOR;
+                        return OP_CMP_GT;
                     }
                     // fall through
                     case 110:
                         break;
-                    case 32: {
+                    case 31: {
                         yybegin(exprState);
-                        return ROUND_L;
+                        return SEPARATOR;
                     }
                     // fall through
                     case 111:
                         break;
-                    case 33: {
-                        return ROUND_R;
+                    case 32: {
+                        yybegin(exprState);
+                        return OP_BITWISE_XOR;
                     }
                     // fall through
                     case 112:
                         break;
-                    case 34: {
+                    case 33: {
                         yybegin(exprState);
-                        return OP_BITWISE_OR;
+                        return ROUND_L;
                     }
                     // fall through
                     case 113:
                         break;
-                    case 35: {
-                        yybegin(exprState);
-                        return OP_UNARY_COMPL;
+                    case 34: {
+                        return ROUND_R;
                     }
                     // fall through
                     case 114:
                         break;
-                    case 36: {
+                    case 35: {
                         yybegin(exprState);
-                        return OP_PLUS;
+                        return OP_BITWISE_OR;
                     }
                     // fall through
                     case 115:
                         break;
-                    case 37: {
+                    case 36: {
                         yybegin(exprState);
-                        return OP_MINUS;
+                        return OP_UNARY_COMPL;
                     }
                     // fall through
                     case 116:
                         break;
-                    case 38: {
+                    case 37: {
                         yybegin(exprState);
-                        return OP_AR_MUL;
+                        return OP_PLUS;
                     }
                     // fall through
                     case 117:
                         break;
-                    case 39: {
+                    case 38: {
                         yybegin(exprState);
-                        return OP_BITWISE_AND;
+                        return OP_MINUS;
                     }
                     // fall through
                     case 118:
                         break;
-                    case 40: {
+                    case 39: {
                         yybegin(exprState);
-                        return OP_AR_DIV;
+                        return OP_AR_MUL;
                     }
                     // fall through
                     case 119:
                         break;
-                    case 41: {
-                        startExpr(EXPR, EXPR_OP);
-                        return OP_ASSIGN;
+                    case 40: {
+                        yybegin(exprState);
+                        return OP_BITWISE_AND;
                     }
                     // fall through
                     case 120:
                         break;
-                    case 42: {
-                        return STRINGLIT;
+                    case 41: {
+                        yybegin(exprState);
+                        return OP_AR_DIV;
                     }
                     // fall through
                     case 121:
                         break;
-                    case 43: {
-                        return COMMENT;
+                    case 42: {
+                        startExpr(EXPR, EXPR_OP);
+                        return OP_ASSIGN;
                     }
                     // fall through
                     case 122:
                         break;
+                    case 43: {
+                        return STRINGLIT;
+                    }
+                    // fall through
+                    case 123:
+                        break;
                     case 44: {
+                        return COMMENT;
+                    }
+                    // fall through
+                    case 124:
+                        break;
+                    case 45: {
                         yybegin(MACROLINE);
                         macroLines = 0;
                         return WHITE_SPACE;
                     }
                     // fall through
-                    case 123:
-                        break;
-                    case 45: {
-                        return MACRO_NAME;
-                    }
-                    // fall through
-                    case 124:
-                        break;
-                    case 46: {
-                        yybegin(MACROWAITEOL);
-                        return COMMENT;
-                    }
-                    // fall through
                     case 125:
                         break;
-                    case 47: {
-                        return MACRO_LINE;
+                    case 46: {
+                        return MACRO_NAME;
                     }
                     // fall through
                     case 126:
                         break;
-                    case 48: {
-                        return handleMacroLineEol(this);
+                    case 47: {
+                        yybegin(MACROWAITEOL);
+                        return COMMENT;
                     }
                     // fall through
                     case 127:
                         break;
+                    case 48: {
+                        return MACRO_LINE;
+                    }
+                    // fall through
+                    case 128:
+                        break;
                     case 49: {
+                        return handleMacroLineEol(this);
+                    }
+                    // fall through
+                    case 129:
+                        break;
+                    case 50: {
                         yybegin(ASSIGNMENT);
                         eatOneWhitespace = true;
                         yypushback(pushbackAssignment(yytext()));
                         return SYMBOLDEF;
                     }
                     // fall through
-                    case 128:
+                    case 130:
                         break;
-                    case 50: {
+                    case 51: {
                         yybegin(INSTRPART);
                         eatOneWhitespace = false;
                         yypushback(pushbackLabelColons(yytext()));
                         return LOCAL_LABEL_DEF;
                     }
                     // fall through
-                    case 129:
+                    case 131:
                         break;
-                    case 51: {
+                    case 52: {
                         yybegin(INSTRPART);
                         yypushback(pushbackLabelColons(yytext()));
                         return GLOBAL_LABEL_DEF;
                     }
                     // fall through
-                    case 130:
-                        break;
-                    case 52: {
-                        return OPSIZE_BS;
-                    }
-                    // fall through
-                    case 131:
-                        break;
-                    case 53: {
-                        return OPSIZE_W;
-                    }
-                    // fall through
                     case 132:
                         break;
-                    case 54: {
-                        return OPSIZE_L;
+                    case 53: {
+                        return OPSIZE_BS;
                     }
                     // fall through
                     case 133:
                         break;
-                    case 55: {
-                        yybegin(exprOpState);
-                        return AREG;
+                    case 54: {
+                        return OPSIZE_W;
                     }
                     // fall through
                     case 134:
                         break;
-                    case 56: {
-                        yybegin(exprOpState);
-                        return REG_SP;
+                    case 55: {
+                        return OPSIZE_L;
                     }
                     // fall through
                     case 135:
                         break;
-                    case 57: {
+                    case 56: {
                         yybegin(exprOpState);
-                        return DREG;
+                        return AREG;
                     }
                     // fall through
                     case 136:
                         break;
-                    case 58: {
+                    case 57: {
                         yybegin(exprOpState);
-                        return REG_SR;
+                        return REG_SP;
                     }
                     // fall through
                     case 137:
                         break;
-                    case 59: {
+                    case 58: {
                         yybegin(exprOpState);
-                        return HEXADECIMAL;
+                        return DREG;
                     }
                     // fall through
                     case 138:
                         break;
-                    case 60: {
+                    case 59: {
                         yybegin(exprOpState);
-                        return BINARY;
+                        return REG_SR;
                     }
                     // fall through
                     case 139:
                         break;
-                    case 61: {
+                    case 60: {
                         yybegin(exprOpState);
-                        return OCTAL;
+                        return HEXADECIMAL;
                     }
                     // fall through
                     case 140:
                         break;
-                    case 62: {
+                    case 61: {
                         yybegin(exprOpState);
-                        return STRINGLIT;
+                        return BINARY;
                     }
                     // fall through
                     case 141:
                         break;
-                    case 63: {
+                    case 62: {
                         yybegin(exprOpState);
-                        return PC;
+                        return OCTAL;
                     }
                     // fall through
                     case 142:
                         break;
-                    case 64: {
-                        yybegin(exprState);
-                        return OP_CMP_LT_EQ;
+                    case 63: {
+                        yybegin(exprOpState);
+                        return STRINGLIT;
                     }
                     // fall through
                     case 143:
                         break;
-                    case 65: {
-                        yybegin(exprState);
-                        return OP_AR_SHIFT_L;
+                    case 64: {
+                        yybegin(exprOpState);
+                        return PC;
                     }
                     // fall through
                     case 144:
                         break;
-                    case 66: {
+                    case 65: {
                         yybegin(exprState);
-                        return OP_CMP_NOT_EQ;
+                        return OP_CMP_LT_EQ;
                     }
                     // fall through
                     case 145:
                         break;
-                    case 67: {
+                    case 66: {
                         yybegin(exprState);
-                        return OP_CMP_GT_EQ;
+                        return OP_AR_SHIFT_L;
                     }
                     // fall through
                     case 146:
                         break;
-                    case 68: {
+                    case 67: {
                         yybegin(exprState);
-                        return OP_AR_SHIFT_R;
+                        return OP_CMP_NOT_EQ;
                     }
                     // fall through
                     case 147:
                         break;
-                    case 69: {
+                    case 68: {
                         yybegin(exprState);
-                        return OP_LOGICAL_AND;
+                        return OP_CMP_GT_EQ;
                     }
                     // fall through
                     case 148:
                         break;
-                    case 70: {
+                    case 69: {
                         yybegin(exprState);
-                        return OP_LOGICAL_OR;
+                        return OP_AR_SHIFT_R;
                     }
                     // fall through
                     case 149:
                         break;
+                    case 70: {
+                        yybegin(exprState);
+                        return OP_LOGICAL_AND;
+                    }
+                    // fall through
+                    case 150:
+                        break;
                     case 71: {
+                        yybegin(exprState);
+                        return OP_LOGICAL_OR;
+                    }
+                    // fall through
+                    case 151:
+                        break;
+                    case 72: {
                         yybegin(INSTRPART);
                         yypushback(pushbackLabelColons(yytext()));
                         return LOCAL_LABEL_DEF;
                     }
                     // fall through
-                    case 150:
+                    case 152:
                         break;
-                    case 72: {
+                    case 73: {
                         yybegin(exprOpState);
                         return REG_USP;
                     }
                     // fall through
-                    case 151:
+                    case 153:
                         break;
-                    case 73: {
+                    case 74: {
                         yybegin(exprOpState);
                         return REG_CCR;
                     }
                     // fall through
-                    case 152:
+                    case 154:
                         break;
-                    case 74: {
+                    case 75: {
                         yybegin(exprOpState);
                         return REG_VBR;
                     }
                     // fall through
-                    case 153:
+                    case 155:
                         break;
-                    case 75: {
+                    case 76: {
                         startExpr(EXPR, EXPR_OP);
                         return EQU;
                     }
                     // fall through
-                    case 154:
+                    case 156:
                         break;
-                    case 76: {
+                    case 77: {
                         yybegin(MACRODEF);
                         return MACRO_TAG;
                     }
                     // fall through
-                    case 155:
+                    case 157:
                         break;
-                    case 77: {
+                    case 78: {
                         return MACRO_TAG;
                     }
                     // fall through
-                    case 156:
+                    case 158:
                         break;
-                    case 78: {
+                    case 79: {
                         yybegin(MACROTERMINATION);
                         return MACRO_END_TAG;
                     }
                     // fall through
-                    case 157:
+                    case 159:
                         break;
-                    case 79: {
+                    case 80: {
                         yybegin(MACRODEF);
                         yypushback(pushbackAfterFirstToken(yytext()));
                         return MACRO_NAME;
                     }
                     // fall through
-                    case 158:
+                    case 160:
                         break;
                     default:
                         zzScanError(ZZ_NO_MATCH);

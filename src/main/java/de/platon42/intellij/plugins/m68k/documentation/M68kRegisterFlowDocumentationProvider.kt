@@ -79,18 +79,12 @@ class M68kRegisterFlowDocumentationProvider : AbstractDocumentationProvider() {
         )
 
         backtrace.addAll(analyseFlow(register, missingBits, true, initialStatement, linesLimit) {
-            PsiTreeUtil.getPrevSiblingOfType(
-                it,
-                M68kStatement::class.java
-            )
+            PsiTreeUtil.getPrevSiblingOfType(it, M68kStatement::class.java)
         })
         backtrace.reverse()
         val traceBits = (cursorRwm or (cursorRwm ushr RWM_MODIFY_SHIFT) or (cursorRwm ushr RWM_READ_SHIFT)) and RWM_SIZE_MASK
         backtrace.addAll(analyseFlow(register, traceBits, false, initialStatement, linesLimit) {
-            PsiTreeUtil.getNextSiblingOfType(
-                it,
-                M68kStatement::class.java
-            )
+            PsiTreeUtil.getNextSiblingOfType(it, M68kStatement::class.java)
         })
 
         val statementRows = HtmlBuilder()
@@ -113,7 +107,7 @@ class M68kRegisterFlowDocumentationProvider : AbstractDocumentationProvider() {
         var currStatement = startingStatement
         val statementLines = ArrayList<HtmlChunk>()
         val rn = register.regname
-        var addAbrevDots = false
+        var addAbbrevDots = false
         var lines = 0
         while (missingBits > 0) {
             val globalLabel = PsiTreeUtil.findChildOfType(currStatement, M68kGlobalLabel::class.java)
@@ -127,17 +121,17 @@ class M68kRegisterFlowDocumentationProvider : AbstractDocumentationProvider() {
             currStatement = direction.invoke(currStatement) ?: break
             val currAsmInstruction = PsiTreeUtil.getChildOfType(currStatement, M68kAsmInstruction::class.java) ?: continue
             if (checkIfInstructionUsesRegister(currAsmInstruction, register)) {
-                if (addAbrevDots) {
+                if (addAbbrevDots) {
                     ++lines
                     statementLines.add(createAbbreviationDots())
                 }
                 if (++lines > linesLimit) {
-                    if (!addAbrevDots) {
+                    if (!addAbbrevDots) {
                         statementLines.add(createAbbreviationDots())
                     }
                     break
                 }
-                addAbrevDots = false
+                addAbbrevDots = false
                 val (_, currAdrMode) = findExactIsaDataAndAllowedAdrModeForInstruction(currAsmInstruction) ?: continue
 
                 val localLabelName = PsiTreeUtil.findChildOfType(currStatement, M68kLocalLabel::class.java)?.name ?: "        "
@@ -163,7 +157,7 @@ class M68kRegisterFlowDocumentationProvider : AbstractDocumentationProvider() {
                         .children(lineBuilder.wrapWith(DocumentationMarkup.SECTION_CONTENT_CELL))
                 )
             } else {
-                addAbrevDots = true
+                addAbbrevDots = true
             }
         }
         return statementLines

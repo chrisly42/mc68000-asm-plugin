@@ -62,11 +62,4 @@ object M68kAddressModeUtil {
             else -> throw IllegalArgumentException("Unknown addressing mode $addressingMode")
         }
     }
-
-    fun mergeReadWriteModifyRegisters(regset: Set<Pair<Register, Int>>): Set<Pair<Register, Int>> {
-        if (regset.size <= 1) return regset
-        return regset.groupBy({ it.first }) { it.second }
-            .map { it.key to if (it.value.size == 1) it.value.single() else it.value.reduce(Int::or) }
-            .toSet()
-    }
 }

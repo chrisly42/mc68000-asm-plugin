@@ -1239,8 +1239,18 @@ public class M68kParser implements PsiParser, LightPsiParser {
         if (!recursion_guard_(b, l, "statement_recover")) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NOT_);
-        r = !consumeToken(b, EOL);
+        r = !statement_recover_0(b, l + 1);
         exit_section_(b, l, m, r, false, null);
+        return r;
+    }
+
+    // (EOL)
+    private static boolean statement_recover_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "statement_recover_0")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeTokenFast(b, EOL);
+        exit_section_(b, m, null, r);
         return r;
     }
 
