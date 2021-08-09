@@ -19,17 +19,17 @@ awesome features and is pretty advanced. Check it out. You can install both plug
 
 Big kudos to Yann -- a few features were _inspired_ by his code.
 
-My plugin, on the other hand, is still pretty basic and is the result of a few weeks of work. I released a really early first version it because I think it's "
-good enough" to get started, and I can return to demo coding with its current state.
+My plugin, on the other hand, is still pretty basic and is the result of a few weeks of work. I released the first versions because I think it's "good enough"
+to get started, and I can return to demo coding with its current state.
 
 ## Features
 
 - Parser / Lexer for MC68000 (yes, only 68000 right now!) assembly language files in VAsm / DevPac style
-- Inspection for validating the syntax of the 68000 ISA.
+- Validates the assembly syntax against the 68000 ISA.
 - Syntax highlighting and Color Settings Page (you should really modify the color settings to your likings!)
 - Mnemonics code completion
-- Symbols / Labels / Macros code completion
-- References / Refactoring support for local and global labels, symbol assignments, and macros.
+- Symbols / labels / macros code completion
+- References / refactoring support for local and global labels, symbol assignments, and macros.
 - Simple register usage flow (hover over register or press F1 for full flow)
 - Brace matching
 - Quote handler
@@ -113,12 +113,11 @@ If the current statement has no valid syntax, the instruction details of all mat
 
 - `Find Usages` always shows _"Unclassified"_ though it shouldn't (?)
 - Macro invocations are not yet evaluated, thus no referencing to symbols defined via macros (e.g. `STRUCT`).
-- No support for includes. Scoping is for global symbols and labels is currently the whole project.
+- Scoping for global symbols and labels is currently the whole project.
 - No support for register replacement (e.g. registers replaced by `EQUR` or `EQURL` will cause syntax errors)
 - While the Lexer supports the -spaces option (where a space introduces a comment), this cannot be configured yet (default is off).
 - No support for other processor instructions, FPU or 68020+ address modes.
 - Unit Test coverage is not as good as it could be (ahem).
-- `opt` keyword needs special treatment and will currently show a parsing error.
 - Missing but planned features:
     - Macro evaluation on invocation
     - Folding
@@ -141,9 +140,11 @@ It is probably the only plugin (besides [Cajon](https://github.com/chrisly42/caj
 far (or at least the only one I'm aware of ;) ). The IntelliJ framework actually uses the JUnit 3 TestCase for plugin testing, and it took me quite a while to
 make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.intellij.jupiter```) for your projects (with attribution).
 
-## Private TODO list
+## Feedback
 
-- code completion suggestion for unresolved global labels and symbols
+I guess there are currently about 100 users of this plugin and while I wrote this mainly for myself, I'm only doing this in my spare time. Feedback
+and [rating](https://plugins.jetbrains.com/plugin/17268-mc68000-assembly-language-support/reviews)
+are appreciated. They really are, because they do keep me motivated to continue development.
 
 ## Changelog
 
@@ -188,7 +189,7 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 - Enhancement: Macro definitions are now word and stub indexed, macro calls reference to definition.
 - New: Macro definition refactoring and find usages support.
 - Enhancement: Structural View also shows macro definitions.
-- Bugfix: Missing REPT and ENDR assembler directives added.
+- Bugfix: Missing `REPT` and `ENDR` assembler directives added.
 - Cosmetics: Changed or added some icons at various places.
 - Performance: Reference search for global labels and symbols now uses stub index.
 - Compatibility: Restored compatibility with IDE versions < 2021.1.
