@@ -39,6 +39,9 @@ good enough" to get started, and I can return to demo coding with its current st
 
 ### Inspections
 
+The plugin provides a few inspections for code analysis. An error or warning can be suppressed by placing a `; suppress <InspectionName>` comment either on an
+end of line comment behind the statement or in a full line comment above the statement.
+
 #### M68kSyntaxInspection - Assembly instruction validity
 
 Checks the validity of the current instruction. If an instruction is not recognized, you may get one of the following errors:
@@ -150,6 +153,7 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 - Enhancement: `include`, `incdir` and `incbin` and `output` with `<pathname>` quotes no longer cause syntax error.
 - New: Files in `include` directives can be referenced and renamed/refactored.
 - New: Code completion for local label definitions, suggesting undefined labels already referenced.
+- New: Added inspection suppression possibility and quickfix.
 
 ### V0.5 (06-Aug-21)
 
