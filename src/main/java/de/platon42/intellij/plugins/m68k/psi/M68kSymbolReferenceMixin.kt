@@ -7,6 +7,10 @@ import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 
 abstract class M68kSymbolReferenceMixin(node: ASTNode) : ASTWrapperPsiElement(node), M68kSymbolReference {
 
+    override fun getReference(): PsiReference? {
+        return references.firstOrNull()
+    }
+
     override fun getReferences(): Array<PsiReference> {
         return ReferenceProvidersRegistry.getReferencesFromProviders(this)
     }

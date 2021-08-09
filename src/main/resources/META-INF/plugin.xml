@@ -61,6 +61,9 @@
         <localInspection implementationClass="de.platon42.intellij.plugins.m68k.inspections.M68kUnexpectedConditionalInstructionInspection"
                          displayName="Unaffected condition codes before conditional instruction" groupName="M68k"
                          enabledByDefault="true" level="WARNING"/>
+        <localInspection implementationClass="de.platon42.intellij.plugins.m68k.inspections.M68kUnresolvedReferenceInspection"
+                         displayName="Unresolved label/symbol/macro reference" groupName="M68k"
+                         enabledByDefault="true" level="WARNING"/>
     </extensions>
 
     <actions>

@@ -64,6 +64,7 @@ patchPluginXml {
       <li>New: Files in 'include' directives can be referenced and renamed/refactored.
       <li>New: Code completion for local label definitions, suggesting undefined labels already referenced.
       <li>New: Added inspection suppression possibility and quickfix.
+      <li>New: Added inspection for unresolved symbols, macros and labels.
     </ul>
   <h4>V0.5 (06-Aug-21)</h4>
     <ul>

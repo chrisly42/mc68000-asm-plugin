@@ -42,7 +42,7 @@ good enough" to get started, and I can return to demo coding with its current st
 The plugin provides a few inspections for code analysis. An error or warning can be suppressed by placing a `; suppress <InspectionName>` comment either on an
 end of line comment behind the statement or in a full line comment above the statement.
 
-#### M68kSyntaxInspection - Assembly instruction validity
+#### M68kSyntax - Assembly instruction validity
 
 Checks the validity of the current instruction. If an instruction is not recognized, you may get one of the following errors:
 
@@ -57,7 +57,7 @@ Checks the validity of the current instruction. If an instruction is not recogni
 - Operation size _(.b,.w,.l)_ unsupported for _mnemonic_
 - Operation size _(.b,.w,.l)_ unsupported (should be _(.b,.w,.l)_)
 
-#### M68kDeadWriteInspection - Dead writes to registers
+#### M68kDeadWrite - Dead writes to registers
 
 This inspection looks at register writes and tries to find instructions that renders a write moot because it was overwritten by another instruction before
 anything useful was done with it.
@@ -68,7 +68,7 @@ Analysis is aborted at global labels, flow control instructions, directives
 The inspection tries to take condition code changing into account and puts out a weak warning if the statement merely changes condition codes before the
 contents of the register are overwritten. In this case, it is sometimes better to replace `move` by `tst`.
 
-#### M68kUnexpectedConditionalInstructionInspection - Unaffected condition codes before conditional instruction
+#### M68kUnexpectedConditionalInstruction - Unaffected condition codes before conditional instruction
 
 Especially for novice coders, it is not clear that some instructions do not affect the condition codes for a subsequent condition branch or `scc` instruction.
 `movea`, `adda` and `suba` come to my mind.
@@ -77,6 +77,11 @@ The inspection will report such suspicious instruction sequences.
 
 However, this does not need to be a programming error. Advanced coders sometimes make use of the fact that instructions do not change condition codes and thus
 optimize the order of execution.
+
+#### M68kUnresolvedReference - Unresolved label/symbol/macro reference
+
+Points out unresolved references such for global and local labels, macros or symbols. Right now, missing symbol and global label references are shown only as
+weak warnings as missing macro evaluation will not resolve symbols defined via `STRUCT` macros.
 
 ### Documentation provider
 
@@ -139,11 +144,6 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 ## Private TODO list
 
 - code completion suggestion for unresolved global labels and symbols
-- support `include` directive
-- support `opt` directive
-- suppression support via comments
-- inspection: Unresolved local label
-- inspection: Unresolved macro
 
 ## Changelog
 
@@ -154,6 +154,7 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 - New: Files in `include` directives can be referenced and renamed/refactored.
 - New: Code completion for local label definitions, suggesting undefined labels already referenced.
 - New: Added inspection suppression possibility and quickfix.
+- New: Added inspection for unresolved symbols, macros and labels.
 
 ### V0.5 (06-Aug-21)
 

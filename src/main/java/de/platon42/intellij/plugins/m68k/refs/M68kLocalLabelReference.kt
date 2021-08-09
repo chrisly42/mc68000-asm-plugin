@@ -1,5 +1,6 @@
 package de.platon42.intellij.plugins.m68k.refs
 
+import com.intellij.codeInsight.daemon.EmptyResolveMessageProvider
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
@@ -14,10 +15,14 @@ import de.platon42.intellij.plugins.m68k.psi.M68kLocalLabel
 import de.platon42.intellij.plugins.m68k.psi.M68kStatement
 import de.platon42.intellij.plugins.m68k.psi.M68kSymbolReference
 
-class M68kLocalLabelReference(element: M68kSymbolReference) : PsiPolyVariantReferenceBase<M68kSymbolReference>(element, TextRange(0, element.textLength)) {
+class M68kLocalLabelReference(element: M68kSymbolReference) :
+    PsiPolyVariantReferenceBase<M68kSymbolReference>(element, TextRange(0, element.textLength)),
+    EmptyResolveMessageProvider {
 
     companion object {
         val INSTANCE = Resolver()
+
+        private const val UNRESOLVED_MESSAGE_PATTERN = "Cannot resolve local label ''{0}''"
 
         fun findLocalLabels(element: M68kSymbolReference, predicate: (M68kLocalLabel) -> Boolean): List<M68kLocalLabel> {
             val statement = PsiTreeUtil.getStubOrPsiParentOfType(element, M68kStatement::class.java)!!
@@ -41,6 +46,8 @@ class M68kLocalLabelReference(element: M68kSymbolReference) : PsiPolyVariantRefe
             return results
         }
     }
+
+    override fun getUnresolvedMessagePattern() = UNRESOLVED_MESSAGE_PATTERN
 
     class Resolver : ResolveCache.PolyVariantResolver<M68kLocalLabelReference> {
         override fun resolve(ref: M68kLocalLabelReference, incompleteCode: Boolean): Array<ResolveResult> {

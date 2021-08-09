@@ -1,5 +1,6 @@
 package de.platon42.intellij.plugins.m68k.refs
 
+import com.intellij.codeInsight.daemon.EmptyResolveMessageProvider
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementResolveResult
@@ -14,11 +15,15 @@ import de.platon42.intellij.plugins.m68k.psi.M68kMacroDefinition
 import de.platon42.intellij.plugins.m68k.stubs.M68kMacroDefinitionStubIndex
 
 class M68kMacroReference(element: M68kMacroCall) :
-    PsiPolyVariantReferenceBase<M68kMacroCall>(element, TextRange(0, element.macroName.length)) {
+    PsiPolyVariantReferenceBase<M68kMacroCall>(element, TextRange(0, element.macroName.length)), EmptyResolveMessageProvider {
 
     companion object {
         val INSTANCE = Resolver()
+
+        private const val UNRESOLVED_MESSAGE_PATTERN = "Cannot resolve macro ''{0}''"
     }
+
+    override fun getUnresolvedMessagePattern() = UNRESOLVED_MESSAGE_PATTERN
 
     class Resolver : ResolveCache.PolyVariantResolver<M68kMacroReference> {
         override fun resolve(ref: M68kMacroReference, incompleteCode: Boolean): Array<ResolveResult> {
