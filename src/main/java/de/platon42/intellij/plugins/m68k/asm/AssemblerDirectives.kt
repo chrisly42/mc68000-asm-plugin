@@ -57,6 +57,8 @@ object AssemblerDirectives {
         "machine", "mc68000", "mc68010", "mc68020", "mc68030", "mc68040", "mc68060",
         "fpu",
 
-        "basereg", "endb", "far", "near", "initnear"
+        "basereg", "endb", "far", "near", "initnear",
+
+        "end"
     )
 }

@@ -20,6 +20,9 @@ object LexerUtil {
             && mnemonics.contains(text.dropLast(2).toString().lowercase())
 
     @JvmStatic
+    fun isEndDirective(text: CharSequence) = text.contentEquals("end", ignoreCase = true)
+
+    @JvmStatic
     fun isDataDirective(text: CharSequence) = AssemblerDirectives.dataDirectives.contains(text.toString().lowercase())
 
     @JvmStatic

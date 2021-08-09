@@ -147,7 +147,7 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 
 ## Changelog
 
-### V0.6 (unreleased)
+### V0.6 (09-Aug-21)
 
 - Enhancement: `opt` and several other directives (`printt`, `fail` etc.) no longer causes a syntax error when unquoted.
 - Enhancement: `include`, `incdir` and `incbin` and `output` with `<pathname>` quotes no longer cause syntax error.
@@ -155,6 +155,7 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 - New: Code completion for local label definitions, suggesting undefined labels already referenced.
 - New: Added inspection suppression possibility and quickfix.
 - New: Added inspection for unresolved symbols, macros and labels.
+- Enhancement: 'END' directive stops parsing.
 
 ### V0.5 (06-Aug-21)
 

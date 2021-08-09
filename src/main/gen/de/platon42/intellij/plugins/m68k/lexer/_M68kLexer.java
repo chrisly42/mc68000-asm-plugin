@@ -624,11 +624,11 @@ public class _M68kLexer implements FlexLexer {
     /**
      * Refills the input buffer.
      *
-     * @return {@code false}, iff there was new input.
+     * @return {@code false}, iff there was NO new input.
      * @throws java.io.IOException if any I/O-Error occurs
      */
     private boolean zzRefill() throws java.io.IOException {
-        return true;
+        return !zzAtEOF;
     }
 
 
@@ -870,6 +870,11 @@ public class _M68kLexer implements FlexLexer {
                         if (isAsmMnemonic(yytext())) {
                             yybegin(ASMINSTR);
                             return MNEMONIC;
+                        }
+                        if (isEndDirective(yytext())) {
+                            yybegin(YYINITIAL);
+                            zzAtEOF = true;
+                            return null;
                         }
                         if (isDataDirective(yytext())) {
                             startExpr(EXPR, EXPR_OP);

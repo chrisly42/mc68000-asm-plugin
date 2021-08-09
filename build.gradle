@@ -57,7 +57,7 @@ runPluginVerifier {
 
 patchPluginXml {
     setChangeNotes("""
-  <h4>V0.6 (unreleased)</h4>
+  <h4>V0.6 (09-Aug-21)</h4>
     <ul>
       <li>Enhancement: 'opt' and several other directives ('printt', 'fail' etc.) no longer causes a syntax error when unquoted.
       <li>Enhancement: 'include', 'incdir' and 'incbin' and 'output' with '&lt;pathname&gt;' quotes no longer cause syntax error.
@@ -65,6 +65,7 @@ patchPluginXml {
       <li>New: Code completion for local label definitions, suggesting undefined labels already referenced.
       <li>New: Added inspection suppression possibility and quickfix.
       <li>New: Added inspection for unresolved symbols, macros and labels.
+      <li>Enhancement: 'END' directive stops parsing.
     </ul>
   <h4>V0.5 (06-Aug-21)</h4>
     <ul>
