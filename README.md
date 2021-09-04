@@ -148,6 +148,13 @@ are appreciated. They really are, because they do keep me motivated to continue 
 
 ## Changelog
 
+### V0.7 (unreleased)
+
+- Bugfix: `btst` with pc-relative and weird immediate mode was missing (courtesy of Yann).
+- Bugfix: `movem` with pc-relative mode was missing for weird immediate mode (courtesy of Yann).
+- Bugfix: Special registers for address mode matching only worked with lower case register names (courtesy of Yann).
+- Enhancement: Assembler syntax with implicit immediate 1 for shifts and rotations no longer cause syntax errors (courtesy of Yann).
+
 ### V0.6 (09-Aug-21)
 
 - Enhancement: `opt` and several other directives (`printt`, `fail` etc.) no longer causes a syntax error when unquoted.

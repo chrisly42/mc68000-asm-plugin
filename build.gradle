@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'de.platon42'
-version = '0.6'
+version = '0.7'
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
@@ -57,6 +57,13 @@ runPluginVerifier {
 
 patchPluginXml {
     setChangeNotes("""
+  <h4>V0.7 (unreleased)</h4>
+    <ul>
+      <li>Bugfix: 'btst' with pc-relative and weird immediate mode was missing (courtesy of Yann).
+      <li>Bugfix: 'movem' with pc-relative mode was missing for weird immediate mode (courtesy of Yann).
+      <li>Bugfix: Special registers for address mode matching only worked with lower case register names (courtesy of Yann).
+      <li>Enhancement: Assembler syntax with implicit immediate 1 for shifts and rotations no longer cause syntax errors (courtesy of Yann).
+    </ul>
   <h4>V0.6 (09-Aug-21)</h4>
     <ul>
       <li>Enhancement: 'opt' and several other directives ('printt', 'fail' etc.) no longer causes a syntax error when unquoted.
@@ -71,26 +78,13 @@ patchPluginXml {
     <ul>
       <li>Bugfix: movem ISA was wrong regarding movem.w &lt;ea&gt;,&lt;registerlist&gt; (sign extends registers).
       <li>Cosmetics: Changed Register Flow Documentation wording from 'reads' to 'uses' and from 'modifies' to 'changes'.
-      <li>Bugfix: Minor fix for `andi/eori/ori to ccr` which were not byte sized in ISA.
+      <li>Bugfix: Minor fix for 'andi/eori/ori to ccr' which were not byte sized in ISA.
       <li>Bugfix: Added alternate condition code tests HS (=CC) and LO (=CS).
       <li>Performance: Optimized mnemonic lookup.
       <li>Enhancement: Reworked Instruction Documentation provider, now shows condition codes.
       <li>Bugfix: In ISA exg is no longer treated as setting a definitive value.
       <li>New: Added inspection to find dead writes to registers!
       <li>New: Added inspection to warn about unexpected condition code unaffecting instructions before conditional instructions.
-    </ul>
-  <h4>V0.4 (03-Aug-21)</h4>
-    <ul>
-      <li>Notice: Due to major new API use, this plugin no longer works on IDEs &gt;=2019.3.1, but rather requires &gt;=2020.3.
-      <li>Enhancement: Added Structure View filters.
-      <li>New: Added inspection to validate the correctness of a MC68000 instruction regarding operation size and address modes.
-      <li>Bugfix: Added several missing assembler directives (opt, machine, etc.).
-      <li>Bugfix: Uppercase hexadecimal literals were not parsed (JFlex bug?).
-      <li>Bugfix: Interpretation of register lists was wrong in BNF.
-      <li>New: Added Documentation Provider for symbol definitions (shows assigned declaration).
-      <li>New: Added Documentation Provider for mnemonics (simple version, generated out of ISA information).
-      <li>Bugfix: Macro definitions with colons and without space supported (as found in P61a source).
-      <li>New: When asking for documentation on registers, a code flow analysis is done. Cool stuff!
     </ul>
   <p>Full changelog available at <a href="https://github.com/chrisly42/mc68000-asm-plugin#changelog">Github project site</a>.</p>
 """)

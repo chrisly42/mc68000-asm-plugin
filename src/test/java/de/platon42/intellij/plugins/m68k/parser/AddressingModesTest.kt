@@ -88,6 +88,11 @@ internal class AddressingModesTest : AbstractParsingTest() {
     }
 
     @Test
+    internal fun btst_quirk(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " btst #5,#42\n btst d0,#42")
+    }
+
+    @Test
     internal fun movem_register_list(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
         testGoodSyntax(testCase, " movem.l d0-d2/d4/a0/a2-a3/a5,-(sp)\n")
         val element = testCase.file.findElementAt(9)
@@ -118,7 +123,7 @@ internal class AddressingModesTest : AbstractParsingTest() {
     internal fun special_register_move(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
         testGoodSyntax(
             testCase, " move.l usp,a0\n"
-                    + " move.l a5,usp\n"
+                    + " move.l a5,USP\n"
         )
     }
 

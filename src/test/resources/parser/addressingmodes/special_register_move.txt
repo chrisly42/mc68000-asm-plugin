@@ -29,5 +29,5 @@ Assembly File: a.asm
       PsiElement(M68kTokenType.SEPARATOR)(',')
       M68kSpecialRegisterDirectAddressingModeImpl(SPECIAL_REGISTER_DIRECT_ADDRESSING_MODE)
         M68kSpecialRegisterImpl(SPECIAL_REGISTER)
-          PsiElement(M68kTokenType.REG_USP)('usp')
+          PsiElement(M68kTokenType.REG_USP)('USP')
   PsiElement(M68kTokenType.EOL)('\n')

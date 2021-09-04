@@ -44,7 +44,7 @@ enum class AddressMode(val description: String, val syntax: String) {
     PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT("program counter indirect with displacement", "(d16,PC)"),
     ADDRESS_REGISTER_INDIRECT_WITH_INDEX("address register indirect with index", "(d8,An,Xn)"),
     PROGRAM_COUNTER_INDIRECT_WITH_INDEX("program counter indirect with index", "(d8,PC,Xn)"),
-    SPECIAL_REGISTER_DIRECT("special register", "ccr|usp|vbr"),
+    SPECIAL_REGISTER_DIRECT("special register", "sr|ccr|usp|vbr"),
     REGISTER_LIST("register list", "list"),
     IMMEDIATE_DATA("immediate", "#<xxx>"),
     ABSOLUTE_ADDRESS("absolute short/long", "(xxx).w|l")
@@ -202,6 +202,18 @@ object M68kIsa {
         AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX,
     )
 
+    private val ALL_EXCEPT_AREG_AND_DREG = setOf(
+        AddressMode.ADDRESS_REGISTER_INDIRECT,
+        AddressMode.ADDRESS_REGISTER_INDIRECT_POST_INC,
+        AddressMode.ADDRESS_REGISTER_INDIRECT_PRE_DEC,
+        AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT,
+        AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_INDEX,
+        AddressMode.ABSOLUTE_ADDRESS,
+        AddressMode.IMMEDIATE_DATA,
+        AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT,
+        AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX,
+    )
+
     private val INDIRECT_MODES = setOf(
         AddressMode.ADDRESS_REGISTER_INDIRECT,
         AddressMode.ADDRESS_REGISTER_INDIRECT_POST_INC,
@@ -256,33 +268,39 @@ object M68kIsa {
     private val ASD_LSD_MODES = listOf(
         AllowedAdrMode(DREG_ONLY, DREG_ONLY, modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("*****")),
         AllowedAdrMode(setOf(AddressMode.IMMEDIATE_DATA), DREG_ONLY, modInfo = RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("*****")),
-        AllowedAdrMode(INDIRECT_MODES, null, modInfo = RWM_MODIFY_OP1_OPSIZE, affectedCc = cc("*****")),
+        AllowedAdrMode(INDIRECT_MODES, null, size = OP_SIZE_W, modInfo = RWM_MODIFY_OP1_OPSIZE, affectedCc = cc("*****")),
+        // not an official address mode, but supported by assembler (implicit #1)
+        AllowedAdrMode(DREG_ONLY, null, modInfo = RWM_MODIFY_OP1_OPSIZE, affectedCc = cc("*****"))
     )
 
     private val ROD_MODES = listOf(
         AllowedAdrMode(DREG_ONLY, DREG_ONLY, modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("-**0*")),
         AllowedAdrMode(setOf(AddressMode.IMMEDIATE_DATA), DREG_ONLY, modInfo = RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("-**0*")),
-        AllowedAdrMode(INDIRECT_MODES, null, modInfo = RWM_MODIFY_OP1_OPSIZE, affectedCc = cc("-**0*")),
+        AllowedAdrMode(INDIRECT_MODES, null, size = OP_SIZE_W, modInfo = RWM_MODIFY_OP1_OPSIZE, affectedCc = cc("-**0*")),
+        // not an official address mode, but supported by assembler (implicit #1)
+        AllowedAdrMode(DREG_ONLY, null, modInfo = RWM_MODIFY_OP1_OPSIZE, affectedCc = cc("-**0*")),
     )
 
     private val ROXD_MODES = listOf(
         AllowedAdrMode(DREG_ONLY, DREG_ONLY, modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("***0*"), testedCc = cc("?----")),
         AllowedAdrMode(setOf(AddressMode.IMMEDIATE_DATA), DREG_ONLY, modInfo = RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("***0*"), testedCc = cc("?----")),
-        AllowedAdrMode(INDIRECT_MODES, null, modInfo = RWM_MODIFY_OP1_OPSIZE, affectedCc = cc("***0*"), testedCc = cc("?----")),
+        AllowedAdrMode(INDIRECT_MODES, null, size = OP_SIZE_W, modInfo = RWM_MODIFY_OP1_OPSIZE, affectedCc = cc("***0*"), testedCc = cc("?----")),
+        // not an official address mode, but supported by assembler (implicit #1)
+        AllowedAdrMode(DREG_ONLY, null, modInfo = RWM_MODIFY_OP1_OPSIZE, affectedCc = cc("***0*"), testedCc = cc("?----")),
     )
 
     private val BCHG_BCLR_BSET_MODES = listOf(
         AllowedAdrMode(DREG_ONLY, DREG_ONLY, OP_SIZE_L, modInfo = RWM_READ_OP1_B or RWM_MODIFY_OP2_L, affectedCc = cc("--*--")),
         AllowedAdrMode(DREG_ONLY, INDIRECT_MODES, OP_SIZE_B, modInfo = RWM_READ_OP1_B or RWM_MODIFY_OP2_B, affectedCc = cc("--*--")),
         AllowedAdrMode(setOf(AddressMode.IMMEDIATE_DATA), DREG_ONLY, OP_SIZE_L, modInfo = RWM_MODIFY_OP2_L, affectedCc = cc("--*--")),
-        AllowedAdrMode(setOf(AddressMode.IMMEDIATE_DATA), INDIRECT_MODES, OP_SIZE_B, modInfo = RWM_MODIFY_OP2_B, affectedCc = cc("--*--")),
+        AllowedAdrMode(setOf(AddressMode.IMMEDIATE_DATA), ALL_EXCEPT_AREG_AND_DREG, OP_SIZE_B, modInfo = RWM_MODIFY_OP2_B, affectedCc = cc("--*--")),
     )
 
     private val BTST_MODES = listOf(
         AllowedAdrMode(DREG_ONLY, DREG_ONLY, OP_SIZE_L, modInfo = RWM_READ_OP1_B or RWM_READ_OP2_L, affectedCc = cc("--*--")),
-        AllowedAdrMode(DREG_ONLY, INDIRECT_MODES, OP_SIZE_B, modInfo = RWM_READ_OP1_B or RWM_READ_OP2_B, affectedCc = cc("--*--")),
+        AllowedAdrMode(DREG_ONLY, ALL_EXCEPT_AREG_AND_DREG, OP_SIZE_B, modInfo = RWM_READ_OP1_B or RWM_READ_OP2_B, affectedCc = cc("--*--")),
         AllowedAdrMode(setOf(AddressMode.IMMEDIATE_DATA), DREG_ONLY, OP_SIZE_L, modInfo = RWM_READ_OP2_L, affectedCc = cc("--*--")),
-        AllowedAdrMode(setOf(AddressMode.IMMEDIATE_DATA), INDIRECT_MODES, OP_SIZE_B, modInfo = RWM_READ_OP2_B, affectedCc = cc("--*--")),
+        AllowedAdrMode(setOf(AddressMode.IMMEDIATE_DATA), ALL_EXCEPT_AREG_AND_DREG, OP_SIZE_B, modInfo = RWM_READ_OP2_B, affectedCc = cc("--*--")),
     )
 
     private val conditionCodes =
@@ -354,7 +372,9 @@ object M68kIsa {
                         AddressMode.ADDRESS_REGISTER_INDIRECT_POST_INC,
                         AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT,
                         AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_INDEX,
-                        AddressMode.ABSOLUTE_ADDRESS
+                        AddressMode.ABSOLUTE_ADDRESS,
+                        AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT,
+                        AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX
                     ),
                     setOf(AddressMode.IMMEDIATE_DATA),
                     OP_SIZE_WL,
@@ -944,5 +964,5 @@ object M68kIsa {
     private fun isAddressModeMatching(am: AllowedAdrMode, op1: AddressMode?, op2: AddressMode?, specialReg: String?) =
         ((((op1 == null) && (am.op1 == null)) || am.op1?.contains(op1) ?: false)
                 && (((op2 == null) && (am.op2 == null)) || am.op2?.contains(op2) ?: false)
-                && ((specialReg == null) || (specialReg == am.specialReg)))
+                && ((specialReg == null) || (specialReg.equals(am.specialReg, true))))
 }
