@@ -92,8 +92,8 @@ class M68kInstructionDocumentationProvider : AbstractDocumentationProvider() {
                 val cellsPerRow = ArrayList<HtmlChunk>(3)
                 cellsPerRow.add(contentBuilder.toFragment())
 
-                if (allowedAdrMode.op1 != null) cellsPerRow.add(collectAddressModes(allowedAdrMode.op1))
-                if (allowedAdrMode.op1 != null) cellsPerRow.add(collectAddressModes(allowedAdrMode.op2))
+                if (allowedAdrMode.op1 != null) cellsPerRow.add(collectAddressModes(allowedAdrMode.op1, allowedAdrMode.specialReg))
+                if (allowedAdrMode.op1 != null) cellsPerRow.add(collectAddressModes(allowedAdrMode.op2, allowedAdrMode.specialReg))
 
                 addressModeInfoRows.append(HtmlChunk.tag("tr").children(cellsPerRow.map { it.wrapWith(DocumentationMarkup.SECTION_CONTENT_CELL) }))
                 addressModeInfoRows.toFragment()
@@ -126,11 +126,12 @@ class M68kInstructionDocumentationProvider : AbstractDocumentationProvider() {
         return defBuilder
     }
 
-    private fun collectAddressModes(addressModes: Set<AddressMode>?): HtmlChunk {
+    private fun collectAddressModes(addressModes: Set<AddressMode>?, specialReg: String?): HtmlChunk {
         if (addressModes == null) return HtmlChunk.text("")
         val modes = HtmlBuilder()
         addressModes.sortedBy(AddressMode::ordinal)
-            .forEach { modes.append(HtmlChunk.text(it.syntax).wrapWith(HtmlChunk.div())) }
+            .map { if (it == AddressMode.SPECIAL_REGISTER_DIRECT) specialReg!! else it.syntax }
+            .forEach { modes.append(HtmlChunk.text(it).wrapWith(HtmlChunk.div())) }
         return modes.toFragment()
     }
 

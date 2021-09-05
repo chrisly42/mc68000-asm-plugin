@@ -63,6 +63,7 @@ patchPluginXml {
       <li>Bugfix: 'movem' with pc-relative mode was missing for weird immediate mode (courtesy of Yann).
       <li>Bugfix: Special registers for address mode matching only worked with lower case register names (courtesy of Yann).
       <li>Enhancement: Assembler syntax with implicit immediate 1 for shifts and rotations no longer cause syntax errors (courtesy of Yann).
+      <li>Enhancement: Documentation for instruction with special register shows specific register expected.
     </ul>
   <h4>V0.6 (09-Aug-21)</h4>
     <ul>

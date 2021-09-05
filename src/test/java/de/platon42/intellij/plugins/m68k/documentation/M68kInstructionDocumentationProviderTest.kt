@@ -109,6 +109,16 @@ internal class M68kInstructionDocumentationProviderTest : AbstractDocumentationP
     }
 
     @Test
+    internal fun check_documentation_for_instruction_with_special_register(@MyFixture myFixture: CodeInsightTestFixture) {
+        myFixture.configureByText(
+            "documentme.asm", """
+ <caret>move.l usp,a0
+        """
+        )
+        assertThat(generateDocumentation(myFixture)).contains("<div>usp</div>")
+    }
+
+    @Test
     internal fun check_documentation_if_there_is_no_concrete_match(@MyFixture myFixture: CodeInsightTestFixture) {
         myFixture.configureByText(
             "documentme.asm", """

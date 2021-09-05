@@ -10,8 +10,8 @@ This plugin delivers support for MC68000 assembly language files ([VAsm](http://
 
 It adds a language parser with syntax highlighting, referencing and refactoring support, and a few more features.
 
-I'm an Amiga retro democoder, and the lack of a plugin for M68k was the motivation to write one. Also, diving deep into custom language plugins has a steep
-learning curve.
+I'm an Amiga retro democoder (among other things), and the lack of a plugin for M68k was the motivation to write one. Also, diving deep into custom language
+plugins has a steep learning curve.
 
 When I started the plugin in July 2021, I was not aware of the [M68k plugin efforts by Jetbrains employee Yann Cébron](https://github.com/YannCebron/m68kplugin)
 who has been working on the same topic for quite some time. At the time of writing, his plugin however, has not been release yet. Nevertheless, it has a lot of
@@ -154,6 +154,7 @@ are appreciated. They really are, because they do keep me motivated to continue 
 - Bugfix: `movem` with pc-relative mode was missing for weird immediate mode (courtesy of Yann).
 - Bugfix: Special registers for address mode matching only worked with lower case register names (courtesy of Yann).
 - Enhancement: Assembler syntax with implicit immediate 1 for shifts and rotations no longer cause syntax errors (courtesy of Yann).
+- Enhancement: Documentation for instruction with special register shows specific register expected.
 
 ### V0.6 (09-Aug-21)
 
