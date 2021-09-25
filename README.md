@@ -112,6 +112,7 @@ If the current statement has no valid syntax, the instruction details of all mat
 ## Known issues
 
 - `Find Usages` always shows _"Unclassified"_ though it shouldn't (?)
+- Typing in the `END` keyword will sometimes mess up the parsing for the next tokens.
 - Macro invocations are not yet evaluated, thus no referencing to symbols defined via macros (e.g. `STRUCT`).
 - Scoping for global symbols and labels is currently the whole project.
 - No support for register replacement (e.g. registers replaced by `EQUR` or `EQURL` will cause syntax errors)
@@ -142,19 +143,22 @@ make it work with JUnit 5. Feel free to use the code (in package ```de.platon42.
 
 ## Feedback
 
-I guess there are currently about 100 users of this plugin and while I wrote this mainly for myself, I'm only doing this in my spare time. Feedback
-and [rating](https://plugins.jetbrains.com/plugin/17268-mc68000-assembly-language-support/reviews)
-are appreciated. They really are, because they do keep me motivated to continue development.
+I guess there are currently over 500 users of this plugin and while I wrote this mainly for myself, I'm only doing this in my spare time.
+
+Feedback and [rating](https://plugins.jetbrains.com/plugin/17268-mc68000-assembly-language-support/reviews)
+are appreciated. It really is keeping me motivated to continue development.
 
 ## Changelog
 
-### V0.7 (unreleased)
+### V0.7 (26-Sep-21)
 
 - Bugfix: `btst` with pc-relative and weird immediate mode was missing (courtesy of Yann).
 - Bugfix: `movem` with pc-relative mode was missing for weird immediate mode (courtesy of Yann).
 - Bugfix: Special registers for address mode matching only worked with lower case register names (courtesy of Yann).
 - Enhancement: Assembler syntax with implicit immediate 1 for shifts and rotations no longer cause syntax errors (courtesy of Yann).
 - Enhancement: Documentation for instruction with special register shows specific register expected.
+- New: Added documentation provider info for global labels. Shows directives and comments above.
+- Bugfix: Fixed BNF for labels with preprocessor statements.
 
 ### V0.6 (09-Aug-21)
 

@@ -1,9 +1,9 @@
 Assembly File: a.asm
   M68kStatementImpl(STATEMENT)
+    M68kGlobalLabelImpl(GLOBAL_LABEL)
+      PsiElement(M68kTokenType.GLOBAL_LABEL_DEF)('howto')
+      PsiElement(M68kTokenType.COLON)(':')
     M68kPreprocessorDirectiveImpl(PREPROCESSOR_DIRECTIVE)
-      M68kGlobalLabelImpl(GLOBAL_LABEL)
-        PsiElement(M68kTokenType.GLOBAL_LABEL_DEF)('howto')
-        PsiElement(M68kTokenType.COLON)(':')
       M68kPreprocessorKeywordImpl(PREPROCESSOR_KEYWORD)
         PsiElement(M68kTokenType.OTHER_DIRECTIVE)('incbin')
       PsiWhiteSpace(' ')

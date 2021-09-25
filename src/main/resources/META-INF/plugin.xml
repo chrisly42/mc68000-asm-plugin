@@ -40,6 +40,8 @@
         <lang.documentationProvider language="MC68000"
                                     implementationClass="de.platon42.intellij.plugins.m68k.documentation.M68kSymbolDefinitionDocumentationProvider"/>
         <lang.documentationProvider language="MC68000"
+                                    implementationClass="de.platon42.intellij.plugins.m68k.documentation.M68kGlobalLabelDocumentationProvider"/>
+        <lang.documentationProvider language="MC68000"
                                     implementationClass="de.platon42.intellij.plugins.m68k.documentation.M68kRegisterFlowDocumentationProvider"/>
         <lang.documentationProvider language="MC68000"
                                     implementationClass="de.platon42.intellij.plugins.m68k.documentation.M68kInstructionDocumentationProvider"/>

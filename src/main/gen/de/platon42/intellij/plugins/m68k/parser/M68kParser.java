@@ -562,9 +562,13 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // Instruction
+    // Instruction|PreprocessorDirective
     static boolean InstructionOnly(PsiBuilder b, int l) {
-        return Instruction(b, l + 1);
+        if (!recursion_guard_(b, l, "InstructionOnly")) return false;
+        boolean r;
+        r = Instruction(b, l + 1);
+        if (!r) r = PreprocessorDirective(b, l + 1);
+        return r;
     }
 
     /* ********************************************************** */
@@ -596,15 +600,24 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // Label Instruction
+    // Label (Instruction|PreprocessorDirective)
     static boolean LabelWithInstruction(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "LabelWithInstruction")) return false;
         if (!nextTokenIs(b, "", GLOBAL_LABEL_DEF, LOCAL_LABEL_DEF)) return false;
         boolean r;
         Marker m = enter_section_(b);
         r = Label(b, l + 1);
-        r = r && Instruction(b, l + 1);
+        r = r && LabelWithInstruction_1(b, l + 1);
         exit_section_(b, m, null, r);
+        return r;
+    }
+
+    // Instruction|PreprocessorDirective
+    private static boolean LabelWithInstruction_1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "LabelWithInstruction_1")) return false;
+        boolean r;
+        r = Instruction(b, l + 1);
+        if (!r) r = PreprocessorDirective(b, l + 1);
         return r;
     }
 
@@ -817,28 +830,21 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // Label? PreprocessorKeyword PreprocessorOperands?
+    // PreprocessorKeyword PreprocessorOperands?
     public static boolean PreprocessorDirective(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "PreprocessorDirective")) return false;
+        if (!nextTokenIs(b, "<preprocessor directive>", DATA_DIRECTIVE, OTHER_DIRECTIVE)) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NONE_, PREPROCESSOR_DIRECTIVE, "<preprocessor directive>");
-        r = PreprocessorDirective_0(b, l + 1);
-        r = r && PreprocessorKeyword(b, l + 1);
-        r = r && PreprocessorDirective_2(b, l + 1);
+        r = PreprocessorKeyword(b, l + 1);
+        r = r && PreprocessorDirective_1(b, l + 1);
         exit_section_(b, l, m, r, false, null);
         return r;
     }
 
-    // Label?
-    private static boolean PreprocessorDirective_0(PsiBuilder b, int l) {
-        if (!recursion_guard_(b, l, "PreprocessorDirective_0")) return false;
-        Label(b, l + 1);
-        return true;
-    }
-
     // PreprocessorOperands?
-    private static boolean PreprocessorDirective_2(PsiBuilder b, int l) {
-        if (!recursion_guard_(b, l, "PreprocessorDirective_2")) return false;
+    private static boolean PreprocessorDirective_1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "PreprocessorDirective_1")) return false;
         PreprocessorOperands(b, l + 1);
         return true;
     }
@@ -1220,14 +1226,12 @@ public class M68kParser implements PsiParser, LightPsiParser {
 
     /* ********************************************************** */
     // Assignment
-    //             | PreprocessorDirective
     //             | LabelInsts
     public static boolean statement(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "statement")) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NONE_, STATEMENT, "<statement>");
         r = Assignment(b, l + 1);
-        if (!r) r = PreprocessorDirective(b, l + 1);
         if (!r) r = LabelInsts(b, l + 1);
         exit_section_(b, l, m, r, false, M68kParser::statement_recover);
         return r;

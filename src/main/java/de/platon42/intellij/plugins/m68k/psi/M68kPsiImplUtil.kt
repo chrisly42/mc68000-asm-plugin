@@ -29,7 +29,7 @@ object M68kPsiImplUtil {
 
     // Local Label
     @JvmStatic
-    fun getName(element: M68kLocalLabel): String = element.firstChild?.text ?: ""
+    fun getName(element: M68kLocalLabel): String? = element.firstChild?.text
 
     @JvmStatic
     fun setName(element: M68kLocalLabel, name: String): PsiElement {

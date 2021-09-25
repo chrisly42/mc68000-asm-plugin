@@ -16,7 +16,7 @@ class M68kSymbolDefinitionDocumentationProvider : AbstractDocumentationProvider(
     override fun generateDoc(element: PsiElement, originalElement: PsiElement?): String? {
         return if (element is M68kSymbolDefinition) {
             // TODO find out how we can generate inner links for more symbol references inside the expression (DocumentationManagerUtil)
-            val value = (element.getParent() as M68kAssignment).expr.text
+            val value = (element.parent as M68kAssignment).expr.text
             DocumentationMarkup.DEFINITION_START + StringUtil.escapeXmlEntities(element.name!!) + DocumentationMarkup.DEFINITION_END +
                     DocumentationMarkup.CONTENT_START + StringUtil.escapeXmlEntities(value) + DocumentationMarkup.CONTENT_END
         } else null

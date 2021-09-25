@@ -6,7 +6,6 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import de.platon42.intellij.plugins.m68k.psi.*;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -24,18 +23,6 @@ public class M68kPreprocessorDirectiveImpl extends M68kPreprocessorDirectiveMixi
     public void accept(@NotNull PsiElementVisitor visitor) {
         if (visitor instanceof M68kVisitor) accept((M68kVisitor) visitor);
         else super.accept(visitor);
-    }
-
-    @Override
-    @Nullable
-    public M68kGlobalLabel getGlobalLabel() {
-        return PsiTreeUtil.getChildOfType(this, M68kGlobalLabel.class);
-    }
-
-    @Override
-    @Nullable
-    public M68kLocalLabel getLocalLabel() {
-        return PsiTreeUtil.getChildOfType(this, M68kLocalLabel.class);
     }
 
     @Override

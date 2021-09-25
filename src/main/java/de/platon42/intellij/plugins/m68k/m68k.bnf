@@ -121,7 +121,6 @@ M68kFile ::= line*
 private line ::= !<<eof>> (MacroDefinition | statement) (<<eof>>|EOL)
 
 statement ::= (Assignment
-            | PreprocessorDirective
             | LabelInsts)
             {pin = 1 recoverWhile = statement_recover}
 
@@ -140,8 +139,8 @@ Assignment ::= SymbolDefinition COLON? (OP_ASSIGN|EQU) expr
 private LabelInsts ::= LabelWithInstruction | LabelOnly | InstructionOnly
 
 private LabelOnly ::= Label
-private LabelWithInstruction ::= Label Instruction
-private InstructionOnly ::= Instruction
+private LabelWithInstruction ::= Label (Instruction|PreprocessorDirective)
+private InstructionOnly ::= (Instruction|PreprocessorDirective)
 
 LocalLabel ::= LOCAL_LABEL_DEF COLON? {
     name = "local label"
@@ -175,7 +174,7 @@ AsmOp ::= MNEMONIC OperandSize? {
 
 PreprocessorKeyword ::= (DATA_DIRECTIVE | OTHER_DIRECTIVE)
 
-PreprocessorDirective ::= Label? PreprocessorKeyword PreprocessorOperands? {
+PreprocessorDirective ::= PreprocessorKeyword PreprocessorOperands? {
     mixin = "de.platon42.intellij.plugins.m68k.psi.M68kPreprocessorDirectiveMixin"
 }
 

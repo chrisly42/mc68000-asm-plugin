@@ -1,9 +1,9 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.intellij' version '1.1.5'
+    id 'org.jetbrains.intellij' version '1.1.6'
     id 'org.jetbrains.kotlin.jvm' version '1.5.21'
     id 'jacoco'
-    id 'com.github.kt3k.coveralls' version '2.11.0'
+    id 'com.github.kt3k.coveralls' version '2.12.0'
 }
 
 group = 'de.platon42'
@@ -22,9 +22,9 @@ repositories {
 
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-    testImplementation "org.assertj:assertj-core:3.20.2"
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.0-M1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.0-M1'
+    testImplementation "org.assertj:assertj-core:3.21.0"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     testImplementation "org.jetbrains.kotlin:kotlin-test"
     testImplementation "org.jetbrains.kotlin:kotlin-reflect"
 //    testImplementation "org.jetbrains.kotlin:kotlin-test-junit"
@@ -57,35 +57,16 @@ runPluginVerifier {
 
 patchPluginXml {
     setChangeNotes("""
-  <h4>V0.7 (unreleased)</h4>
+  <p>I still got zero feedback and zero <a href="https://plugins.jetbrains.com/plugin/17268-mc68000-assembly-language-support/reviews">ratings</a> :-(</p>
+  <h4>V0.7 (26-Sep-21)</h4>
     <ul>
       <li>Bugfix: 'btst' with pc-relative and weird immediate mode was missing (courtesy of Yann).
       <li>Bugfix: 'movem' with pc-relative mode was missing for weird immediate mode (courtesy of Yann).
       <li>Bugfix: Special registers for address mode matching only worked with lower case register names (courtesy of Yann).
       <li>Enhancement: Assembler syntax with implicit immediate 1 for shifts and rotations no longer cause syntax errors (courtesy of Yann).
       <li>Enhancement: Documentation for instruction with special register shows specific register expected.
-    </ul>
-  <h4>V0.6 (09-Aug-21)</h4>
-    <ul>
-      <li>Enhancement: 'opt' and several other directives ('printt', 'fail' etc.) no longer causes a syntax error when unquoted.
-      <li>Enhancement: 'include', 'incdir' and 'incbin' and 'output' with '&lt;pathname&gt;' quotes no longer cause syntax error.
-      <li>New: Files in 'include' directives can be referenced and renamed/refactored.
-      <li>New: Code completion for local label definitions, suggesting undefined labels already referenced.
-      <li>New: Added inspection suppression possibility and quickfix.
-      <li>New: Added inspection for unresolved symbols, macros and labels.
-      <li>Enhancement: 'END' directive stops parsing.
-    </ul>
-  <h4>V0.5 (06-Aug-21)</h4>
-    <ul>
-      <li>Bugfix: movem ISA was wrong regarding movem.w &lt;ea&gt;,&lt;registerlist&gt; (sign extends registers).
-      <li>Cosmetics: Changed Register Flow Documentation wording from 'reads' to 'uses' and from 'modifies' to 'changes'.
-      <li>Bugfix: Minor fix for 'andi/eori/ori to ccr' which were not byte sized in ISA.
-      <li>Bugfix: Added alternate condition code tests HS (=CC) and LO (=CS).
-      <li>Performance: Optimized mnemonic lookup.
-      <li>Enhancement: Reworked Instruction Documentation provider, now shows condition codes.
-      <li>Bugfix: In ISA exg is no longer treated as setting a definitive value.
-      <li>New: Added inspection to find dead writes to registers!
-      <li>New: Added inspection to warn about unexpected condition code unaffecting instructions before conditional instructions.
+      <li>New: Added documentation provider info for global labels. Shows directives and comments above.
+      <li>Bugfix: Fixed BNF for labels with preprocessor statements.
     </ul>
   <p>Full changelog available at <a href="https://github.com/chrisly42/mc68000-asm-plugin#changelog">Github project site</a>.</p>
 """)
