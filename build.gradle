@@ -67,6 +67,7 @@ patchPluginXml {
       <li>Enhancement: Documentation for instruction with special register shows specific register expected.
       <li>New: Added documentation provider info for global labels. Shows directives and comments above.
       <li>Bugfix: Fixed BNF for labels with preprocessor statements.
+      <li>Disabled: 'END' detection was breaking parsing, causing havoc.
     </ul>
   <p>Full changelog available at <a href="https://github.com/chrisly42/mc68000-asm-plugin#changelog">Github project site</a>.</p>
 """)

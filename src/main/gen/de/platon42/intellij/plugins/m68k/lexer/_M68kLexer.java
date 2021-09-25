@@ -871,11 +871,7 @@ public class _M68kLexer implements FlexLexer {
                             yybegin(ASMINSTR);
                             return MNEMONIC;
                         }
-                        if (isEndDirective(yytext())) {
-                            yybegin(YYINITIAL);
-                            zzAtEOF = true;
-                            return null;
-                        }
+                        //if(isEndDirective(yytext())) { yybegin(YYINITIAL); zzAtEOF = true; return null; }
                         if (isDataDirective(yytext())) {
                             startExpr(EXPR, EXPR_OP);
                             return DATA_DIRECTIVE;

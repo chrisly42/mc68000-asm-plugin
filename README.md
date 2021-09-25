@@ -85,11 +85,15 @@ weak warnings as missing macro evaluation will not resolve symbols defined via `
 
 ### Documentation provider
 
-#### M68kSymbolDefinitionDocumentationProvider
+#### M68kSymbolDefinition
 
 Provides the assigned value of a `=`, `set` or `equ` symbol definition when hovering over a symbol.
 
-#### M68kRegisterFlowDocumentationProvider
+#### M68kGlobalLabel
+
+Shows the comments above the label and if the first statement after the label is a directive like `include` or `dc.b`, shows it, too.
+
+#### M68kRegisterFlow
 
 When hovering over or placing the cursor at a data or address register, the documentation will scan through the instructions backwards and forwards and will
 show all read, changes of the register contents. It does this until an instruction is found that defines (sets) the contents of the register
@@ -100,7 +104,7 @@ The analysis ignores all code flow instructions and might be inaccurate for bran
 The documentation will search up to 100 instructions in each direction, but only four when hovering over the register
 (so if you need the whole analysis, use the documentation window).
 
-#### M68kInstructionDocumentationProvider
+#### M68kInstruction
 
 When hovering over a mnemonic, it will show a short description of the assembly instruction.
 
@@ -112,7 +116,7 @@ If the current statement has no valid syntax, the instruction details of all mat
 ## Known issues
 
 - `Find Usages` always shows _"Unclassified"_ though it shouldn't (?)
-- Typing in the `END` keyword will sometimes mess up the parsing for the next tokens.
+- `END` detection was breaking parsing, so this is disabled for now until I find a working solution.
 - Macro invocations are not yet evaluated, thus no referencing to symbols defined via macros (e.g. `STRUCT`).
 - Scoping for global symbols and labels is currently the whole project.
 - No support for register replacement (e.g. registers replaced by `EQUR` or `EQURL` will cause syntax errors)
@@ -159,6 +163,7 @@ are appreciated. It really is keeping me motivated to continue development.
 - Enhancement: Documentation for instruction with special register shows specific register expected.
 - New: Added documentation provider info for global labels. Shows directives and comments above.
 - Bugfix: Fixed BNF for labels with preprocessor statements.
+- Disabled: `END` detection was breaking parsing, causing havoc.
 
 ### V0.6 (09-Aug-21)
 
