@@ -42,16 +42,16 @@ compileTestKotlin {
 }
 
 intellij {
-    setVersion("2021.2.1") // LATEST-EAP-SNAPSHOT
+    setVersion("2021.2.2") // LATEST-EAP-SNAPSHOT
     setUpdateSinceUntilBuild(false)
 //    setPlugins(["com.intellij.java"])
 }
 
 runPluginVerifier {
-    ideVersions = ["IC-203.6682.168", "IC-212.5080.55", // 2020.3 - 2021.2.1
+    ideVersions = ["IC-203.6682.168", "IC-212.5284.40", // 2020.3 - 2021.2.2
                    "CL-203.5981.166", "CL-203.8084.11", // 2020.3
                    "CL-211.6693.114", "CL-211.7628.27", // 2021.1
-                   "CL-212.4746.93", "CL-212.5080.54"] // 2021.2 - 2021.2.1
+                   "CL-212.4746.93", "CL-212.5284.51"] // 2021.2 - 2021.2.2
     downloadDir = System.getProperty("user.home") + "/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/verifier"
 }
 
