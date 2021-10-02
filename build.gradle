@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'de.platon42'
-version = '0.7'
+version = '0.8'
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 

@@ -13,9 +13,9 @@ It adds a language parser with syntax highlighting, referencing and refactoring 
 I'm an Amiga retro democoder (among other things), and the lack of a plugin for M68k was the motivation to write one. Also, diving deep into custom language
 plugins has a steep learning curve.
 
-When I started the plugin in July 2021, I was not aware of the [M68k plugin efforts by Jetbrains employee Yann Cébron](https://github.com/YannCebron/m68kplugin)
-who has been working on the same topic for quite some time. At the time of writing, his plugin however, has not been release yet. Nevertheless, it has a lot of
-awesome features and is pretty advanced. Check it out. You can install both plugins at the same time and see what suits you more.
+When I started the plugin in July 2021, I was unaware of the [M68k plugin efforts by Jetbrains employee Yann Cébron](https://github.com/YannCebron/m68kplugin)
+who has been working on the same topic for quite some time. *On 01-Oct-21, he released his first public version.* Check it out. You can install both plugins at
+the same time and see what suits you more.
 
 Big kudos to Yann -- a few features were _inspired_ by his code.
 
@@ -118,9 +118,9 @@ If the current statement has no valid syntax, the instruction details of all mat
 - `Find Usages` always shows _"Unclassified"_ though it shouldn't (?)
 - `END` detection was breaking parsing, so this is disabled for now until I find a working solution.
 - Macro invocations are not yet evaluated, thus no referencing to symbols defined via macros (e.g. `STRUCT`).
-- Scoping for global symbols and labels is currently the whole project.
+- Scoping for global symbols, labels and macros is currently the whole project.
 - No support for register replacement (e.g. registers replaced by `EQUR` or `EQURL` will cause syntax errors)
-- While the Lexer supports the -spaces option (where a space introduces a comment), this cannot be configured yet (default is off).
+- While the lexer supports the -spaces option (where a space does *NOT* introduce a comment), this cannot be configured yet (default is ON).
 - No support for other processor instructions, FPU or 68020+ address modes.
 - Unit Test coverage is not as good as it could be (ahem).
 - Missing but planned features:
