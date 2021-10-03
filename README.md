@@ -14,8 +14,9 @@ I'm an Amiga retro democoder (among other things), and the lack of a plugin for 
 plugins has a steep learning curve.
 
 When I started the plugin in July 2021, I was unaware of the [M68k plugin efforts by Jetbrains employee Yann Cébron](https://github.com/YannCebron/m68kplugin)
-who has been working on the same topic for quite some time. *On 01-Oct-21, he released his first public version.* Check it out. You can install both plugins at
-the same time and see what suits you more.
+who has been working on the same topic for quite some time. *On 01-Oct-21, he released
+his [first public version](https://plugins.jetbrains.com/plugin/17712-motorola-68000-series-assembler).* Check it out. You can install both plugins at the same
+time and see what suits you more.
 
 Big kudos to Yann -- a few features were _inspired_ by his code.
 
@@ -89,9 +90,10 @@ weak warnings as missing macro evaluation will not resolve symbols defined via `
 
 Provides the assigned value of a `=`, `set` or `equ` symbol definition when hovering over a symbol.
 
-#### M68kGlobalLabel
+#### M68kLabel
 
-Shows the comments above the label and if the first statement after the label is a directive like `include` or `dc.b`, shows it, too.
+Shows the comments above the label (local or global) and an end-of-line comment, if available. If the first statement after the label is a directive
+like `include` or `dc.b`, it will be shown, too.
 
 #### M68kRegisterFlow
 
@@ -153,6 +155,11 @@ Feedback and [rating](https://plugins.jetbrains.com/plugin/17268-mc68000-assembl
 are appreciated. It really is keeping me motivated to continue development.
 
 ## Changelog
+
+### V0.8 (unreleased)
+
+- Enhancement: Label documentation now also works for local labels and includes end-of-line comment for label, too.
+- Enhancement: Symbol definition documentation now also includes comments in the same way as the label documentation does.
 
 ### V0.7 (26-Sep-21)
 

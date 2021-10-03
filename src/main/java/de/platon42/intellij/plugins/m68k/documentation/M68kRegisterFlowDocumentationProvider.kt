@@ -1,6 +1,5 @@
 package de.platon42.intellij.plugins.m68k.documentation
 
-import com.intellij.lang.documentation.AbstractDocumentationProvider
 import com.intellij.lang.documentation.DocumentationMarkup
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.util.text.HtmlBuilder
@@ -19,7 +18,7 @@ import de.platon42.intellij.plugins.m68k.utils.M68kIsaUtil.findExactIsaDataAndAl
 import de.platon42.intellij.plugins.m68k.utils.M68kIsaUtil.getOpSizeOrDefault
 import de.platon42.intellij.plugins.m68k.utils.M68kIsaUtil.modifyRwmWithOpsize
 
-class M68kRegisterFlowDocumentationProvider : AbstractDocumentationProvider() {
+class M68kRegisterFlowDocumentationProvider : AbstractM68kDocumentationProvider() {
 
     override fun generateDoc(element: PsiElement, originalElement: PsiElement?): String? {
         if (element is M68kDataRegister || element is M68kAddressRegister) {
@@ -90,7 +89,7 @@ class M68kRegisterFlowDocumentationProvider : AbstractDocumentationProvider() {
         val statementRows = HtmlBuilder()
         backtrace.forEach(statementRows::append)
         val builder = HtmlBuilder()
-        builder.append(HtmlChunk.text(thisInfo).wrapWith(DocumentationMarkup.DEFINITION_ELEMENT))
+        builder.append(getDefinition(thisInfo))
         builder.append(statementRows.wrapWith(DocumentationMarkup.SECTIONS_TABLE.style("padding-left: 8pt; padding-right: 8pt")))
         return builder.toString()
     }

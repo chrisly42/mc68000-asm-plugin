@@ -58,16 +58,10 @@ runPluginVerifier {
 patchPluginXml {
     setChangeNotes("""
   <p>I still got zero feedback and zero <a href="https://plugins.jetbrains.com/plugin/17268-mc68000-assembly-language-support/reviews">ratings</a> :-(</p>
-  <h4>V0.7 (26-Sep-21)</h4>
+  <h4>V0.8 (unreleased)</h4>
     <ul>
-      <li>Bugfix: 'btst' with pc-relative and weird immediate mode was missing (courtesy of Yann).
-      <li>Bugfix: 'movem' with pc-relative mode was missing for weird immediate mode (courtesy of Yann).
-      <li>Bugfix: Special registers for address mode matching only worked with lower case register names (courtesy of Yann).
-      <li>Enhancement: Assembler syntax with implicit immediate 1 for shifts and rotations no longer cause syntax errors (courtesy of Yann).
-      <li>Enhancement: Documentation for instruction with special register shows specific register expected.
-      <li>New: Added documentation provider info for global labels. Shows directives and comments above.
-      <li>Bugfix: Fixed BNF for labels with preprocessor statements.
-      <li>Disabled: 'END' detection was breaking parsing, causing havoc.
+      <li>Enhancement: Label documentation now also works for local labels and includes end-of-line comment for label, too.
+      <li>Enhancement: Symbol definition documentation now also includes comments in the same way as the label documentation does.
     </ul>
   <p>Full changelog available at <a href="https://github.com/chrisly42/mc68000-asm-plugin#changelog">Github project site</a>.</p>
 """)
