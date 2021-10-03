@@ -6,7 +6,7 @@ import com.intellij.openapi.util.text.HtmlBuilder
 import com.intellij.openapi.util.text.HtmlChunk
 import com.intellij.psi.PsiElement
 import de.platon42.intellij.plugins.m68k.psi.M68kNamedElement
-import de.platon42.intellij.plugins.m68k.psi.M68kPsiWalkUtil
+import de.platon42.intellij.plugins.m68k.psi.utils.M68kPsiWalkUtil
 
 abstract class AbstractM68kDocumentationProvider : AbstractDocumentationProvider() {
 
@@ -26,6 +26,9 @@ abstract class AbstractM68kDocumentationProvider : AbstractDocumentationProvider
 
     fun getContent(element: PsiElement) =
         HtmlBuilder().append(HtmlChunk.text(element.text).code()).wrapWith(DocumentationMarkup.CONTENT_ELEMENT)
+
+    fun getContent(chunk: HtmlChunk) =
+        HtmlBuilder().append(chunk).wrapWith(DocumentationMarkup.CONTENT_ELEMENT)
 
     fun getContent(value: String) =
         HtmlBuilder().append(value).wrapWith(DocumentationMarkup.CONTENT_ELEMENT)

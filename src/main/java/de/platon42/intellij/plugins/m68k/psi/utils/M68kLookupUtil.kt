@@ -1,9 +1,10 @@
-package de.platon42.intellij.plugins.m68k.psi
+package de.platon42.intellij.plugins.m68k.psi.utils
 
 import com.intellij.openapi.project.Project
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.stubs.StubIndex
 import com.intellij.psi.util.PsiTreeUtil
+import de.platon42.intellij.plugins.m68k.psi.*
 import de.platon42.intellij.plugins.m68k.stubs.M68kGlobalLabelStubIndex
 import de.platon42.intellij.plugins.m68k.stubs.M68kMacroDefinitionStubIndex
 import de.platon42.intellij.plugins.m68k.stubs.M68kSymbolDefinitionStubIndex

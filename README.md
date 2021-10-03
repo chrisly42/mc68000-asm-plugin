@@ -90,6 +90,10 @@ weak warnings as missing macro evaluation will not resolve symbols defined via `
 
 Provides the assigned value of a `=`, `set` or `equ` symbol definition when hovering over a symbol.
 
+#### M68kMacroDefinition
+
+When used over a macro invocation, shows the expanded macro contents.
+
 #### M68kLabel
 
 Shows the comments above the label (local or global) and an end-of-line comment, if available. If the first statement after the label is a directive
@@ -160,6 +164,7 @@ are appreciated. It really is keeping me motivated to continue development.
 
 - Enhancement: Label documentation now also works for local labels and includes end-of-line comment for label, too.
 - Enhancement: Symbol definition documentation now also includes comments in the same way as the label documentation does.
+- New: Macro definition / invocation documentation provider that even tries to expand macros.
 
 ### V0.7 (26-Sep-21)
 

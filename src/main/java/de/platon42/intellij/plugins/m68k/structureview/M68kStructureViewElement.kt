@@ -6,8 +6,8 @@ import com.intellij.navigation.ItemPresentation
 import com.intellij.psi.NavigatablePsiElement
 import de.platon42.intellij.plugins.m68k.psi.M68kFile
 import de.platon42.intellij.plugins.m68k.psi.M68kGlobalLabel
-import de.platon42.intellij.plugins.m68k.psi.M68kLookupUtil
-import de.platon42.intellij.plugins.m68k.psi.M68kLookupUtil.findAllLocalLabels
+import de.platon42.intellij.plugins.m68k.psi.utils.M68kLookupUtil
+import de.platon42.intellij.plugins.m68k.psi.utils.M68kLookupUtil.findAllLocalLabels
 
 class M68kStructureViewElement(private val myElement: NavigatablePsiElement) : StructureViewTreeElement {
     override fun getValue(): Any = myElement
