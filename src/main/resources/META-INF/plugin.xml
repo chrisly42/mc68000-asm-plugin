@@ -40,7 +40,7 @@
         <lang.documentationProvider language="MC68000"
                                     implementationClass="de.platon42.intellij.plugins.m68k.documentation.M68kSymbolDefinitionDocumentationProvider"/>
         <lang.documentationProvider language="MC68000"
-                                    implementationClass="de.platon42.intellij.plugins.m68k.documentation.M68kLabelDocumentationProvider"/>
+                                    implementationClass="de.platon42.intellij.plugins.m68k.documentation.M68kLabelDefinitionDocumentationProvider"/>
         <lang.documentationProvider language="MC68000"
                                     implementationClass="de.platon42.intellij.plugins.m68k.documentation.M68kMacroDefinitionDocumentationProvider"/>
         <lang.documentationProvider language="MC68000"

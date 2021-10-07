@@ -8,7 +8,7 @@ import de.platon42.intellij.plugins.m68k.psi.M68kLocalLabel
 import de.platon42.intellij.plugins.m68k.psi.M68kNamedElement
 import de.platon42.intellij.plugins.m68k.psi.M68kStatement
 
-class M68kLabelDocumentationProvider : AbstractM68kDocumentationProvider() {
+class M68kLabelDefinitionDocumentationProvider : AbstractM68kDocumentationProvider() {
 
     override fun getQuickNavigateInfo(element: PsiElement, originalElement: PsiElement?): String? {
         return generateDoc(element, originalElement)

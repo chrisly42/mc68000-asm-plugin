@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(LightCodeInsightExtension::class)
-internal class M68KLabelDocumentationProviderTest : AbstractDocumentationProviderTest() {
+internal class M68kLabelDocumentationProviderTest : AbstractDocumentationProviderTest() {
 
     @Test
     internal fun check_documentation_for_a_label_definition(@MyFixture myFixture: CodeInsightTestFixture) {

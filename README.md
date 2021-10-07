@@ -92,9 +92,9 @@ Provides the assigned value of a `=`, `set` or `equ` symbol definition when hove
 
 #### M68kMacroDefinition
 
-When used over a macro invocation, shows the expanded macro contents.
+When used over a macro invocation, shows the expanded macro contents (only the \1 to \9 and \a to \z are expanded according to the parameters used).
 
-#### M68kLabel
+#### M68kLabelDefinition
 
 Shows the comments above the label (local or global) and an end-of-line comment, if available. If the first statement after the label is a directive
 like `include` or `dc.b`, it will be shown, too.
