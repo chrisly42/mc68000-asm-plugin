@@ -236,11 +236,20 @@ Register ::= DataRegister | AddressRegister | SpecialRegister
 
 private DataOrAddressRegister ::= DataRegister | AddressRegister { name = "data or address register"}
 
-IndexRegister ::= DataOrAddressRegister DataWidth?
+IndexRegister ::= DataOrAddressRegister DataWidth? (OP_AR_MUL IndexScale)?
 {
     name = "index register"
     methods = [
+        indexRegister = "DataOrAddressRegister"
         isLongWidth
+    ]
+}
+
+IndexScale ::= expr
+{
+    name = "scale value"
+    methods = [
+        indexScale = "expr"
     ]
 }
 
@@ -268,6 +277,7 @@ AddressRegisterDirectAddressingMode ::= AddressRegister !(OP_MINUS|OP_AR_DIV)
 AddressRegisterIndirectAddressingMode ::= ROUND_L AddressRegister ROUND_R !OP_PLUS { implements = "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect" }
 AddressRegisterIndirectPostIncAddressingMode ::= ROUND_L AddressRegister ROUND_R OP_PLUS { implements = "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect" }
 AddressRegisterIndirectPreDecAddressingMode ::= OP_MINUS ROUND_L AddressRegister ROUND_R { implements = "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect" }
+
 AddressRegisterIndirectWithDisplacementOldAddressingMode ::= expr ROUND_L AddressRegister ROUND_R
 {
     implements = [
@@ -278,6 +288,7 @@ AddressRegisterIndirectWithDisplacementOldAddressingMode ::= expr ROUND_L Addres
         displacement = "expr"
     ]
 }
+
 AddressRegisterIndirectWithDisplacementNewAddressingMode ::= ROUND_L expr SEPARATOR AddressRegister ROUND_R
 {
     implements = [

@@ -32,6 +32,12 @@ public class M68kIndexRegisterImpl extends ASTWrapperPsiElement implements M68kI
     }
 
     @Override
+    @Nullable
+    public M68kIndexScale getIndexScale() {
+        return PsiTreeUtil.getChildOfType(this, M68kIndexScale.class);
+    }
+
+    @Override
     @NotNull
     public M68kRegister getRegister() {
         return notNullChild(PsiTreeUtil.getChildOfType(this, M68kRegister.class));

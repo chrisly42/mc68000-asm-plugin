@@ -532,13 +532,14 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // DataOrAddressRegister DataWidth?
+    // DataOrAddressRegister DataWidth? (OP_AR_MUL IndexScale)?
     public static boolean IndexRegister(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "IndexRegister")) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NONE_, INDEX_REGISTER, "<index register>");
         r = DataOrAddressRegister(b, l + 1);
         r = r && IndexRegister_1(b, l + 1);
+        r = r && IndexRegister_2(b, l + 1);
         exit_section_(b, l, m, r, false, null);
         return r;
     }
@@ -548,6 +549,35 @@ public class M68kParser implements PsiParser, LightPsiParser {
         if (!recursion_guard_(b, l, "IndexRegister_1")) return false;
         DataWidth(b, l + 1);
         return true;
+    }
+
+    // (OP_AR_MUL IndexScale)?
+    private static boolean IndexRegister_2(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "IndexRegister_2")) return false;
+        IndexRegister_2_0(b, l + 1);
+        return true;
+    }
+
+    // OP_AR_MUL IndexScale
+    private static boolean IndexRegister_2_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "IndexRegister_2_0")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeToken(b, OP_AR_MUL);
+        r = r && IndexScale(b, l + 1);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
+    /* ********************************************************** */
+    // expr
+    public static boolean IndexScale(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "IndexScale")) return false;
+        boolean r;
+        Marker m = enter_section_(b, l, _NONE_, INDEX_SCALE, "<scale value>");
+        r = expr(b, l + 1, -1);
+        exit_section_(b, l, m, r, false, null);
+        return r;
     }
 
     /* ********************************************************** */

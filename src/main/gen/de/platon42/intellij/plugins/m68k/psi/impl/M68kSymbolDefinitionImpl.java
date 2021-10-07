@@ -19,8 +19,8 @@ public class M68kSymbolDefinitionImpl extends M68kSymbolDefinitionMixin implemen
         super(node);
     }
 
-    public M68kSymbolDefinitionImpl(@NotNull M68kSymbolDefinitionStub stub, @NotNull IStubElementType<?, ?> nodeType) {
-        super(stub, nodeType);
+    public M68kSymbolDefinitionImpl(@NotNull M68kSymbolDefinitionStub stub, @NotNull IStubElementType<?, ?> type) {
+        super(stub, type);
     }
 
     public void accept(@NotNull M68kVisitor visitor) {

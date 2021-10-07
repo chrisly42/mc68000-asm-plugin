@@ -19,8 +19,8 @@ public class M68kMacroDefinitionImpl extends M68kMacroDefinitionMixin implements
         super(node);
     }
 
-    public M68kMacroDefinitionImpl(@NotNull M68kMacroDefinitionStub stub, @NotNull IStubElementType<?, ?> nodeType) {
-        super(stub, nodeType);
+    public M68kMacroDefinitionImpl(@NotNull M68kMacroDefinitionStub stub, @NotNull IStubElementType<?, ?> type) {
+        super(stub, type);
     }
 
     public void accept(@NotNull M68kVisitor visitor) {

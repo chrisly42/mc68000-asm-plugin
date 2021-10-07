@@ -103,6 +103,10 @@ public class M68kVisitor extends PsiElementVisitor {
         visitPsiElement(o);
     }
 
+    public void visitIndexScale(@NotNull M68kIndexScale o) {
+        visitPsiElement(o);
+    }
+
     public void visitLocalLabel(@NotNull M68kLocalLabel o) {
         visitNamedElement(o);
     }

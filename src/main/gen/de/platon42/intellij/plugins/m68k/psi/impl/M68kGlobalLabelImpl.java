@@ -19,8 +19,8 @@ public class M68kGlobalLabelImpl extends M68kGlobalLabelMixin implements M68kGlo
         super(node);
     }
 
-    public M68kGlobalLabelImpl(@NotNull M68kGlobalLabelStub stub, @NotNull IStubElementType<?, ?> nodeType) {
-        super(stub, nodeType);
+    public M68kGlobalLabelImpl(@NotNull M68kGlobalLabelStub stub, @NotNull IStubElementType<?, ?> type) {
+        super(stub, type);
     }
 
     public void accept(@NotNull M68kVisitor visitor) {

@@ -53,6 +53,16 @@ internal class AddressingModesTest : AbstractParsingTest() {
     }
 
     @Test
+    internal fun register_indirect_with_scaled_index_and_offset_old_syntax(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l -4+foo(sp,d0.w*8),(10*20+4)(a1,a3*4)\n")
+    }
+
+    @Test
+    internal fun register_indirect_with_scaled_index_and_offset_new_syntax(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l (-4+foo,sp,a0*1),((10*20+4),a1,d5.l*2)\n")
+    }
+
+    @Test
     internal fun pc_indirect_with_offset_old_syntax(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
         testGoodSyntax(testCase, " move.l -4*4(pc),+4(pc)\n")
     }

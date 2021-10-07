@@ -12,12 +12,12 @@ object M68kAddressModeUtil {
             is M68kAddressRegisterIndirectPreDecAddressingMode -> AddressMode.ADDRESS_REGISTER_INDIRECT_PRE_DEC
             is M68kAddressRegisterIndirectWithDisplacementNewAddressingMode -> AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT
             is M68kAddressRegisterIndirectWithDisplacementOldAddressingMode -> AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT
-            is M68kAddressRegisterIndirectWithIndexNewAddressingMode -> AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_INDEX
-            is M68kAddressRegisterIndirectWithIndexOldAddressingMode -> AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_INDEX
+            is M68kAddressRegisterIndirectWithIndexNewAddressingMode -> if (hasScale(addressingMode)) AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_SCALED_INDEX else AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_INDEX
+            is M68kAddressRegisterIndirectWithIndexOldAddressingMode -> if (hasScale(addressingMode)) AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_SCALED_INDEX else AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_INDEX
             is M68kProgramCounterIndirectWithDisplacementNewAddressingMode -> AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT
             is M68kProgramCounterIndirectWithDisplacementOldAddressingMode -> AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT
-            is M68kProgramCounterIndirectWithIndexNewAddressingMode -> AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX
-            is M68kProgramCounterIndirectWithIndexOldAddressingMode -> AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX
+            is M68kProgramCounterIndirectWithIndexNewAddressingMode -> if (hasScale(addressingMode)) AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_SCALED_INDEX else AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX
+            is M68kProgramCounterIndirectWithIndexOldAddressingMode -> if (hasScale(addressingMode)) AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_SCALED_INDEX else AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX
             is M68kSpecialRegisterDirectAddressingMode -> AddressMode.SPECIAL_REGISTER_DIRECT
             is M68kDataRegisterDirectAddressingMode -> AddressMode.DATA_REGISTER_DIRECT
             is M68kAddressRegisterDirectAddressingMode -> AddressMode.ADDRESS_REGISTER_DIRECT
@@ -26,6 +26,8 @@ object M68kAddressModeUtil {
             else -> throw IllegalArgumentException("Unknown addressing mode $addressingMode")
         }
     }
+
+    private fun hasScale(addressingMode: M68kWithIndexRegister) = addressingMode.indexRegister.indexScale != null
 
     fun getOtherReadWriteModifyRegisters(rwm: Int): List<Pair<Register, Int>> {
         if (rwm and RWM_MODIFY_STACK > 0) {

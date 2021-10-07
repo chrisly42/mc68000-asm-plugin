@@ -9,6 +9,9 @@ public interface M68kIndexRegister extends M68kPsiElement {
     @Nullable
     M68kDataWidth getDataWidth();
 
+    @Nullable
+    M68kIndexScale getIndexScale();
+
     @NotNull
     M68kRegister getRegister();
 
