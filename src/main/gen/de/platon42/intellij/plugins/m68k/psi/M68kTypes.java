@@ -56,6 +56,9 @@ public interface M68kTypes {
     IElementType MACRO_DEFINITION = M68kStubElementTypeFactory.stubFactory("MACRO_DEFINITION");
     IElementType MACRO_NAME_DEFINITION = new M68kElementType("MACRO_NAME_DEFINITION");
     IElementType MACRO_PLAIN_LINE = new M68kElementType("MACRO_PLAIN_LINE");
+    IElementType MEMORY_INDIRECT_ADDRESSING_MODE = new M68kElementType("MEMORY_INDIRECT_ADDRESSING_MODE");
+    IElementType MEMORY_INDIRECT_POST_INDEXED_ADDRESSING_MODE = new M68kElementType("MEMORY_INDIRECT_POST_INDEXED_ADDRESSING_MODE");
+    IElementType MEMORY_INDIRECT_PRE_INDEXED_ADDRESSING_MODE = new M68kElementType("MEMORY_INDIRECT_PRE_INDEXED_ADDRESSING_MODE");
     IElementType OPERAND_SIZE = new M68kElementType("OPERAND_SIZE");
     IElementType PAREN_EXPR = new M68kElementType("PAREN_EXPR");
     IElementType PREPROCESSOR_DIRECTIVE = new M68kElementType("PREPROCESSOR_DIRECTIVE");
@@ -64,6 +67,9 @@ public interface M68kTypes {
     IElementType PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT_OLD_ADDRESSING_MODE = new M68kElementType("PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT_OLD_ADDRESSING_MODE");
     IElementType PROGRAM_COUNTER_INDIRECT_WITH_INDEX_NEW_ADDRESSING_MODE = new M68kElementType("PROGRAM_COUNTER_INDIRECT_WITH_INDEX_NEW_ADDRESSING_MODE");
     IElementType PROGRAM_COUNTER_INDIRECT_WITH_INDEX_OLD_ADDRESSING_MODE = new M68kElementType("PROGRAM_COUNTER_INDIRECT_WITH_INDEX_OLD_ADDRESSING_MODE");
+    IElementType PROGRAM_COUNTER_MEMORY_INDIRECT_ADDRESSING_MODE = new M68kElementType("PROGRAM_COUNTER_MEMORY_INDIRECT_ADDRESSING_MODE");
+    IElementType PROGRAM_COUNTER_MEMORY_INDIRECT_POST_INDEXED_ADDRESSING_MODE = new M68kElementType("PROGRAM_COUNTER_MEMORY_INDIRECT_POST_INDEXED_ADDRESSING_MODE");
+    IElementType PROGRAM_COUNTER_MEMORY_INDIRECT_PRE_INDEXED_ADDRESSING_MODE = new M68kElementType("PROGRAM_COUNTER_MEMORY_INDIRECT_PRE_INDEXED_ADDRESSING_MODE");
     IElementType PROGRAM_COUNTER_REFERENCE = new M68kElementType("PROGRAM_COUNTER_REFERENCE");
     IElementType REF_EXPR = new M68kElementType("REF_EXPR");
     IElementType REGISTER = new M68kElementType("REGISTER");
@@ -134,6 +140,8 @@ public interface M68kTypes {
     IElementType ROUND_L = new M68kTokenType("ROUND_L");
     IElementType ROUND_R = new M68kTokenType("ROUND_R");
     IElementType SEPARATOR = new M68kTokenType("SEPARATOR");
+    IElementType SQUARE_L = new M68kTokenType("SQUARE_L");
+    IElementType SQUARE_R = new M68kTokenType("SQUARE_R");
     IElementType STRINGLIT = new M68kTokenType("STRINGLIT");
     IElementType SYMBOL = new M68kTokenType("SYMBOL");
     IElementType SYMBOLDEF = new M68kTokenType("SYMBOLDEF");
@@ -231,6 +239,12 @@ public interface M68kTypes {
                 return new M68kMacroNameDefinitionImpl(node);
             } else if (type == MACRO_PLAIN_LINE) {
                 return new M68kMacroPlainLineImpl(node);
+            } else if (type == MEMORY_INDIRECT_ADDRESSING_MODE) {
+                return new M68kMemoryIndirectAddressingModeImpl(node);
+            } else if (type == MEMORY_INDIRECT_POST_INDEXED_ADDRESSING_MODE) {
+                return new M68kMemoryIndirectPostIndexedAddressingModeImpl(node);
+            } else if (type == MEMORY_INDIRECT_PRE_INDEXED_ADDRESSING_MODE) {
+                return new M68kMemoryIndirectPreIndexedAddressingModeImpl(node);
             } else if (type == OPERAND_SIZE) {
                 return new M68kOperandSizeImpl(node);
             } else if (type == PAREN_EXPR) {
@@ -247,6 +261,12 @@ public interface M68kTypes {
                 return new M68kProgramCounterIndirectWithIndexNewAddressingModeImpl(node);
             } else if (type == PROGRAM_COUNTER_INDIRECT_WITH_INDEX_OLD_ADDRESSING_MODE) {
                 return new M68kProgramCounterIndirectWithIndexOldAddressingModeImpl(node);
+            } else if (type == PROGRAM_COUNTER_MEMORY_INDIRECT_ADDRESSING_MODE) {
+                return new M68kProgramCounterMemoryIndirectAddressingModeImpl(node);
+            } else if (type == PROGRAM_COUNTER_MEMORY_INDIRECT_POST_INDEXED_ADDRESSING_MODE) {
+                return new M68kProgramCounterMemoryIndirectPostIndexedAddressingModeImpl(node);
+            } else if (type == PROGRAM_COUNTER_MEMORY_INDIRECT_PRE_INDEXED_ADDRESSING_MODE) {
+                return new M68kProgramCounterMemoryIndirectPreIndexedAddressingModeImpl(node);
             } else if (type == PROGRAM_COUNTER_REFERENCE) {
                 return new M68kProgramCounterReferenceImpl(node);
             } else if (type == REF_EXPR) {

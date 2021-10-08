@@ -168,7 +168,6 @@ PLAIN_MACRO_LINE=[^;\r\n]+
   "+"                 { return OP_PLUS; }
   "-"                 { return OP_MINUS; }
   "*"                 { yybegin(exprOpState); return CURRENT_PC_SYMBOL; }
-
 }
 
 <EXPR> {
@@ -218,6 +217,8 @@ PLAIN_MACRO_LINE=[^;\r\n]+
   "vbr"               { yybegin(exprOpState); return REG_VBR; }
 
   "#"                 { return HASH; }
+  "\["                { return SQUARE_L; }
+//  "\]"                { return SQUARE_R; }
 
   {SYMBOL}            { yybegin(exprOpState); return SYMBOL; }
 }
@@ -226,6 +227,8 @@ PLAIN_MACRO_LINE=[^;\r\n]+
   {OPSIZE_BS}         { return OPSIZE_BS; }
   {OPSIZE_W}          { return OPSIZE_W; }
   {OPSIZE_L}          { return OPSIZE_L; }
+  "\["                { return SQUARE_L; }
+  "\]"                { return SQUARE_R; }
 }
 
 <WAITEOL>

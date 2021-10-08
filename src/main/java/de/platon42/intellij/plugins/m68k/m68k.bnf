@@ -259,6 +259,12 @@ AddressingMode ::= ImmediateData
                 | AddressRegisterIndirectAddressingMode
                 | AddressRegisterIndirectWithDisplacementNewAddressingMode
                 | ProgramCounterIndirectWithDisplacementNewAddressingMode
+                | MemoryIndirectAddressingMode
+                | ProgramCounterMemoryIndirectAddressingMode
+                | MemoryIndirectPostIndexedAddressingMode
+                | ProgramCounterMemoryIndirectPostIndexedAddressingMode
+                | MemoryIndirectPreIndexedAddressingMode
+                | ProgramCounterMemoryIndirectPreIndexedAddressingMode
                 | AddressRegisterIndirectWithIndexNewAddressingMode
                 | ProgramCounterIndirectWithIndexNewAddressingMode
                 | AddressRegisterIndirectWithDisplacementOldAddressingMode
@@ -324,6 +330,47 @@ AddressRegisterIndirectWithIndexNewAddressingMode ::= ROUND_L (expr SEPARATOR)? 
     ]
 }
 
+MemoryIndirectAddressingMode ::= ROUND_L SQUARE_L (expr SEPARATOR)? AddressRegister SQUARE_R (SEPARATOR expr)? ROUND_R
+{
+    implements = [
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithBaseDisplacement"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithOuterDisplacement"
+    ]
+    methods = [
+        baseDisplacement = "expr[0]"
+        outerDisplacement = "expr[1]"
+    ]
+}
+
+MemoryIndirectPostIndexedAddressingMode ::= ROUND_L (SQUARE_L (expr SEPARATOR)? AddressRegister SQUARE_R SEPARATOR)? IndexRegister (SEPARATOR expr)? ROUND_R
+{
+    implements = [
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithBaseDisplacement"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithIndexRegister"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithOuterDisplacement"
+    ]
+    methods = [
+        baseDisplacement = "expr[0]"
+        outerDisplacement = "expr[1]"
+    ]
+}
+
+MemoryIndirectPreIndexedAddressingMode ::= ROUND_L SQUARE_L (expr SEPARATOR)? AddressRegister SEPARATOR IndexRegister SQUARE_R (SEPARATOR expr)? ROUND_R
+{
+    implements = [
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithBaseDisplacement"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithIndexRegister"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithOuterDisplacement"
+    ]
+    methods = [
+        baseDisplacement = "expr[0]"
+        outerDisplacement = "expr[1]"
+    ]
+}
+
 ProgramCounterIndirectWithDisplacementOldAddressingMode ::= (ROUND_L PC ROUND_R) | (expr ROUND_L PC ROUND_R)
 {
     implements = ["de.platon42.intellij.plugins.m68k.psi.M68kWithDisplacement"]
@@ -359,6 +406,44 @@ ProgramCounterIndirectWithIndexNewAddressingMode ::= ROUND_L (expr SEPARATOR)? P
     ]
     methods = [
         displacement = "expr"
+    ]
+}
+
+ProgramCounterMemoryIndirectAddressingMode ::= ROUND_L SQUARE_L (expr SEPARATOR)? PC SQUARE_R (SEPARATOR expr)? ROUND_R
+{
+    implements = [
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithBaseDisplacement"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithOuterDisplacement"
+    ]
+    methods = [
+        baseDisplacement = "expr[0]"
+        outerDisplacement = "expr[1]"
+    ]
+}
+
+ProgramCounterMemoryIndirectPostIndexedAddressingMode ::= ROUND_L (SQUARE_L (expr SEPARATOR)? PC SQUARE_R SEPARATOR)? IndexRegister (SEPARATOR expr)? ROUND_R
+{
+    implements = [
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithBaseDisplacement"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithIndexRegister"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithOuterDisplacement"
+    ]
+    methods = [
+        baseDisplacement = "expr[0]"
+        outerDisplacement = "expr[1]"
+    ]
+}
+
+ProgramCounterMemoryIndirectPreIndexedAddressingMode ::= ROUND_L SQUARE_L (expr SEPARATOR)? PC SEPARATOR IndexRegister SQUARE_R (SEPARATOR expr)? ROUND_R
+{
+    implements = [
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithBaseDisplacement"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithIndexRegister"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithOuterDisplacement"
+    ]
+    methods = [
+        baseDisplacement = "expr[0]"
+        outerDisplacement = "expr[1]"
     ]
 }
 

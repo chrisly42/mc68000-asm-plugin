@@ -93,6 +93,127 @@ internal class AddressingModesTest : AbstractParsingTest() {
     }
 
     @Test
+    internal fun memory_indirect_with_all_params(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([1234,a1],124),([-12,a0],-120)\n")
+    }
+
+    @Test
+    internal fun memory_indirect_without_base_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([a1],124),([a0],-120)\n")
+    }
+
+    @Test
+    internal fun memory_indirect_without_outer_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([1234,a1]),([-12,a0])\n")
+    }
+
+    @Test
+    internal fun memory_indirect_minimal(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([a1]),([a0])\n")
+    }
+
+    @Test
+    internal fun memory_indirect_post_indexed_with_all_params(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([1234,a1],a0.w*4,124),([-12,a0],d0.l*8,-120)\n")
+    }
+
+    @Test
+    internal fun memory_indirect_post_indexed_without_base_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([a1],a0,124),([a0],d0.l*8,-120)\n")
+    }
+
+    @Test
+    internal fun memory_indirect_post_indexed_without_outer_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([1234,a1],a0),([-12,a0],d0.l*8)\n")
+    }
+
+    @Test
+    internal fun memory_indirect_post_indexed_minimal(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([a1],a0),([a0],d0)\n")
+    }
+
+    @Test
+    internal fun memory_indirect_pre_indexed_with_all_params(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([1234,a1,a0.w*4],124),([-12,a0,d0.l*8],-120)\n")
+    }
+
+    @Test
+    internal fun memory_indirect_pre_indexed_without_base_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([a1,a0],124),([a0,d0.l*8],-120)\n")
+    }
+
+    @Test
+    internal fun memory_indirect_pre_indexed_without_outer_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([1234,a1,a0]),([-12,a0,d0.l*8])\n")
+    }
+
+    @Test
+    internal fun memory_indirect_pre_indexed_minimal(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([a1,a0]),([a0,d0])\n")
+    }
+
+
+    @Test
+    internal fun pc_memory_indirect_with_all_params(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([1234,pc],124),d0\n")
+    }
+
+    @Test
+    internal fun pc_memory_indirect_without_base_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([pc],124),d0\n")
+    }
+
+    @Test
+    internal fun pc_memory_indirect_without_outer_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([1234,pc]),d0\n")
+    }
+
+    @Test
+    internal fun pc_memory_indirect_minimal(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([pc]),d0\n")
+    }
+
+    @Test
+    internal fun pc_memory_indirect_post_indexed_with_all_params(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([1234,pc],a0.w*4,124),d0\n")
+    }
+
+    @Test
+    internal fun pc_memory_indirect_post_indexed_without_base_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([pc],a0.l*4,124),d0\n")
+    }
+
+    @Test
+    internal fun pc_memory_indirect_post_indexed_without_outer_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([1234,pc],a0),d0\n")
+    }
+
+    @Test
+    internal fun pc_memory_indirect_post_indexed_minimal(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([pc],a0*4),d0\n")
+    }
+
+    @Test
+    internal fun pc_memory_indirect_pre_indexed_with_all_params(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([1234,pc,a0.w*4],124),d0\n")
+    }
+
+    @Test
+    internal fun pc_memory_indirect_pre_indexed_without_base_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([pc,a0*4],124),d0\n")
+    }
+
+    @Test
+    internal fun pc_memory_indirect_pre_indexed_without_outer_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([1234,pc,a0]),d0\n")
+    }
+
+    @Test
+    internal fun pc_memory_indirect_pre_indexed_minimal(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([pc,a0.l*4]),d0\n")
+    }
+
+    @Test
     internal fun absolute_address(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
         testGoodSyntax(testCase, " move.l 4.w,a6\n")
     }

@@ -127,7 +127,8 @@ If the current statement has no valid syntax, the instruction details of all mat
 - Scoping for global symbols, labels and macros is currently the whole project.
 - No support for register replacement (e.g. registers replaced by `EQUR` or `EQURL` will cause syntax errors)
 - While the lexer supports the -spaces option (where a space does *NOT* introduce a comment), this cannot be configured yet (default is ON).
-- No support for other processor instructions, FPU or 68020+ address modes.
+- No support for other processor instructions and FPU.
+- The pretty esoteric use of `ZPC`, `ZA0-ZA7` or `ZSP` for zero (omitted) address in 68020 addressing modes is unsupported.
 - Unit Test coverage is not as good as it could be (ahem).
 - Missing but planned features:
     - Macro evaluation on invocation

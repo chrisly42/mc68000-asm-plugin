@@ -18,6 +18,12 @@ object M68kAddressModeUtil {
             is M68kProgramCounterIndirectWithDisplacementOldAddressingMode -> AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT
             is M68kProgramCounterIndirectWithIndexNewAddressingMode -> if (hasScale(addressingMode)) AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_SCALED_INDEX else AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX
             is M68kProgramCounterIndirectWithIndexOldAddressingMode -> if (hasScale(addressingMode)) AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_SCALED_INDEX else AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX
+            is M68kMemoryIndirectAddressingMode -> AddressMode.MEMORY_INDIRECT
+            is M68kMemoryIndirectPreIndexedAddressingMode -> AddressMode.MEMORY_INDIRECT_PREINDEXED
+            is M68kMemoryIndirectPostIndexedAddressingMode -> AddressMode.MEMORY_INDIRECT_POSTINDEXED
+            is M68kProgramCounterMemoryIndirectAddressingMode -> AddressMode.PROGRAM_COUNTER_MEMORY_INDIRECT
+            is M68kProgramCounterMemoryIndirectPreIndexedAddressingMode -> AddressMode.PROGRAM_COUNTER_MEMORY_INDIRECT_PREINDEXED
+            is M68kProgramCounterMemoryIndirectPostIndexedAddressingMode -> AddressMode.PROGRAM_COUNTER_MEMORY_INDIRECT_POSTINDEXED
             is M68kSpecialRegisterDirectAddressingMode -> AddressMode.SPECIAL_REGISTER_DIRECT
             is M68kDataRegisterDirectAddressingMode -> AddressMode.DATA_REGISTER_DIRECT
             is M68kAddressRegisterDirectAddressingMode -> AddressMode.ADDRESS_REGISTER_DIRECT
@@ -27,6 +33,7 @@ object M68kAddressModeUtil {
         }
     }
 
+    // TODO add evaluation of constant expressions and allow scale == 1 as false
     private fun hasScale(addressingMode: M68kWithIndexRegister) = addressingMode.indexRegister.indexScale != null
 
     fun getOtherReadWriteModifyRegisters(rwm: Int): List<Pair<Register, Int>> {

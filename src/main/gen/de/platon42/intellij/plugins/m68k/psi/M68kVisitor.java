@@ -127,6 +127,29 @@ public class M68kVisitor extends PsiElementVisitor {
         visitPsiElement(o);
     }
 
+    public void visitMemoryIndirectAddressingMode(@NotNull M68kMemoryIndirectAddressingMode o) {
+        visitAddressingMode(o);
+        // visitWithAddressRegisterIndirect(o);
+        // visitWithBaseDisplacement(o);
+        // visitWithOuterDisplacement(o);
+    }
+
+    public void visitMemoryIndirectPostIndexedAddressingMode(@NotNull M68kMemoryIndirectPostIndexedAddressingMode o) {
+        visitAddressingMode(o);
+        // visitWithAddressRegisterIndirect(o);
+        // visitWithBaseDisplacement(o);
+        // visitWithIndexRegister(o);
+        // visitWithOuterDisplacement(o);
+    }
+
+    public void visitMemoryIndirectPreIndexedAddressingMode(@NotNull M68kMemoryIndirectPreIndexedAddressingMode o) {
+        visitAddressingMode(o);
+        // visitWithAddressRegisterIndirect(o);
+        // visitWithBaseDisplacement(o);
+        // visitWithIndexRegister(o);
+        // visitWithOuterDisplacement(o);
+    }
+
     public void visitOperandSize(@NotNull M68kOperandSize o) {
         visitPsiElement(o);
     }
@@ -159,6 +182,26 @@ public class M68kVisitor extends PsiElementVisitor {
         visitAddressingMode(o);
         // visitWithDisplacement(o);
         // visitWithIndexRegister(o);
+    }
+
+    public void visitProgramCounterMemoryIndirectAddressingMode(@NotNull M68kProgramCounterMemoryIndirectAddressingMode o) {
+        visitAddressingMode(o);
+        // visitWithBaseDisplacement(o);
+        // visitWithOuterDisplacement(o);
+    }
+
+    public void visitProgramCounterMemoryIndirectPostIndexedAddressingMode(@NotNull M68kProgramCounterMemoryIndirectPostIndexedAddressingMode o) {
+        visitAddressingMode(o);
+        // visitWithBaseDisplacement(o);
+        // visitWithIndexRegister(o);
+        // visitWithOuterDisplacement(o);
+    }
+
+    public void visitProgramCounterMemoryIndirectPreIndexedAddressingMode(@NotNull M68kProgramCounterMemoryIndirectPreIndexedAddressingMode o) {
+        visitAddressingMode(o);
+        // visitWithBaseDisplacement(o);
+        // visitWithIndexRegister(o);
+        // visitWithOuterDisplacement(o);
     }
 
     public void visitProgramCounterReference(@NotNull M68kProgramCounterReference o) {
