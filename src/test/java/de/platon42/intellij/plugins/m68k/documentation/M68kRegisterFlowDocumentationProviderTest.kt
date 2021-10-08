@@ -100,7 +100,6 @@ nextlabel
             )
     }
 
-
     @Test
     internal fun check_documentation_for_a_written_register_in_code_flow(@MyFixture myFixture: CodeInsightTestFixture) {
         myFixture.configureByText(
@@ -175,6 +174,42 @@ nextlabel
         <td valign="top">        </td>
         <td valign="top"><code>move.l (sp)+,<font color="#ffc800">d1</font></code></td>
         <td valign="top"> ; <font color="#00ff00">sets d1.l</font></td>
+    </tr>
+</table>
+"""
+            )
+    }
+
+    @Test
+    internal fun check_documentation_for_68020_address_modes(@MyFixture myFixture: CodeInsightTestFixture) {
+        myFixture.configureByText(
+            "documentme.asm", """
+    moveq.l #0,d0
+    lea     foobar(pc),a0
+    move.l  ([100.w,a0,a0.w*4],124.w),($42.w,a0,d0.l*4)
+    move.l  a<caret>0,a1
+"""
+        )
+        assertThat(generateDocumentation(myFixture))
+            .isEqualToIgnoringWhitespace(
+                """
+<div class="definition">movea instruction uses a0.l</div>
+<table class="sections" style="padding-left: 8pt; padding-right: 8pt">
+    <tr>
+        <td valign="top">        </td>
+        <td valign="top"><code>lea foobar(pc),<font color="#ffc800">a0</font></code></td>
+        <td valign="top"> ; <font color="#00ff00">sets a0.l</font></td>
+    </tr>
+    <tr>
+        <td valign="top">        </td>
+        <td valign="top"><code>move.l ([100.w,<font color="#ffc800">a0</font>,<font color="#ffc800">a0</font>.w*4],124.w),(${'$'}42.w,<font color="#ffc800">a0</font>,d0.l*4)</code>
+        </td>
+        <td valign="top"> ; uses a0.l, uses a0.w</td>
+    </tr>
+    <tr>
+        <td valign="top">--&gt;</td>
+        <td valign="top"><b><code>move.l <font color="#ffc800">a0</font>,a1</code></b></td>
+        <td valign="top"> ; &lt;--</td>
     </tr>
 </table>
 """

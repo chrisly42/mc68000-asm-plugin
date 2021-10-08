@@ -1,5 +1,7 @@
 package de.platon42.intellij.plugins.m68k.asm
 
+import java.util.*
+
 enum class Machine {
     MC68000,
     MC68010,
@@ -8,6 +10,10 @@ enum class Machine {
     MC68040,
     MC68060
 }
+
+private val MC68000_ONLY = EnumSet.of(Machine.MC68000)
+private val MC68020_PLUS = EnumSet.range(Machine.MC68020, Machine.MC68060)
+private val ALL_MACHINES = EnumSet.allOf(Machine::class.java)
 
 enum class Register(val regname: String, val num: Int) {
     D0("d0", 0),
@@ -138,7 +144,7 @@ data class AllowedAdrMode(
 data class IsaData(
     val mnemonic: String,
     val description: String,
-    val machine: Set<Machine> = setOf(Machine.MC68000),
+    val machine: Set<Machine> = MC68000_ONLY,
     val altMnemonics: List<String> = emptyList(),
     val conditionCodes: List<String> = emptyList(),
     val id: String = mnemonic,
@@ -166,6 +172,21 @@ object M68kIsa {
         AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX,
     )
 
+    private val ALL_68020_MODES = ALL_68000_MODES.plus(
+        setOf(
+            AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_SCALED_INDEX,
+            AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_BASE_DISPLACEMENT,
+            AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_SCALED_INDEX,
+            AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_BASE_DISPLACEMENT,
+            AddressMode.MEMORY_INDIRECT,
+            AddressMode.MEMORY_INDIRECT_POSTINDEXED,
+            AddressMode.MEMORY_INDIRECT_PREINDEXED,
+            AddressMode.PROGRAM_COUNTER_MEMORY_INDIRECT,
+            AddressMode.PROGRAM_COUNTER_MEMORY_INDIRECT_POSTINDEXED,
+            AddressMode.PROGRAM_COUNTER_MEMORY_INDIRECT_PREINDEXED
+        )
+    )
+
     private val ALL_EXCEPT_IMMEDIATE_AND_PC_REL = setOf(
         AddressMode.DATA_REGISTER_DIRECT,
         AddressMode.ADDRESS_REGISTER_DIRECT,
@@ -175,6 +196,16 @@ object M68kIsa {
         AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT,
         AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_INDEX,
         AddressMode.ABSOLUTE_ADDRESS
+    )
+
+    private val ALL_68020_MODES_EXCEPT_IMMEDIATE_AND_PC_REL = ALL_EXCEPT_IMMEDIATE_AND_PC_REL.plus(
+        setOf(
+            AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_SCALED_INDEX,
+            AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_BASE_DISPLACEMENT,
+            AddressMode.MEMORY_INDIRECT,
+            AddressMode.MEMORY_INDIRECT_POSTINDEXED,
+            AddressMode.MEMORY_INDIRECT_PREINDEXED,
+        )
     )
 
     private val ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL = setOf(
@@ -321,21 +352,28 @@ object M68kIsa {
     private val isaData = listOf(
 
         // Data Movement Instructions
-        IsaData(
-            "move", "Move",
-            modes = listOf(
-                AllowedAdrMode(
-                    ALL_68000_MODES, ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL, modInfo = RWM_READ_OP1_OPSIZE or RWM_SET_OP2_OPSIZE,
-                    affectedCc = cc("-**00")
+        *autoExpandForOtherCpus(
+            MC68020_PLUS,
+
+            IsaData(
+                "move", "Move",
+                modes = listOf(
+                    AllowedAdrMode(
+                        ALL_68000_MODES, ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL, modInfo = RWM_READ_OP1_OPSIZE or RWM_SET_OP2_OPSIZE,
+                        affectedCc = cc("-**00")
+                    )
                 )
+            ),
+
+            IsaData(
+                "movea", "Move Address", altMnemonics = listOf("move"),
+                modes = listOf(AllowedAdrMode(ALL_68000_MODES, AREG_ONLY, OP_SIZE_WL, modInfo = RWM_READ_OP1_OPSIZE or RWM_SET_OP2_L))
             )
         ),
-        IsaData(
-            "movea", "Move Address", altMnemonics = listOf("move"),
-            modes = listOf(AllowedAdrMode(ALL_68000_MODES, AREG_ONLY, OP_SIZE_WL, modInfo = RWM_READ_OP1_OPSIZE or RWM_SET_OP2_L))
-        ),
+
         IsaData(
             "movem", "Move Multiple Registers",
+            machine = ALL_MACHINES,
             modes = listOf(
                 AllowedAdrMode(
                     setOf(AddressMode.REGISTER_LIST, AddressMode.ADDRESS_REGISTER_DIRECT, AddressMode.DATA_REGISTER_DIRECT),
@@ -392,8 +430,10 @@ object M68kIsa {
                 ),
             )
         ),
+
         IsaData(
             "movep", "Move Peripheral",
+            machine = EnumSet.range(Machine.MC68000, Machine.MC68040),
             modes = listOf(
                 AllowedAdrMode(
                     DREG_ONLY,
@@ -412,11 +452,13 @@ object M68kIsa {
 
         IsaData(
             "moveq", "Move Quick",
+            machine = ALL_MACHINES,
             modes = listOf(AllowedAdrMode(setOf(AddressMode.IMMEDIATE_DATA), DREG_ONLY, OP_SIZE_L, modInfo = RWM_SET_OP2_L, affectedCc = cc("-**00")))
         ),
 
         IsaData(
             "exg", "Exchange Registers",
+            machine = ALL_MACHINES,
             modes = listOf(
                 AllowedAdrMode(
                     setOf(AddressMode.DATA_REGISTER_DIRECT, AddressMode.ADDRESS_REGISTER_DIRECT),
@@ -426,139 +468,182 @@ object M68kIsa {
                 )
             )
         ),
-        IsaData(
-            "lea", "Load Effective Address",
-            modes = listOf(
-                AllowedAdrMode(
-                    setOf(
-                        AddressMode.ADDRESS_REGISTER_INDIRECT,
-                        AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT,
-                        AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_INDEX,
-                        AddressMode.ABSOLUTE_ADDRESS,
-                        AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT,
-                        AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX,
-                    ),
-                    AREG_ONLY,
-                    OP_SIZE_L,
-                    modInfo = RWM_SET_OP2_L
+
+        *autoExpandForOtherCpus(
+            MC68020_PLUS,
+
+            IsaData(
+                "lea", "Load Effective Address",
+                modes = listOf(
+                    AllowedAdrMode(
+                        setOf(
+                            AddressMode.ADDRESS_REGISTER_INDIRECT,
+                            AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT,
+                            AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_INDEX,
+                            AddressMode.ABSOLUTE_ADDRESS,
+                            AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT,
+                            AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX,
+                        ),
+                        AREG_ONLY,
+                        OP_SIZE_L,
+                        modInfo = RWM_SET_OP2_L
+                    )
+                )
+            ),
+
+            IsaData(
+                "pea", "Push Effective Address",
+                modes = listOf(
+                    AllowedAdrMode(
+                        setOf(
+                            AddressMode.ADDRESS_REGISTER_INDIRECT,
+                            AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT,
+                            AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_INDEX,
+                            AddressMode.ABSOLUTE_ADDRESS,
+                            AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT,
+                            AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX,
+                        ),
+                        null,
+                        OP_SIZE_L,
+                        modInfo = RWM_MODIFY_STACK
+                    )
                 )
             )
         ),
-        IsaData(
-            "pea", "Push Effective Address",
-            modes = listOf(
-                AllowedAdrMode(
-                    setOf(
-                        AddressMode.ADDRESS_REGISTER_INDIRECT,
-                        AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT,
-                        AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_INDEX,
-                        AddressMode.ABSOLUTE_ADDRESS,
-                        AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT,
-                        AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX,
-                    ),
-                    null,
-                    OP_SIZE_L,
-                    modInfo = RWM_MODIFY_STACK
-                )
-            )
-        ),
+
         IsaData(
             "link", "Link and Allocate",
+            machine = ALL_MACHINES,
             modes = listOf(AllowedAdrMode(AREG_ONLY, setOf(AddressMode.IMMEDIATE_DATA), OP_SIZE_W, modInfo = RWM_SET_OP1_L or RWM_MODIFY_STACK))
         ),
+
         IsaData(
             "unlk", "Unlink",
+            machine = ALL_MACHINES,
             modes = listOf(AllowedAdrMode(AREG_ONLY, null, OP_UNSIZED, modInfo = RWM_SET_OP1_L or RWM_MODIFY_STACK))
         ),
 
         // Integer Arithmetic Instructions
-        IsaData("add", "Add", modes = ADD_SUB_MODES),
-        IsaData(
-            "adda", "Add Address", altMnemonics = listOf("add"),
-            modes = listOf(AllowedAdrMode(ALL_68000_MODES, AREG_ONLY, OP_SIZE_WL, modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_L))
-        ),
-        IsaData(
-            "addi", "Add Immediate", altMnemonics = listOf("add"),
-            modes = listOf(
-                AllowedAdrMode(
-                    setOf(AddressMode.IMMEDIATE_DATA), ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL, modInfo = RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("C****")
-                )
-            )
-        ),
-        IsaData("addq", "Add Quick", modes = ADDQ_SUBQ_MODES),
-        IsaData("addx", "Add with Extend", modes = ADDX_SUBX_MODES),
+        *autoExpandForOtherCpus(
+            MC68020_PLUS,
 
-        IsaData("sub", "Subtract", modes = ADD_SUB_MODES),
-        IsaData(
-            "suba", "Subtract Address", altMnemonics = listOf("sub"),
-            modes = listOf(AllowedAdrMode(ALL_68000_MODES, AREG_ONLY, OP_SIZE_WL, modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_L))
-        ),
-        IsaData(
-            "subi", "Subtract Immediate", altMnemonics = listOf("sub"),
-            modes = listOf(
-                AllowedAdrMode(
-                    setOf(AddressMode.IMMEDIATE_DATA), ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL, modInfo = RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("C****")
-                )
-            )
-        ),
-        IsaData("subq", "Subtract Quick", modes = ADDQ_SUBQ_MODES),
-        IsaData("subx", "Subtract with Extend", modes = ADDX_SUBX_MODES),
+            IsaData("add", "Add", modes = ADD_SUB_MODES),
 
-        IsaData(
-            "neg", "Negate", modes = listOf(
-                AllowedAdrMode(
-                    ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL, null, modInfo = RWM_MODIFY_OP1_OPSIZE,
-                    affectedCc = cc("C****")
+            IsaData(
+                "adda", "Add Address", altMnemonics = listOf("add"),
+                modes = listOf(AllowedAdrMode(ALL_68000_MODES, AREG_ONLY, OP_SIZE_WL, modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_L))
+            ),
+
+            IsaData(
+                "addi", "Add Immediate", altMnemonics = listOf("add"),
+                modes = listOf(
+                    AllowedAdrMode(
+                        setOf(AddressMode.IMMEDIATE_DATA), ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL, modInfo = RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("C****")
+                    )
                 )
-            )
-        ),
-        IsaData(
-            "negx", "Negate with Extend", modes = listOf(
-                AllowedAdrMode(
-                    ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL, null, modInfo = RWM_MODIFY_OP1_OPSIZE,
-                    affectedCc = cc("C****"), testedCc = cc("?----")
-                )
-            )
+            ),
+
+            IsaData("addq", "Add Quick", modes = ADDQ_SUBQ_MODES)
         ),
 
-        IsaData(
-            "clr",
-            "Clear",
-            modes = listOf(AllowedAdrMode(ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL, null, modInfo = RWM_SET_OP1_OPSIZE, affectedCc = cc("-0100")))
+        IsaData("addx", "Add with Extend", machine = ALL_MACHINES, modes = ADDX_SUBX_MODES),
+
+        *autoExpandForOtherCpus(
+            MC68020_PLUS,
+
+            IsaData("sub", "Subtract", modes = ADD_SUB_MODES),
+
+            IsaData(
+                "suba", "Subtract Address", altMnemonics = listOf("sub"),
+                modes = listOf(AllowedAdrMode(ALL_68000_MODES, AREG_ONLY, OP_SIZE_WL, modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_L))
+            ),
+
+            IsaData(
+                "subi", "Subtract Immediate", altMnemonics = listOf("sub"),
+                modes = listOf(
+                    AllowedAdrMode(
+                        setOf(AddressMode.IMMEDIATE_DATA), ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL, modInfo = RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("C****")
+                    )
+                )
+            ),
+
+            IsaData("subq", "Subtract Quick", modes = ADDQ_SUBQ_MODES)
         ),
 
-        IsaData(
-            "cmp", "Compare", modes = listOf(
-                AllowedAdrMode(
-                    ALL_EXCEPT_AREG,
-                    setOf(AddressMode.DATA_REGISTER_DIRECT),
-                    modInfo = RWM_READ_OP1_OPSIZE or RWM_READ_OP2_OPSIZE,
-                    affectedCc = cc("-****")
-                ),
-                AllowedAdrMode(
-                    setOf(AddressMode.ADDRESS_REGISTER_DIRECT),
-                    setOf(AddressMode.DATA_REGISTER_DIRECT),
-                    OP_SIZE_WL,
-                    modInfo = RWM_READ_OP1_OPSIZE or RWM_READ_OP2_OPSIZE,
-                    affectedCc = cc("-****")
-                ),
-            )
-        ),
-        IsaData(
-            "cmpa", "Compare Address", altMnemonics = listOf("cmp"),
-            modes = listOf(AllowedAdrMode(ALL_68000_MODES, AREG_ONLY, OP_SIZE_WL, modInfo = RWM_READ_OP1_OPSIZE or RWM_READ_OP2_L, affectedCc = cc("-****")))
-        ),
-        IsaData(
-            "cmpi", "Compare Immediate", altMnemonics = listOf("cmp"),
-            modes = listOf(
-                AllowedAdrMode(
-                    setOf(AddressMode.IMMEDIATE_DATA), ALL_EXCEPT_AREG_AND_IMMEDIATE, modInfo = RWM_READ_OP2_OPSIZE,
-                    affectedCc = cc("-****")
+        IsaData("subx", "Subtract with Extend", machine = ALL_MACHINES, modes = ADDX_SUBX_MODES),
+
+        *autoExpandForOtherCpus(
+            MC68020_PLUS,
+
+            IsaData(
+                "neg", "Negate", modes = listOf(
+                    AllowedAdrMode(
+                        ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL, null, modInfo = RWM_MODIFY_OP1_OPSIZE,
+                        affectedCc = cc("C****")
+                    )
+                )
+            ),
+
+            IsaData(
+                "negx", "Negate with Extend", modes = listOf(
+                    AllowedAdrMode(
+                        ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL, null, modInfo = RWM_MODIFY_OP1_OPSIZE,
+                        affectedCc = cc("C****"), testedCc = cc("?----")
+                    )
+                )
+            ),
+
+            IsaData(
+                "clr",
+                "Clear",
+                modes = listOf(AllowedAdrMode(ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL, null, modInfo = RWM_SET_OP1_OPSIZE, affectedCc = cc("-0100")))
+            ),
+
+            IsaData(
+                "cmp", "Compare", modes = listOf(
+                    AllowedAdrMode(
+                        ALL_EXCEPT_AREG,
+                        setOf(AddressMode.DATA_REGISTER_DIRECT),
+                        modInfo = RWM_READ_OP1_OPSIZE or RWM_READ_OP2_OPSIZE,
+                        affectedCc = cc("-****")
+                    ),
+                    AllowedAdrMode(
+                        setOf(AddressMode.ADDRESS_REGISTER_DIRECT),
+                        setOf(AddressMode.DATA_REGISTER_DIRECT),
+                        OP_SIZE_WL,
+                        modInfo = RWM_READ_OP1_OPSIZE or RWM_READ_OP2_OPSIZE,
+                        affectedCc = cc("-****")
+                    ),
+                )
+            ),
+
+            IsaData(
+                "cmpa", "Compare Address", altMnemonics = listOf("cmp"),
+                modes = listOf(
+                    AllowedAdrMode(
+                        ALL_68000_MODES,
+                        AREG_ONLY,
+                        OP_SIZE_WL,
+                        modInfo = RWM_READ_OP1_OPSIZE or RWM_READ_OP2_L,
+                        affectedCc = cc("-****")
+                    )
+                )
+            ),
+
+            IsaData(
+                "cmpi", "Compare Immediate", altMnemonics = listOf("cmp"),
+                modes = listOf(
+                    AllowedAdrMode(
+                        setOf(AddressMode.IMMEDIATE_DATA), ALL_EXCEPT_AREG_AND_IMMEDIATE, modInfo = RWM_READ_OP2_OPSIZE,
+                        affectedCc = cc("-****")
+                    )
                 )
             )
         ),
+
         IsaData(
             "cmpm", "Compare Memory to Memory", altMnemonics = listOf("cmp"),
+            machine = ALL_MACHINES,
             modes = listOf(
                 AllowedAdrMode(
                     setOf(AddressMode.ADDRESS_REGISTER_INDIRECT_POST_INC),
@@ -569,99 +654,122 @@ object M68kIsa {
             )
         ),
 
-        IsaData(
-            "muls", "Signed Multiply",
-            modes = listOf(AllowedAdrMode(ALL_EXCEPT_AREG, DREG_ONLY, OP_SIZE_W, modInfo = RWM_READ_OP1_W or RWM_MODIFY_OP2_L, affectedCc = cc("-**00")))
-        ),
-        IsaData(
-            "mulu", "Unsigned Multiply",
-            modes = listOf(AllowedAdrMode(ALL_EXCEPT_AREG, DREG_ONLY, OP_SIZE_W, modInfo = RWM_READ_OP1_W or RWM_MODIFY_OP2_L, affectedCc = cc("-**00")))
-        ),
-        IsaData(
-            "divs", "Signed Divide",
-            modes = listOf(AllowedAdrMode(ALL_EXCEPT_AREG, DREG_ONLY, OP_SIZE_W, modInfo = RWM_READ_OP1_L or RWM_MODIFY_OP2_L, affectedCc = cc("-***0")))
-        ),
-        IsaData(
-            "divu", "Unsigned Divide",
-            modes = listOf(AllowedAdrMode(ALL_EXCEPT_AREG, DREG_ONLY, OP_SIZE_W, modInfo = RWM_READ_OP1_L or RWM_MODIFY_OP2_L, affectedCc = cc("-***0")))
+        *autoExpandForOtherCpus(
+            MC68020_PLUS,
+
+            IsaData(
+                "muls", "Signed Multiply",
+                modes = listOf(AllowedAdrMode(ALL_EXCEPT_AREG, DREG_ONLY, OP_SIZE_W, modInfo = RWM_READ_OP1_W or RWM_MODIFY_OP2_L, affectedCc = cc("-**00")))
+            ),
+
+            IsaData(
+                "mulu", "Unsigned Multiply",
+                modes = listOf(AllowedAdrMode(ALL_EXCEPT_AREG, DREG_ONLY, OP_SIZE_W, modInfo = RWM_READ_OP1_W or RWM_MODIFY_OP2_L, affectedCc = cc("-**00")))
+            ),
+
+            IsaData(
+                "divs", "Signed Divide",
+                modes = listOf(AllowedAdrMode(ALL_EXCEPT_AREG, DREG_ONLY, OP_SIZE_W, modInfo = RWM_READ_OP1_L or RWM_MODIFY_OP2_L, affectedCc = cc("-***0")))
+            ),
+
+            IsaData(
+                "divu", "Unsigned Divide",
+                modes = listOf(AllowedAdrMode(ALL_EXCEPT_AREG, DREG_ONLY, OP_SIZE_W, modInfo = RWM_READ_OP1_L or RWM_MODIFY_OP2_L, affectedCc = cc("-***0")))
+            ),
         ),
 
-        IsaData("ext", "Sign Extend", modes = listOf(AllowedAdrMode(DREG_ONLY, null, OP_SIZE_WL, modInfo = RWM_MODIFY_OP1_OPSIZE, affectedCc = cc("-**00")))),
+        IsaData(
+            "ext",
+            "Sign Extend",
+            machine = ALL_MACHINES,
+            modes = listOf(AllowedAdrMode(DREG_ONLY, null, OP_SIZE_WL, modInfo = RWM_MODIFY_OP1_OPSIZE, affectedCc = cc("-**00")))
+        ),
 
         // Logical Instructions
-        IsaData(
-            "and", "Logical AND",
-            modes = listOf(
-                AllowedAdrMode(ALL_EXCEPT_AREG, DREG_ONLY, modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("-**00")),
-                AllowedAdrMode(DREG_ONLY, INDIRECT_MODES, modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("-**00"))
-            )
-        ),
-        IsaData(
-            "andi", "Logical AND Immediate",
-            altMnemonics = listOf("and"),
-            modes = listOf(
-                AllowedAdrMode(
-                    setOf(AddressMode.IMMEDIATE_DATA),
-                    ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL,
-                    modInfo = RWM_MODIFY_OP2_OPSIZE,
-                    affectedCc = cc("-**00")
+
+        *autoExpandForOtherCpus(
+            MC68020_PLUS,
+            IsaData(
+                "and", "Logical AND",
+                modes = listOf(
+                    AllowedAdrMode(ALL_EXCEPT_AREG, DREG_ONLY, modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("-**00")),
+                    AllowedAdrMode(DREG_ONLY, INDIRECT_MODES, modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("-**00"))
                 )
-            )
-        ),
-        IsaData(
-            "eor", "Logical Exclusive-OR",
-            modes = listOf(
-                AllowedAdrMode(
-                    DREG_ONLY,
-                    ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL,
-                    modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_OPSIZE,
-                    affectedCc = cc("-**00")
+            ),
+
+            IsaData(
+                "andi", "Logical AND Immediate",
+                altMnemonics = listOf("and"),
+                modes = listOf(
+                    AllowedAdrMode(
+                        setOf(AddressMode.IMMEDIATE_DATA),
+                        ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL,
+                        modInfo = RWM_MODIFY_OP2_OPSIZE,
+                        affectedCc = cc("-**00")
+                    )
                 )
-            )
-        ),
-        IsaData(
-            "eori", "Logical Exclusive-OR Immediate", altMnemonics = listOf("eor"),
-            modes = listOf(
-                AllowedAdrMode(
-                    setOf(AddressMode.IMMEDIATE_DATA),
-                    ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL,
-                    modInfo = RWM_MODIFY_OP2_OPSIZE,
-                    affectedCc = cc("-**00")
+            ),
+
+            IsaData(
+                "eor", "Logical Exclusive-OR",
+                modes = listOf(
+                    AllowedAdrMode(
+                        DREG_ONLY,
+                        ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL,
+                        modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_OPSIZE,
+                        affectedCc = cc("-**00")
+                    )
                 )
-            )
-        ),
-        IsaData(
-            "or", "Logical Inclusive-OR",
-            modes = listOf(
-                AllowedAdrMode(ALL_EXCEPT_AREG, DREG_ONLY, modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("-**00")),
-                AllowedAdrMode(DREG_ONLY, INDIRECT_MODES, modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("-**00"))
-            )
-        ),
-        IsaData(
-            "ori", "Logical Inclusive-OR Immediate", altMnemonics = listOf("or"),
-            modes = listOf(
-                AllowedAdrMode(
-                    setOf(AddressMode.IMMEDIATE_DATA),
-                    ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL,
-                    modInfo = RWM_MODIFY_OP2_OPSIZE,
-                    affectedCc = cc("-**00")
+            ),
+
+            IsaData(
+                "eori", "Logical Exclusive-OR Immediate", altMnemonics = listOf("eor"),
+                modes = listOf(
+                    AllowedAdrMode(
+                        setOf(AddressMode.IMMEDIATE_DATA),
+                        ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL,
+                        modInfo = RWM_MODIFY_OP2_OPSIZE,
+                        affectedCc = cc("-**00")
+                    )
                 )
-            )
-        ),
-        IsaData(
-            "not", "Logical Complement",
-            modes = listOf(AllowedAdrMode(ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL, null, modInfo = RWM_MODIFY_OP1_OPSIZE, affectedCc = cc("-**00")))
+            ),
+
+            IsaData(
+                "or", "Logical Inclusive-OR",
+                modes = listOf(
+                    AllowedAdrMode(ALL_EXCEPT_AREG, DREG_ONLY, modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("-**00")),
+                    AllowedAdrMode(DREG_ONLY, INDIRECT_MODES, modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("-**00"))
+                )
+            ),
+
+            IsaData(
+                "ori", "Logical Inclusive-OR Immediate", altMnemonics = listOf("or"),
+                modes = listOf(
+                    AllowedAdrMode(
+                        setOf(AddressMode.IMMEDIATE_DATA),
+                        ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL,
+                        modInfo = RWM_MODIFY_OP2_OPSIZE,
+                        affectedCc = cc("-**00")
+                    )
+                )
+            ),
+
+            IsaData(
+                "not", "Logical Complement",
+                modes = listOf(AllowedAdrMode(ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL, null, modInfo = RWM_MODIFY_OP1_OPSIZE, affectedCc = cc("-**00")))
+            ),
+
+            // Shift and Rotate Instructions
+            IsaData("asl", "Arithmetic Shift Left", modes = ASD_LSD_MODES),
+            IsaData("asr", "Arithmetic Shift Right", modes = ASD_LSD_MODES),
+            IsaData("lsl", "Logical Shift Left", modes = ASD_LSD_MODES),
+            IsaData("lsr", "Logical Shift Right", modes = ASD_LSD_MODES),
+            IsaData("rol", "Rotate Left", modes = ROD_MODES),
+            IsaData("ror", "Rotate Right", modes = ROD_MODES),
+            IsaData("roxl", "Rotate with Extend Left", modes = ROXD_MODES),
+            IsaData("roxr", "Rotate with Extend Right", modes = ROXD_MODES),
         ),
 
-        // Shift and Rotate Instructions
-        IsaData("asl", "Arithmetic Shift Left", modes = ASD_LSD_MODES),
-        IsaData("asr", "Arithmetic Shift Right", modes = ASD_LSD_MODES),
-        IsaData("lsl", "Logical Shift Left", modes = ASD_LSD_MODES),
-        IsaData("lsr", "Logical Shift Right", modes = ASD_LSD_MODES),
-        IsaData("rol", "Rotate Left", modes = ROD_MODES),
-        IsaData("ror", "Rotate Right", modes = ROD_MODES),
-        IsaData("roxl", "Rotate with Extend Left", modes = ROXD_MODES),
-        IsaData("roxr", "Rotate with Extend Right", modes = ROXD_MODES),
         IsaData(
             "swap",
             "Swap Register Words",
@@ -669,14 +777,19 @@ object M68kIsa {
         ),
 
         // Bit Manipulation Instructions
-        IsaData("bchg", "Test Bit and Change", modes = BCHG_BCLR_BSET_MODES),
-        IsaData("bclr", "Test Bit and Clear", modes = BCHG_BCLR_BSET_MODES),
-        IsaData("bset", "Test Bit and Set", modes = BCHG_BCLR_BSET_MODES),
-        IsaData("btst", "Test Bit", modes = BTST_MODES),
+
+        *autoExpandForOtherCpus(
+            MC68020_PLUS,
+            IsaData("bchg", "Test Bit and Change", modes = BCHG_BCLR_BSET_MODES),
+            IsaData("bclr", "Test Bit and Clear", modes = BCHG_BCLR_BSET_MODES),
+            IsaData("bset", "Test Bit and Set", modes = BCHG_BCLR_BSET_MODES),
+            IsaData("btst", "Test Bit", modes = BTST_MODES),
+        ),
 
         // Binary-Coded Decimal Instructions
         IsaData(
             "abcd", "Add Decimal with Extend",
+            machine = ALL_MACHINES,
             modes = listOf(
                 AllowedAdrMode(
                     DREG_ONLY, DREG_ONLY, OP_SIZE_B, modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_OPSIZE,
@@ -693,6 +806,7 @@ object M68kIsa {
         ),
         IsaData(
             "sbcd", "Subtract Decimal with Extend",
+            machine = ALL_MACHINES,
             modes = listOf(
                 AllowedAdrMode(
                     DREG_ONLY, DREG_ONLY, OP_SIZE_B, modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_OPSIZE,
@@ -707,12 +821,16 @@ object M68kIsa {
                 )
             )
         ),
-        IsaData(
-            "nbcd", "Negate Decimal with Extend",
-            modes = listOf(
-                AllowedAdrMode(
-                    ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL, null, OP_SIZE_B, modInfo = RWM_MODIFY_OP1_OPSIZE,
-                    affectedCc = cc("CUAU*"), testedCc = cc("?-?--")
+
+        *autoExpandForOtherCpus(
+            MC68020_PLUS,
+            IsaData(
+                "nbcd", "Negate Decimal with Extend",
+                modes = listOf(
+                    AllowedAdrMode(
+                        ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL, null, OP_SIZE_B, modInfo = RWM_MODIFY_OP1_OPSIZE,
+                        affectedCc = cc("CUAU*"), testedCc = cc("?-?--")
+                    )
                 )
             )
         ),
@@ -743,60 +861,70 @@ object M68kIsa {
             modes = listOf(AllowedAdrMode(DREG_ONLY, setOf(AddressMode.ABSOLUTE_ADDRESS), OP_SIZE_W, modInfo = RWM_MODIFY_OP1_W, testedCc = cc("-????"))),
             changesControlFlow = true
         ),
-        IsaData(
-            "sCC", "Set Conditionally", conditionCodes = conditionCodes,
-            modes = listOf(AllowedAdrMode(ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL, null, OP_SIZE_B, modInfo = RWM_SET_OP2_B, testedCc = cc("-????")))
+
+
+        *autoExpandForOtherCpus(
+            MC68020_PLUS,
+            IsaData(
+                "sCC", "Set Conditionally", conditionCodes = conditionCodes,
+                modes = listOf(AllowedAdrMode(ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL, null, OP_SIZE_B, modInfo = RWM_SET_OP2_B, testedCc = cc("-????")))
+            ),
+
+            IsaData(
+                "jmp", "Jump",
+                modes = listOf(
+                    AllowedAdrMode(
+                        setOf(
+                            AddressMode.ADDRESS_REGISTER_INDIRECT,
+                            AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT,
+                            AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_INDEX,
+                            AddressMode.ABSOLUTE_ADDRESS,
+                            AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT,
+                            AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX
+                        ), null, OP_UNSIZED
+                    )
+                ),
+                changesControlFlow = true
+            ),
+            IsaData(
+                "jsr", "Jump to Subroutine",
+                modes = listOf(
+                    AllowedAdrMode(
+                        setOf(
+                            AddressMode.ADDRESS_REGISTER_INDIRECT,
+                            AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT,
+                            AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_INDEX,
+                            AddressMode.ABSOLUTE_ADDRESS,
+                            AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT,
+                            AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX
+                        ), null, OP_UNSIZED, modInfo = RWM_MODIFY_STACK
+                    )
+                ),
+                changesControlFlow = true
+            )
         ),
 
-        IsaData(
-            "jmp", "Jump",
-            modes = listOf(
-                AllowedAdrMode(
-                    setOf(
-                        AddressMode.ADDRESS_REGISTER_INDIRECT,
-                        AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT,
-                        AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_INDEX,
-                        AddressMode.ABSOLUTE_ADDRESS,
-                        AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT,
-                        AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX
-                    ), null, OP_UNSIZED
-                )
-            ),
-            changesControlFlow = true
-        ),
-        IsaData(
-            "jsr", "Jump to Subroutine",
-            modes = listOf(
-                AllowedAdrMode(
-                    setOf(
-                        AddressMode.ADDRESS_REGISTER_INDIRECT,
-                        AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT,
-                        AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_INDEX,
-                        AddressMode.ABSOLUTE_ADDRESS,
-                        AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT,
-                        AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX
-                    ), null, OP_UNSIZED, modInfo = RWM_MODIFY_STACK
-                )
-            ),
-            changesControlFlow = true
-        ),
-        IsaData("nop", "No Operation", hasOps = false, modes = NO_OPS_UNSIZED),
+        IsaData("nop", "No Operation", machine = ALL_MACHINES, hasOps = false, modes = NO_OPS_UNSIZED),
 
         IsaData(
             "rtr",
             "Return and Restore",
+            machine = ALL_MACHINES,
             hasOps = false,
             modes = listOf(AllowedAdrMode(size = OP_UNSIZED, modInfo = RWM_MODIFY_STACK, affectedCc = cc("*****"))),
             changesControlFlow = true
         ),
         IsaData(
             "rts", "Return from Subroutine", hasOps = false,
+            machine = ALL_MACHINES,
             modes = listOf(AllowedAdrMode(size = OP_UNSIZED, modInfo = RWM_MODIFY_STACK)),
             changesControlFlow = true
         ),
 
         IsaData(
-            "tst", "Test Operand", modes = listOf(
+            "tst", "Test Operand",
+            machine = MC68000_ONLY,
+            modes = listOf(
                 AllowedAdrMode(
                     ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL, null, modInfo = RWM_READ_OP1_OPSIZE,
                     affectedCc = cc("-**00")
@@ -804,9 +932,25 @@ object M68kIsa {
             )
         ),
 
+        IsaData(
+            "tst", "Test Operand",
+            machine = MC68020_PLUS,
+            modes = listOf(
+                AllowedAdrMode(
+                    ALL_68020_MODES.minus(AddressMode.ADDRESS_REGISTER_DIRECT), null, modInfo = RWM_READ_OP1_OPSIZE,
+                    affectedCc = cc("-**00")
+                ),
+                AllowedAdrMode(
+                    setOf(AddressMode.ADDRESS_REGISTER_DIRECT), null, OP_SIZE_WL, modInfo = RWM_READ_OP1_OPSIZE,
+                    affectedCc = cc("-**00")
+                ),
+            )
+        ),
+
         // System Control Instructions
         IsaData(
             "andi", "AND Immediate to Status Register", id = "andi to SR", altMnemonics = listOf("and"), isPrivileged = true,
+            machine = ALL_MACHINES,
             modes = listOf(
                 AllowedAdrMode(
                     setOf(AddressMode.IMMEDIATE_DATA), setOf(AddressMode.SPECIAL_REGISTER_DIRECT), OP_SIZE_W, "sr",
@@ -816,6 +960,7 @@ object M68kIsa {
         ),
         IsaData(
             "eori", "Exclusive-OR Immediate to Status Register", id = "eori to SR", altMnemonics = listOf("eor"), isPrivileged = true,
+            machine = ALL_MACHINES,
             modes = listOf(
                 AllowedAdrMode(
                     setOf(AddressMode.IMMEDIATE_DATA), setOf(AddressMode.SPECIAL_REGISTER_DIRECT), OP_SIZE_W, "sr",
@@ -825,6 +970,7 @@ object M68kIsa {
         ),
         IsaData(
             "ori", "Inclusive-OR Immediate to Status Register", id = "ori to SR", altMnemonics = listOf("or"), isPrivileged = true,
+            machine = ALL_MACHINES,
             modes = listOf(
                 AllowedAdrMode(
                     setOf(AddressMode.IMMEDIATE_DATA), setOf(AddressMode.SPECIAL_REGISTER_DIRECT), OP_SIZE_W, "sr",
@@ -832,8 +978,10 @@ object M68kIsa {
                 )
             )
         ),
+
         IsaData(
             "move", "Move from Status Register", id = "move from SR",
+            machine = MC68000_ONLY,
             modes = listOf(
                 AllowedAdrMode(
                     setOf(AddressMode.SPECIAL_REGISTER_DIRECT),
@@ -845,42 +993,62 @@ object M68kIsa {
                 )
             )
         ),
-        IsaData(
-            "move", "Move to Status Register", id = "move to SR", isPrivileged = true,
-            modes = listOf(
-                AllowedAdrMode(
-                    ALL_EXCEPT_AREG, setOf(AddressMode.SPECIAL_REGISTER_DIRECT), OP_SIZE_W, "sr",
-                    affectedCc = cc("*****")
+
+        *autoExpandForOtherCpus(
+            MC68020_PLUS,
+
+            IsaData(
+                "move", "Move to Status Register", id = "move to SR", isPrivileged = true,
+                modes = listOf(
+                    AllowedAdrMode(
+                        ALL_EXCEPT_AREG, setOf(AddressMode.SPECIAL_REGISTER_DIRECT), OP_SIZE_W, "sr",
+                        affectedCc = cc("*****")
+                    )
                 )
             )
         ),
+
         IsaData(
             "move", "Move User Stack Pointer", id = "move USP", isPrivileged = true,
+            machine = ALL_MACHINES,
             modes = listOf(
                 AllowedAdrMode(setOf(AddressMode.SPECIAL_REGISTER_DIRECT), AREG_ONLY, OP_SIZE_L, "usp", modInfo = RWM_SET_OP2_L),
                 AllowedAdrMode(AREG_ONLY, setOf(AddressMode.SPECIAL_REGISTER_DIRECT), OP_SIZE_L, "usp", modInfo = RWM_READ_OP1_L),
             )
         ),
 
-        IsaData("reset", "Reset External Devices", isPrivileged = true, hasOps = false, modes = NO_OPS_UNSIZED),
+        IsaData("reset", "Reset External Devices", machine = ALL_MACHINES, isPrivileged = true, hasOps = false, modes = NO_OPS_UNSIZED),
         IsaData(
-            "rte", "Return from Exception", isPrivileged = true, hasOps = false,
+            "rte", "Return from Exception",
+            machine = ALL_MACHINES, isPrivileged = true, hasOps = false,
             modes = listOf(AllowedAdrMode(size = OP_UNSIZED, modInfo = RWM_MODIFY_STACK)),
             changesControlFlow = true
         ),
         IsaData(
-            "stop", "Stop", isPrivileged = true,
+            "stop", "Stop",
+            machine = ALL_MACHINES, isPrivileged = true,
             modes = listOf(AllowedAdrMode(setOf(AddressMode.IMMEDIATE_DATA), null, OP_UNSIZED))
         ),
 
-        IsaData(
-            "chk", "Check Register Against Bound",
-            modes = listOf(AllowedAdrMode(ALL_EXCEPT_AREG, DREG_ONLY, OP_SIZE_W, modInfo = RWM_READ_OP1_W or RWM_READ_OP2_W, affectedCc = cc("-*UUU")))
+        *autoExpandForOtherCpus(
+            MC68020_PLUS,
+            IsaData(
+                "chk", "Check Register Against Bound",
+                modes = listOf(AllowedAdrMode(ALL_EXCEPT_AREG, DREG_ONLY, OP_SIZE_W, modInfo = RWM_READ_OP1_W or RWM_READ_OP2_W, affectedCc = cc("-*UUU")))
+            )
         ),
-        IsaData("illegal", "Take Illegal Instruction Trap", hasOps = false, modes = NO_OPS_UNSIZED, changesControlFlow = true),
-        IsaData("trap", "Trap", modes = listOf(AllowedAdrMode(setOf(AddressMode.IMMEDIATE_DATA), null, OP_UNSIZED)), changesControlFlow = true),
+
+        IsaData("illegal", "Take Illegal Instruction Trap", machine = ALL_MACHINES, hasOps = false, modes = NO_OPS_UNSIZED, changesControlFlow = true),
         IsaData(
-            "trapv", "Trap on Overflow", hasOps = false,
+            "trap",
+            "Trap",
+            machine = ALL_MACHINES,
+            modes = listOf(AllowedAdrMode(setOf(AddressMode.IMMEDIATE_DATA), null, OP_UNSIZED)),
+            changesControlFlow = true
+        ),
+        IsaData(
+            "trapv", "Trap on Overflow",
+            machine = ALL_MACHINES, hasOps = false,
             modes = listOf(AllowedAdrMode(size = OP_UNSIZED, testedCc = cc("---?-"))),
             changesControlFlow = true
         ),
@@ -912,21 +1080,78 @@ object M68kIsa {
                 )
             )
         ),
-        IsaData(
-            "move", "Move to Condition Code Register", id = "move to CCR",
-            modes = listOf(
-                AllowedAdrMode(ALL_EXCEPT_AREG, setOf(AddressMode.SPECIAL_REGISTER_DIRECT), OP_SIZE_W, "ccr", affectedCc = cc("*****")),
+
+        *autoExpandForOtherCpus(
+            MC68020_PLUS,
+
+            IsaData(
+                "move", "Move from Condition Code Register", id = "move from CCR",
+                machine = EnumSet.of(Machine.MC68010),
+                modes = listOf(
+                    AllowedAdrMode(
+                        setOf(AddressMode.SPECIAL_REGISTER_DIRECT),
+                        ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL,
+                        OP_SIZE_W,
+                        "ccr",
+                        modInfo = RWM_SET_OP2_W,
+                        testedCc = cc("?????")
+                    )
+                )
+            ),
+
+            IsaData(
+                "move", "Move to Condition Code Register", id = "move to CCR",
+                modes = listOf(
+                    AllowedAdrMode(ALL_EXCEPT_AREG, setOf(AddressMode.SPECIAL_REGISTER_DIRECT), OP_SIZE_W, "ccr", affectedCc = cc("*****")),
+                )
             )
         ),
 
         // Multiprocessor Instructions
-        IsaData(
-            "tas", "Test Operand and Set",
-            modes = listOf(AllowedAdrMode(ALL_EXCEPT_IMMEDIATE_AND_PC_REL, null, OP_SIZE_B, modInfo = RWM_MODIFY_OP1_B, affectedCc = cc("-**00")))
+        *autoExpandForOtherCpus(
+            MC68020_PLUS,
+            IsaData(
+                "tas", "Test Operand and Set",
+                modes = listOf(AllowedAdrMode(ALL_EXCEPT_IMMEDIATE_AND_PC_REL, null, OP_SIZE_B, modInfo = RWM_MODIFY_OP1_B, affectedCc = cc("-**00")))
+            )
         )
     )
 
-    private val mnemonicLookupMap = isaData.asSequence()
+    private fun autoExpandForOtherCpus(machines: Set<Machine>, vararg isaDatas: IsaData): Array<out IsaData> {
+        val allIsaData = ArrayList<IsaData>()
+        for (isaData in isaDatas) {
+            val newModes = ArrayList<AllowedAdrMode>()
+            for (mode in isaData.modes) {
+                newModes.add(mode.copy(op1 = add68020Modes(mode.op1), op2 = add68020Modes(mode.op2)))
+            }
+            allIsaData.add(isaData.copy(machine = machines, modes = newModes))
+        }
+        return allIsaData.toTypedArray()
+    }
+
+    private fun add68020Modes(oldModes: Set<AddressMode>?) = if (oldModes != null) {
+        val newModes = oldModes.toMutableSet()
+        if (oldModes.contains(AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_INDEX)) {
+            newModes.add(AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_SCALED_INDEX)
+            newModes.add(AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_BASE_DISPLACEMENT)
+            newModes.add(AddressMode.MEMORY_INDIRECT)
+            newModes.add(AddressMode.MEMORY_INDIRECT_POSTINDEXED)
+            newModes.add(AddressMode.MEMORY_INDIRECT_PREINDEXED)
+        }
+        if (oldModes.contains(AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX)) {
+            newModes.add(AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_SCALED_INDEX)
+            newModes.add(AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_BASE_DISPLACEMENT)
+            newModes.add(AddressMode.PROGRAM_COUNTER_MEMORY_INDIRECT)
+            newModes.add(AddressMode.PROGRAM_COUNTER_MEMORY_INDIRECT_POSTINDEXED)
+            newModes.add(AddressMode.PROGRAM_COUNTER_MEMORY_INDIRECT_PREINDEXED)
+        }
+        newModes
+    } else {
+        null
+    }
+
+    private
+    val mnemonicLookupMap = isaData.asSequence()
         .flatMap {
             (if (it.conditionCodes.isEmpty()) it.altMnemonics.plus(it.mnemonic) else it.altMnemonics.plus(it.conditionCodes
                 .map { cc ->
