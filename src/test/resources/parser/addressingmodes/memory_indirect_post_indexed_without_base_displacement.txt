@@ -20,6 +20,8 @@ Assembly File: a.asm
         PsiElement(M68kTokenType.SEPARATOR)(',')
         M68kLiteralExprImpl(LITERAL_EXPR)
           PsiElement(M68kTokenType.DECIMAL)('124')
+        M68kDataWidthImpl(DATA_WIDTH)
+          PsiElement(M68kTokenType.OPSIZE_L)('.l')
         PsiElement(M68kTokenType.ROUND_R)(')')
       PsiElement(M68kTokenType.SEPARATOR)(',')
       M68kMemoryIndirectPostIndexedAddressingModeImpl(MEMORY_INDIRECT_POST_INDEXED_ADDRESSING_MODE)

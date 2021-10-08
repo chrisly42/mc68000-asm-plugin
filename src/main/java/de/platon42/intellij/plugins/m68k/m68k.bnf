@@ -330,7 +330,7 @@ AddressRegisterIndirectWithIndexNewAddressingMode ::= ROUND_L (expr SEPARATOR)? 
     ]
 }
 
-MemoryIndirectAddressingMode ::= ROUND_L SQUARE_L (expr SEPARATOR)? AddressRegister SQUARE_R (SEPARATOR expr)? ROUND_R
+MemoryIndirectAddressingMode ::= ROUND_L SQUARE_L (expr DataWidth? SEPARATOR)? AddressRegister SQUARE_R (SEPARATOR expr DataWidth?)? ROUND_R
 {
     implements = [
         "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect"
@@ -340,10 +340,12 @@ MemoryIndirectAddressingMode ::= ROUND_L SQUARE_L (expr SEPARATOR)? AddressRegis
     methods = [
         baseDisplacement = "expr[0]"
         outerDisplacement = "expr[1]"
+        baseDataWidth = "DataWidth[0]"
+        outerDataWidth = "DataWidth[1]"
     ]
 }
 
-MemoryIndirectPostIndexedAddressingMode ::= ROUND_L (SQUARE_L (expr SEPARATOR)? AddressRegister SQUARE_R SEPARATOR)? IndexRegister (SEPARATOR expr)? ROUND_R
+MemoryIndirectPostIndexedAddressingMode ::= ROUND_L (SQUARE_L (expr DataWidth? SEPARATOR)? AddressRegister SQUARE_R SEPARATOR)? IndexRegister (SEPARATOR expr DataWidth?)? ROUND_R
 {
     implements = [
         "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect"
@@ -354,10 +356,12 @@ MemoryIndirectPostIndexedAddressingMode ::= ROUND_L (SQUARE_L (expr SEPARATOR)? 
     methods = [
         baseDisplacement = "expr[0]"
         outerDisplacement = "expr[1]"
+        baseDataWidth = "DataWidth[0]"
+        outerDataWidth = "DataWidth[1]"
     ]
 }
 
-MemoryIndirectPreIndexedAddressingMode ::= ROUND_L SQUARE_L (expr SEPARATOR)? AddressRegister SEPARATOR IndexRegister SQUARE_R (SEPARATOR expr)? ROUND_R
+MemoryIndirectPreIndexedAddressingMode ::= ROUND_L SQUARE_L (expr DataWidth? SEPARATOR)? AddressRegister SEPARATOR IndexRegister SQUARE_R (SEPARATOR expr DataWidth?)? ROUND_R
 {
     implements = [
         "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect"
@@ -368,6 +372,8 @@ MemoryIndirectPreIndexedAddressingMode ::= ROUND_L SQUARE_L (expr SEPARATOR)? Ad
     methods = [
         baseDisplacement = "expr[0]"
         outerDisplacement = "expr[1]"
+        baseDataWidth = "DataWidth[0]"
+        outerDataWidth = "DataWidth[1]"
     ]
 }
 
@@ -409,7 +415,7 @@ ProgramCounterIndirectWithIndexNewAddressingMode ::= ROUND_L (expr SEPARATOR)? P
     ]
 }
 
-ProgramCounterMemoryIndirectAddressingMode ::= ROUND_L SQUARE_L (expr SEPARATOR)? PC SQUARE_R (SEPARATOR expr)? ROUND_R
+ProgramCounterMemoryIndirectAddressingMode ::= ROUND_L SQUARE_L (expr DataWidth? SEPARATOR)? PC SQUARE_R (SEPARATOR expr DataWidth?)? ROUND_R
 {
     implements = [
         "de.platon42.intellij.plugins.m68k.psi.M68kWithBaseDisplacement"
@@ -418,10 +424,12 @@ ProgramCounterMemoryIndirectAddressingMode ::= ROUND_L SQUARE_L (expr SEPARATOR)
     methods = [
         baseDisplacement = "expr[0]"
         outerDisplacement = "expr[1]"
+        baseDataWidth = "DataWidth[0]"
+        outerDataWidth = "DataWidth[1]"
     ]
 }
 
-ProgramCounterMemoryIndirectPostIndexedAddressingMode ::= ROUND_L (SQUARE_L (expr SEPARATOR)? PC SQUARE_R SEPARATOR)? IndexRegister (SEPARATOR expr)? ROUND_R
+ProgramCounterMemoryIndirectPostIndexedAddressingMode ::= ROUND_L (SQUARE_L (expr DataWidth? SEPARATOR)? PC SQUARE_R SEPARATOR)? IndexRegister (SEPARATOR expr DataWidth?)? ROUND_R
 {
     implements = [
         "de.platon42.intellij.plugins.m68k.psi.M68kWithBaseDisplacement"
@@ -431,10 +439,12 @@ ProgramCounterMemoryIndirectPostIndexedAddressingMode ::= ROUND_L (SQUARE_L (exp
     methods = [
         baseDisplacement = "expr[0]"
         outerDisplacement = "expr[1]"
+        baseDataWidth = "DataWidth[0]"
+        outerDataWidth = "DataWidth[1]"
     ]
 }
 
-ProgramCounterMemoryIndirectPreIndexedAddressingMode ::= ROUND_L SQUARE_L (expr SEPARATOR)? PC SEPARATOR IndexRegister SQUARE_R (SEPARATOR expr)? ROUND_R
+ProgramCounterMemoryIndirectPreIndexedAddressingMode ::= ROUND_L SQUARE_L (expr DataWidth? SEPARATOR)? PC SEPARATOR IndexRegister SQUARE_R (SEPARATOR expr DataWidth?)? ROUND_R
 {
     implements = [
         "de.platon42.intellij.plugins.m68k.psi.M68kWithBaseDisplacement"
@@ -444,6 +454,8 @@ ProgramCounterMemoryIndirectPreIndexedAddressingMode ::= ROUND_L SQUARE_L (expr 
     methods = [
         baseDisplacement = "expr[0]"
         outerDisplacement = "expr[1]"
+        baseDataWidth = "DataWidth[0]"
+        outerDataWidth = "DataWidth[1]"
     ]
 }
 

@@ -9,6 +9,9 @@ import java.util.List;
 public interface M68kProgramCounterMemoryIndirectAddressingMode extends M68kAddressingMode, M68kWithBaseDisplacement, M68kWithOuterDisplacement {
 
     @NotNull
+    List<M68kDataWidth> getDataWidthList();
+
+    @NotNull
     List<M68kExpr> getExprList();
 
     @Nullable
@@ -16,5 +19,11 @@ public interface M68kProgramCounterMemoryIndirectAddressingMode extends M68kAddr
 
     @Nullable
     M68kExpr getOuterDisplacement();
+
+    @Nullable
+    M68kDataWidth getBaseDataWidth();
+
+    @Nullable
+    M68kDataWidth getOuterDataWidth();
 
 }

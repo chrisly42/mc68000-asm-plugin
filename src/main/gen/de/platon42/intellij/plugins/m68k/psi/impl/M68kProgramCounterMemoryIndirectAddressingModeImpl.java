@@ -4,6 +4,7 @@ package de.platon42.intellij.plugins.m68k.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
+import de.platon42.intellij.plugins.m68k.psi.M68kDataWidth;
 import de.platon42.intellij.plugins.m68k.psi.M68kExpr;
 import de.platon42.intellij.plugins.m68k.psi.M68kProgramCounterMemoryIndirectAddressingMode;
 import de.platon42.intellij.plugins.m68k.psi.M68kVisitor;
@@ -31,6 +32,12 @@ public class M68kProgramCounterMemoryIndirectAddressingModeImpl extends M68kAddr
 
     @Override
     @NotNull
+    public List<M68kDataWidth> getDataWidthList() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, M68kDataWidth.class);
+    }
+
+    @Override
+    @NotNull
     public List<M68kExpr> getExprList() {
         return PsiTreeUtil.getChildrenOfTypeAsList(this, M68kExpr.class);
     }
@@ -46,6 +53,20 @@ public class M68kProgramCounterMemoryIndirectAddressingModeImpl extends M68kAddr
     @Nullable
     public M68kExpr getOuterDisplacement() {
         List<M68kExpr> p1 = getExprList();
+        return p1.size() < 2 ? null : p1.get(1);
+    }
+
+    @Override
+    @Nullable
+    public M68kDataWidth getBaseDataWidth() {
+        List<M68kDataWidth> p1 = getDataWidthList();
+        return p1.size() < 1 ? null : p1.get(0);
+    }
+
+    @Override
+    @Nullable
+    public M68kDataWidth getOuterDataWidth() {
+        List<M68kDataWidth> p1 = getDataWidthList();
         return p1.size() < 2 ? null : p1.get(1);
     }
 

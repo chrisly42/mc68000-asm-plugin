@@ -35,6 +35,12 @@ public class M68kMemoryIndirectPostIndexedAddressingModeImpl extends M68kAddress
 
     @Override
     @NotNull
+    public List<M68kDataWidth> getDataWidthList() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, M68kDataWidth.class);
+    }
+
+    @Override
+    @NotNull
     public M68kIndexRegister getIndexRegister() {
         return notNullChild(PsiTreeUtil.getChildOfType(this, M68kIndexRegister.class));
     }
@@ -56,6 +62,20 @@ public class M68kMemoryIndirectPostIndexedAddressingModeImpl extends M68kAddress
     @Nullable
     public M68kExpr getOuterDisplacement() {
         List<M68kExpr> p1 = getExprList();
+        return p1.size() < 2 ? null : p1.get(1);
+    }
+
+    @Override
+    @Nullable
+    public M68kDataWidth getBaseDataWidth() {
+        List<M68kDataWidth> p1 = getDataWidthList();
+        return p1.size() < 1 ? null : p1.get(0);
+    }
+
+    @Override
+    @Nullable
+    public M68kDataWidth getOuterDataWidth() {
+        List<M68kDataWidth> p1 = getDataWidthList();
         return p1.size() < 2 ? null : p1.get(1);
     }
 

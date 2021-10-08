@@ -12,6 +12,9 @@ public interface M68kMemoryIndirectPreIndexedAddressingMode extends M68kAddressi
     M68kAddressRegister getAddressRegister();
 
     @NotNull
+    List<M68kDataWidth> getDataWidthList();
+
+    @NotNull
     M68kIndexRegister getIndexRegister();
 
     @NotNull
@@ -22,5 +25,11 @@ public interface M68kMemoryIndirectPreIndexedAddressingMode extends M68kAddressi
 
     @Nullable
     M68kExpr getOuterDisplacement();
+
+    @Nullable
+    M68kDataWidth getBaseDataWidth();
+
+    @Nullable
+    M68kDataWidth getOuterDataWidth();
 
 }

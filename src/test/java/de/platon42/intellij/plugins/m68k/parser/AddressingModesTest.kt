@@ -94,12 +94,12 @@ internal class AddressingModesTest : AbstractParsingTest() {
 
     @Test
     internal fun memory_indirect_with_all_params(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        testGoodSyntax(testCase, " move.l ([1234,a1],124),([-12,a0],-120)\n")
+        testGoodSyntax(testCase, " move.l ([1234.w,a1],124),([-12.w,a0],-120)\n")
     }
 
     @Test
     internal fun memory_indirect_without_base_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        testGoodSyntax(testCase, " move.l ([a1],124),([a0],-120)\n")
+        testGoodSyntax(testCase, " move.l ([a1],124.l),([a0],-120.w)\n")
     }
 
     @Test
@@ -114,17 +114,17 @@ internal class AddressingModesTest : AbstractParsingTest() {
 
     @Test
     internal fun memory_indirect_post_indexed_with_all_params(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        testGoodSyntax(testCase, " move.l ([1234,a1],a0.w*4,124),([-12,a0],d0.l*8,-120)\n")
+        testGoodSyntax(testCase, " move.l ([1234.w,a1],a0.w*4,124),([-12,a0],d0.l*8,-120.w)\n")
     }
 
     @Test
     internal fun memory_indirect_post_indexed_without_base_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        testGoodSyntax(testCase, " move.l ([a1],a0,124),([a0],d0.l*8,-120)\n")
+        testGoodSyntax(testCase, " move.l ([a1],a0,124.l),([a0],d0.l*8,-120)\n")
     }
 
     @Test
     internal fun memory_indirect_post_indexed_without_outer_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        testGoodSyntax(testCase, " move.l ([1234,a1],a0),([-12,a0],d0.l*8)\n")
+        testGoodSyntax(testCase, " move.l ([1234.l,a1],a0),([-12,a0],d0.l*8)\n")
     }
 
     @Test
@@ -139,12 +139,12 @@ internal class AddressingModesTest : AbstractParsingTest() {
 
     @Test
     internal fun memory_indirect_pre_indexed_without_base_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        testGoodSyntax(testCase, " move.l ([a1,a0],124),([a0,d0.l*8],-120)\n")
+        testGoodSyntax(testCase, " move.l ([a1,a0],124),([a0,d0.l*8],-120.w)\n")
     }
 
     @Test
     internal fun memory_indirect_pre_indexed_without_outer_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        testGoodSyntax(testCase, " move.l ([1234,a1,a0]),([-12,a0,d0.l*8])\n")
+        testGoodSyntax(testCase, " move.l ([1234.l,a1,a0]),([-12,a0,d0.l*8])\n")
     }
 
     @Test
@@ -152,15 +152,14 @@ internal class AddressingModesTest : AbstractParsingTest() {
         testGoodSyntax(testCase, " move.l ([a1,a0]),([a0,d0])\n")
     }
 
-
     @Test
     internal fun pc_memory_indirect_with_all_params(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        testGoodSyntax(testCase, " move.l ([1234,pc],124),d0\n")
+        testGoodSyntax(testCase, " move.l ([1234.w,pc],124),d0\n")
     }
 
     @Test
     internal fun pc_memory_indirect_without_base_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        testGoodSyntax(testCase, " move.l ([pc],124),d0\n")
+        testGoodSyntax(testCase, " move.l ([pc],124.l),d0\n")
     }
 
     @Test
@@ -175,7 +174,7 @@ internal class AddressingModesTest : AbstractParsingTest() {
 
     @Test
     internal fun pc_memory_indirect_post_indexed_with_all_params(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        testGoodSyntax(testCase, " move.l ([1234,pc],a0.w*4,124),d0\n")
+        testGoodSyntax(testCase, " move.l ([1234.l,pc],a0.w*4,124.w),d0\n")
     }
 
     @Test
@@ -195,12 +194,12 @@ internal class AddressingModesTest : AbstractParsingTest() {
 
     @Test
     internal fun pc_memory_indirect_pre_indexed_with_all_params(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        testGoodSyntax(testCase, " move.l ([1234,pc,a0.w*4],124),d0\n")
+        testGoodSyntax(testCase, " move.l ([1234.w,pc,a0.w*4],124),d0\n")
     }
 
     @Test
     internal fun pc_memory_indirect_pre_indexed_without_base_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        testGoodSyntax(testCase, " move.l ([pc,a0*4],124),d0\n")
+        testGoodSyntax(testCase, " move.l ([pc,a0*4],124.l),d0\n")
     }
 
     @Test
