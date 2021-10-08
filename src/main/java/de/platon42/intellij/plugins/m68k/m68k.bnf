@@ -263,18 +263,20 @@ AddressingMode ::= ImmediateData
                 | AddressRegisterIndirectAddressingMode
                 | AddressRegisterIndirectWithDisplacementNewAddressingMode
                 | ProgramCounterIndirectWithDisplacementNewAddressingMode
-                | MemoryIndirectAddressingMode
-                | ProgramCounterMemoryIndirectAddressingMode
-                | MemoryIndirectPostIndexedAddressingMode
-                | ProgramCounterMemoryIndirectPostIndexedAddressingMode
-                | MemoryIndirectPreIndexedAddressingMode
-                | ProgramCounterMemoryIndirectPreIndexedAddressingMode
                 | AddressRegisterIndirectWithIndexNewAddressingMode
                 | ProgramCounterIndirectWithIndexNewAddressingMode
                 | AddressRegisterIndirectWithDisplacementOldAddressingMode
                 | ProgramCounterIndirectWithDisplacementOldAddressingMode
                 | AddressRegisterIndirectWithIndexOldAddressingMode
                 | ProgramCounterIndirectWithIndexOldAddressingMode
+                | AddressRegisterIndirectWithIndexBaseDisplacementAddressingMode
+                | ProgramCounterIndirectWithIndexBaseDisplacementAddressingMode
+                | MemoryIndirectAddressingMode
+                | ProgramCounterMemoryIndirectAddressingMode
+                | MemoryIndirectPostIndexedAddressingMode
+                | ProgramCounterMemoryIndirectPostIndexedAddressingMode
+                | MemoryIndirectPreIndexedAddressingMode
+                | ProgramCounterMemoryIndirectPreIndexedAddressingMode
                 | SpecialRegisterDirectAddressingMode
                 | DataRegisterDirectAddressingMode
                 | AddressRegisterDirectAddressingMode
@@ -331,6 +333,33 @@ AddressRegisterIndirectWithIndexNewAddressingMode ::= ROUND_L (expr SEPARATOR)? 
     ]
     methods = [
         displacement = "expr"
+    ]
+}
+
+private internalBaseDisplacementOption1 ::= (BaseDisplacement SEPARATOR)? (AddressRegister SEPARATOR)? IndexRegister
+private internalBaseDisplacementOption2 ::= (BaseDisplacement SEPARATOR)? AddressRegister (SEPARATOR IndexRegister)?
+private internalBaseDisplacementOption3 ::= BaseDisplacement (SEPARATOR AddressRegister)? (SEPARATOR IndexRegister)?
+
+AddressRegisterIndirectWithIndexBaseDisplacementAddressingMode ::= ROUND_L (internalBaseDisplacementOption1|internalBaseDisplacementOption2|internalBaseDisplacementOption3)? ROUND_R
+{
+    implements = [
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithOptionalAddressRegisterIndirect"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithBaseDisplacement"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithOptionalIndexRegister"
+    ]
+    methods = [
+        baseDisplacement = "BaseDisplacement"
+    ]
+}
+
+ProgramCounterIndirectWithIndexBaseDisplacementAddressingMode ::= ROUND_L (BaseDisplacement SEPARATOR)? PC (SEPARATOR IndexRegister)? ROUND_R
+{
+    implements = [
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithBaseDisplacement"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithOptionalIndexRegister"
+    ]
+    methods = [
+        baseDisplacement = "BaseDisplacement"
     ]
 }
 

@@ -40,10 +40,11 @@ public class M68kParser implements PsiParser, LightPsiParser {
             create_token_set_(ADDRESS_REGISTER, DATA_REGISTER, REGISTER, SPECIAL_REGISTER),
             create_token_set_(ABSOLUTE_ADDRESS_ADDRESSING_MODE, ADDRESSING_MODE, ADDRESS_REGISTER_DIRECT_ADDRESSING_MODE, ADDRESS_REGISTER_INDIRECT_ADDRESSING_MODE,
                     ADDRESS_REGISTER_INDIRECT_POST_INC_ADDRESSING_MODE, ADDRESS_REGISTER_INDIRECT_PRE_DEC_ADDRESSING_MODE, ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT_NEW_ADDRESSING_MODE, ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT_OLD_ADDRESSING_MODE,
-                    ADDRESS_REGISTER_INDIRECT_WITH_INDEX_NEW_ADDRESSING_MODE, ADDRESS_REGISTER_INDIRECT_WITH_INDEX_OLD_ADDRESSING_MODE, DATA_REGISTER_DIRECT_ADDRESSING_MODE, IMMEDIATE_DATA,
-                    MEMORY_INDIRECT_ADDRESSING_MODE, MEMORY_INDIRECT_POST_INDEXED_ADDRESSING_MODE, MEMORY_INDIRECT_PRE_INDEXED_ADDRESSING_MODE, PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT_NEW_ADDRESSING_MODE,
-                    PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT_OLD_ADDRESSING_MODE, PROGRAM_COUNTER_INDIRECT_WITH_INDEX_NEW_ADDRESSING_MODE, PROGRAM_COUNTER_INDIRECT_WITH_INDEX_OLD_ADDRESSING_MODE, PROGRAM_COUNTER_MEMORY_INDIRECT_ADDRESSING_MODE,
-                    PROGRAM_COUNTER_MEMORY_INDIRECT_POST_INDEXED_ADDRESSING_MODE, PROGRAM_COUNTER_MEMORY_INDIRECT_PRE_INDEXED_ADDRESSING_MODE, REGISTER_LIST_ADDRESSING_MODE, SPECIAL_REGISTER_DIRECT_ADDRESSING_MODE),
+                    ADDRESS_REGISTER_INDIRECT_WITH_INDEX_BASE_DISPLACEMENT_ADDRESSING_MODE, ADDRESS_REGISTER_INDIRECT_WITH_INDEX_NEW_ADDRESSING_MODE, ADDRESS_REGISTER_INDIRECT_WITH_INDEX_OLD_ADDRESSING_MODE, DATA_REGISTER_DIRECT_ADDRESSING_MODE,
+                    IMMEDIATE_DATA, MEMORY_INDIRECT_ADDRESSING_MODE, MEMORY_INDIRECT_POST_INDEXED_ADDRESSING_MODE, MEMORY_INDIRECT_PRE_INDEXED_ADDRESSING_MODE,
+                    PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT_NEW_ADDRESSING_MODE, PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT_OLD_ADDRESSING_MODE, PROGRAM_COUNTER_INDIRECT_WITH_INDEX_BASE_DISPLACEMENT_ADDRESSING_MODE, PROGRAM_COUNTER_INDIRECT_WITH_INDEX_NEW_ADDRESSING_MODE,
+                    PROGRAM_COUNTER_INDIRECT_WITH_INDEX_OLD_ADDRESSING_MODE, PROGRAM_COUNTER_MEMORY_INDIRECT_ADDRESSING_MODE, PROGRAM_COUNTER_MEMORY_INDIRECT_POST_INDEXED_ADDRESSING_MODE, PROGRAM_COUNTER_MEMORY_INDIRECT_PRE_INDEXED_ADDRESSING_MODE,
+                    REGISTER_LIST_ADDRESSING_MODE, SPECIAL_REGISTER_DIRECT_ADDRESSING_MODE),
             create_token_set_(BINARY_ADD_EXPR, BINARY_BITWISE_AND_EXPR, BINARY_BITWISE_OR_EXPR, BINARY_BITWISE_XOR_EXPR,
                     BINARY_CMP_EQ_EXPR, BINARY_CMP_GE_EXPR, BINARY_CMP_GT_EXPR, BINARY_CMP_LE_EXPR,
                     BINARY_CMP_LT_EXPR, BINARY_CMP_NE_EXPR, BINARY_DIV_EXPR, BINARY_LOGICAL_AND_EXPR,
@@ -212,6 +213,37 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
+    // ROUND_L (internalBaseDisplacementOption1|internalBaseDisplacementOption2|internalBaseDisplacementOption3)? ROUND_R
+    public static boolean AddressRegisterIndirectWithIndexBaseDisplacementAddressingMode(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "AddressRegisterIndirectWithIndexBaseDisplacementAddressingMode")) return false;
+        if (!nextTokenIsFast(b, ROUND_L)) return false;
+        boolean r;
+        Marker m = enter_section_(b, l, _NONE_, ADDRESS_REGISTER_INDIRECT_WITH_INDEX_BASE_DISPLACEMENT_ADDRESSING_MODE, "<AddressingMode>");
+        r = consumeTokenFast(b, ROUND_L);
+        r = r && AddressRegisterIndirectWithIndexBaseDisplacementAddressingMode_1(b, l + 1);
+        r = r && consumeToken(b, ROUND_R);
+        exit_section_(b, l, m, r, false, null);
+        return r;
+    }
+
+    // (internalBaseDisplacementOption1|internalBaseDisplacementOption2|internalBaseDisplacementOption3)?
+    private static boolean AddressRegisterIndirectWithIndexBaseDisplacementAddressingMode_1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "AddressRegisterIndirectWithIndexBaseDisplacementAddressingMode_1")) return false;
+        AddressRegisterIndirectWithIndexBaseDisplacementAddressingMode_1_0(b, l + 1);
+        return true;
+    }
+
+    // internalBaseDisplacementOption1|internalBaseDisplacementOption2|internalBaseDisplacementOption3
+    private static boolean AddressRegisterIndirectWithIndexBaseDisplacementAddressingMode_1_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "AddressRegisterIndirectWithIndexBaseDisplacementAddressingMode_1_0")) return false;
+        boolean r;
+        r = internalBaseDisplacementOption1(b, l + 1);
+        if (!r) r = internalBaseDisplacementOption2(b, l + 1);
+        if (!r) r = internalBaseDisplacementOption3(b, l + 1);
+        return r;
+    }
+
+    /* ********************************************************** */
     // ROUND_L (expr SEPARATOR)? AddressRegister SEPARATOR IndexRegister ROUND_R
     public static boolean AddressRegisterIndirectWithIndexNewAddressingMode(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "AddressRegisterIndirectWithIndexNewAddressingMode")) return false;
@@ -289,18 +321,20 @@ public class M68kParser implements PsiParser, LightPsiParser {
     //                 | AddressRegisterIndirectAddressingMode
     //                 | AddressRegisterIndirectWithDisplacementNewAddressingMode
     //                 | ProgramCounterIndirectWithDisplacementNewAddressingMode
-    //                 | MemoryIndirectAddressingMode
-    //                 | ProgramCounterMemoryIndirectAddressingMode
-    //                 | MemoryIndirectPostIndexedAddressingMode
-    //                 | ProgramCounterMemoryIndirectPostIndexedAddressingMode
-    //                 | MemoryIndirectPreIndexedAddressingMode
-    //                 | ProgramCounterMemoryIndirectPreIndexedAddressingMode
     //                 | AddressRegisterIndirectWithIndexNewAddressingMode
     //                 | ProgramCounterIndirectWithIndexNewAddressingMode
     //                 | AddressRegisterIndirectWithDisplacementOldAddressingMode
     //                 | ProgramCounterIndirectWithDisplacementOldAddressingMode
     //                 | AddressRegisterIndirectWithIndexOldAddressingMode
     //                 | ProgramCounterIndirectWithIndexOldAddressingMode
+    //                 | AddressRegisterIndirectWithIndexBaseDisplacementAddressingMode
+    //                 | ProgramCounterIndirectWithIndexBaseDisplacementAddressingMode
+    //                 | MemoryIndirectAddressingMode
+    //                 | ProgramCounterMemoryIndirectAddressingMode
+    //                 | MemoryIndirectPostIndexedAddressingMode
+    //                 | ProgramCounterMemoryIndirectPostIndexedAddressingMode
+    //                 | MemoryIndirectPreIndexedAddressingMode
+    //                 | ProgramCounterMemoryIndirectPreIndexedAddressingMode
     //                 | SpecialRegisterDirectAddressingMode
     //                 | DataRegisterDirectAddressingMode
     //                 | AddressRegisterDirectAddressingMode
@@ -316,18 +350,20 @@ public class M68kParser implements PsiParser, LightPsiParser {
         if (!r) r = AddressRegisterIndirectAddressingMode(b, l + 1);
         if (!r) r = AddressRegisterIndirectWithDisplacementNewAddressingMode(b, l + 1);
         if (!r) r = ProgramCounterIndirectWithDisplacementNewAddressingMode(b, l + 1);
-        if (!r) r = MemoryIndirectAddressingMode(b, l + 1);
-        if (!r) r = ProgramCounterMemoryIndirectAddressingMode(b, l + 1);
-        if (!r) r = MemoryIndirectPostIndexedAddressingMode(b, l + 1);
-        if (!r) r = ProgramCounterMemoryIndirectPostIndexedAddressingMode(b, l + 1);
-        if (!r) r = MemoryIndirectPreIndexedAddressingMode(b, l + 1);
-        if (!r) r = ProgramCounterMemoryIndirectPreIndexedAddressingMode(b, l + 1);
         if (!r) r = AddressRegisterIndirectWithIndexNewAddressingMode(b, l + 1);
         if (!r) r = ProgramCounterIndirectWithIndexNewAddressingMode(b, l + 1);
         if (!r) r = AddressRegisterIndirectWithDisplacementOldAddressingMode(b, l + 1);
         if (!r) r = ProgramCounterIndirectWithDisplacementOldAddressingMode(b, l + 1);
         if (!r) r = AddressRegisterIndirectWithIndexOldAddressingMode(b, l + 1);
         if (!r) r = ProgramCounterIndirectWithIndexOldAddressingMode(b, l + 1);
+        if (!r) r = AddressRegisterIndirectWithIndexBaseDisplacementAddressingMode(b, l + 1);
+        if (!r) r = ProgramCounterIndirectWithIndexBaseDisplacementAddressingMode(b, l + 1);
+        if (!r) r = MemoryIndirectAddressingMode(b, l + 1);
+        if (!r) r = ProgramCounterMemoryIndirectAddressingMode(b, l + 1);
+        if (!r) r = MemoryIndirectPostIndexedAddressingMode(b, l + 1);
+        if (!r) r = ProgramCounterMemoryIndirectPostIndexedAddressingMode(b, l + 1);
+        if (!r) r = MemoryIndirectPreIndexedAddressingMode(b, l + 1);
+        if (!r) r = ProgramCounterMemoryIndirectPreIndexedAddressingMode(b, l + 1);
         if (!r) r = SpecialRegisterDirectAddressingMode(b, l + 1);
         if (!r) r = DataRegisterDirectAddressingMode(b, l + 1);
         if (!r) r = AddressRegisterDirectAddressingMode(b, l + 1);
@@ -1211,6 +1247,58 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
+    // ROUND_L (BaseDisplacement SEPARATOR)? PC (SEPARATOR IndexRegister)? ROUND_R
+    public static boolean ProgramCounterIndirectWithIndexBaseDisplacementAddressingMode(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "ProgramCounterIndirectWithIndexBaseDisplacementAddressingMode")) return false;
+        if (!nextTokenIsFast(b, ROUND_L)) return false;
+        boolean r;
+        Marker m = enter_section_(b, l, _NONE_, PROGRAM_COUNTER_INDIRECT_WITH_INDEX_BASE_DISPLACEMENT_ADDRESSING_MODE, "<AddressingMode>");
+        r = consumeTokenFast(b, ROUND_L);
+        r = r && ProgramCounterIndirectWithIndexBaseDisplacementAddressingMode_1(b, l + 1);
+        r = r && consumeToken(b, PC);
+        r = r && ProgramCounterIndirectWithIndexBaseDisplacementAddressingMode_3(b, l + 1);
+        r = r && consumeToken(b, ROUND_R);
+        exit_section_(b, l, m, r, false, null);
+        return r;
+    }
+
+    // (BaseDisplacement SEPARATOR)?
+    private static boolean ProgramCounterIndirectWithIndexBaseDisplacementAddressingMode_1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "ProgramCounterIndirectWithIndexBaseDisplacementAddressingMode_1")) return false;
+        ProgramCounterIndirectWithIndexBaseDisplacementAddressingMode_1_0(b, l + 1);
+        return true;
+    }
+
+    // BaseDisplacement SEPARATOR
+    private static boolean ProgramCounterIndirectWithIndexBaseDisplacementAddressingMode_1_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "ProgramCounterIndirectWithIndexBaseDisplacementAddressingMode_1_0")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = BaseDisplacement(b, l + 1);
+        r = r && consumeToken(b, SEPARATOR);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
+    // (SEPARATOR IndexRegister)?
+    private static boolean ProgramCounterIndirectWithIndexBaseDisplacementAddressingMode_3(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "ProgramCounterIndirectWithIndexBaseDisplacementAddressingMode_3")) return false;
+        ProgramCounterIndirectWithIndexBaseDisplacementAddressingMode_3_0(b, l + 1);
+        return true;
+    }
+
+    // SEPARATOR IndexRegister
+    private static boolean ProgramCounterIndirectWithIndexBaseDisplacementAddressingMode_3_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "ProgramCounterIndirectWithIndexBaseDisplacementAddressingMode_3_0")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeTokenFast(b, SEPARATOR);
+        r = r && IndexRegister(b, l + 1);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
+    /* ********************************************************** */
     // ROUND_L (expr SEPARATOR)? PC SEPARATOR IndexRegister ROUND_R
     public static boolean ProgramCounterIndirectWithIndexNewAddressingMode(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "ProgramCounterIndirectWithIndexNewAddressingMode")) return false;
@@ -1614,6 +1702,153 @@ public class M68kParser implements PsiParser, LightPsiParser {
         Marker m = enter_section_(b);
         r = consumeToken(b, SYMBOL);
         exit_section_(b, m, SYMBOL_REFERENCE, r);
+        return r;
+    }
+
+    /* ********************************************************** */
+    // (BaseDisplacement SEPARATOR)? (AddressRegister SEPARATOR)? IndexRegister
+    static boolean internalBaseDisplacementOption1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalBaseDisplacementOption1")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = internalBaseDisplacementOption1_0(b, l + 1);
+        r = r && internalBaseDisplacementOption1_1(b, l + 1);
+        r = r && IndexRegister(b, l + 1);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
+    // (BaseDisplacement SEPARATOR)?
+    private static boolean internalBaseDisplacementOption1_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalBaseDisplacementOption1_0")) return false;
+        internalBaseDisplacementOption1_0_0(b, l + 1);
+        return true;
+    }
+
+    // BaseDisplacement SEPARATOR
+    private static boolean internalBaseDisplacementOption1_0_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalBaseDisplacementOption1_0_0")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = BaseDisplacement(b, l + 1);
+        r = r && consumeToken(b, SEPARATOR);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
+    // (AddressRegister SEPARATOR)?
+    private static boolean internalBaseDisplacementOption1_1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalBaseDisplacementOption1_1")) return false;
+        internalBaseDisplacementOption1_1_0(b, l + 1);
+        return true;
+    }
+
+    // AddressRegister SEPARATOR
+    private static boolean internalBaseDisplacementOption1_1_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalBaseDisplacementOption1_1_0")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = AddressRegister(b, l + 1);
+        r = r && consumeToken(b, SEPARATOR);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
+    /* ********************************************************** */
+    // (BaseDisplacement SEPARATOR)? AddressRegister (SEPARATOR IndexRegister)?
+    static boolean internalBaseDisplacementOption2(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalBaseDisplacementOption2")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = internalBaseDisplacementOption2_0(b, l + 1);
+        r = r && AddressRegister(b, l + 1);
+        r = r && internalBaseDisplacementOption2_2(b, l + 1);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
+    // (BaseDisplacement SEPARATOR)?
+    private static boolean internalBaseDisplacementOption2_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalBaseDisplacementOption2_0")) return false;
+        internalBaseDisplacementOption2_0_0(b, l + 1);
+        return true;
+    }
+
+    // BaseDisplacement SEPARATOR
+    private static boolean internalBaseDisplacementOption2_0_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalBaseDisplacementOption2_0_0")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = BaseDisplacement(b, l + 1);
+        r = r && consumeToken(b, SEPARATOR);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
+    // (SEPARATOR IndexRegister)?
+    private static boolean internalBaseDisplacementOption2_2(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalBaseDisplacementOption2_2")) return false;
+        internalBaseDisplacementOption2_2_0(b, l + 1);
+        return true;
+    }
+
+    // SEPARATOR IndexRegister
+    private static boolean internalBaseDisplacementOption2_2_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalBaseDisplacementOption2_2_0")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeToken(b, SEPARATOR);
+        r = r && IndexRegister(b, l + 1);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
+    /* ********************************************************** */
+    // BaseDisplacement (SEPARATOR AddressRegister)? (SEPARATOR IndexRegister)?
+    static boolean internalBaseDisplacementOption3(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalBaseDisplacementOption3")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = BaseDisplacement(b, l + 1);
+        r = r && internalBaseDisplacementOption3_1(b, l + 1);
+        r = r && internalBaseDisplacementOption3_2(b, l + 1);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
+    // (SEPARATOR AddressRegister)?
+    private static boolean internalBaseDisplacementOption3_1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalBaseDisplacementOption3_1")) return false;
+        internalBaseDisplacementOption3_1_0(b, l + 1);
+        return true;
+    }
+
+    // SEPARATOR AddressRegister
+    private static boolean internalBaseDisplacementOption3_1_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalBaseDisplacementOption3_1_0")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeToken(b, SEPARATOR);
+        r = r && AddressRegister(b, l + 1);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
+    // (SEPARATOR IndexRegister)?
+    private static boolean internalBaseDisplacementOption3_2(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalBaseDisplacementOption3_2")) return false;
+        internalBaseDisplacementOption3_2_0(b, l + 1);
+        return true;
+    }
+
+    // SEPARATOR IndexRegister
+    private static boolean internalBaseDisplacementOption3_2_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalBaseDisplacementOption3_2_0")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeToken(b, SEPARATOR);
+        r = r && IndexRegister(b, l + 1);
+        exit_section_(b, m, null, r);
         return r;
     }
 

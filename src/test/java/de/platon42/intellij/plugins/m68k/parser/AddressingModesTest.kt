@@ -213,6 +213,46 @@ internal class AddressingModesTest : AbstractParsingTest() {
     }
 
     @Test
+    internal fun register_indirect_with_index_base_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l (100.w,a0,a0.l*4),d0\n")
+    }
+
+    @Test
+    internal fun register_indirect_with_index_base_displacement_without_areg(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l (100.w,a0.l*4),d0\n")
+    }
+
+    @Test
+    internal fun register_indirect_with_index_base_displacement_without_index(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l (100.l,a0),d0\n")
+    }
+
+    @Test
+    internal fun register_indirect_with_index_base_displacement_with_dreg_index(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l (d0),(d0.w*4)\n")
+    }
+
+    @Test
+    internal fun register_indirect_with_index_base_displacement_only(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l (100.l),d0\n")
+    }
+
+    @Test
+    internal fun register_indirect_with_index_base_displacement_zero(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l (),d0\n")
+    }
+
+    @Test
+    internal fun pc_indirect_with_index_base_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l (100.w,pc,a0.l*4),d0\n")
+    }
+
+    @Test
+    internal fun pc_indirect_with_index_base_displacement_without_index(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l (100.l,pc),d0\n")
+    }
+
+    @Test
     internal fun absolute_address(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
         testGoodSyntax(testCase, " move.l 4.w,a6\n")
     }

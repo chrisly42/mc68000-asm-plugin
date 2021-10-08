@@ -14,10 +14,12 @@ object M68kAddressModeUtil {
             is M68kAddressRegisterIndirectWithDisplacementOldAddressingMode -> AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_DISPLACEMENT
             is M68kAddressRegisterIndirectWithIndexNewAddressingMode -> if (hasScale(addressingMode)) AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_SCALED_INDEX else AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_INDEX
             is M68kAddressRegisterIndirectWithIndexOldAddressingMode -> if (hasScale(addressingMode)) AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_SCALED_INDEX else AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_INDEX
+            is M68kAddressRegisterIndirectWithIndexBaseDisplacementAddressingMode -> AddressMode.ADDRESS_REGISTER_INDIRECT_WITH_BASE_DISPLACEMENT
             is M68kProgramCounterIndirectWithDisplacementNewAddressingMode -> AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT
             is M68kProgramCounterIndirectWithDisplacementOldAddressingMode -> AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_DISPLACEMENT
             is M68kProgramCounterIndirectWithIndexNewAddressingMode -> if (hasScale(addressingMode)) AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_SCALED_INDEX else AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX
             is M68kProgramCounterIndirectWithIndexOldAddressingMode -> if (hasScale(addressingMode)) AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_SCALED_INDEX else AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_INDEX
+            is M68kProgramCounterIndirectWithIndexBaseDisplacementAddressingMode -> AddressMode.PROGRAM_COUNTER_INDIRECT_WITH_BASE_DISPLACEMENT
             is M68kMemoryIndirectAddressingMode -> AddressMode.MEMORY_INDIRECT
             is M68kMemoryIndirectPreIndexedAddressingMode -> AddressMode.MEMORY_INDIRECT_PREINDEXED
             is M68kMemoryIndirectPostIndexedAddressingMode -> AddressMode.MEMORY_INDIRECT_POSTINDEXED
@@ -54,21 +56,18 @@ object M68kAddressModeUtil {
 
             is M68kAddressRegisterIndirectPostIncAddressingMode -> listOf(Register.getRegFromName(addressingMode.addressRegister.text) to (RWM_READ_L or RWM_MODIFY_L))
             is M68kAddressRegisterIndirectPreDecAddressingMode -> listOf(Register.getRegFromName(addressingMode.addressRegister.text) to (RWM_READ_L or RWM_MODIFY_L))
-            is M68kWithAddressRegisterIndirect -> {
-                if (addressingMode is M68kWithIndexRegister) {
-                    listOf(
-                        Register.getRegFromName(addressingMode.addressRegister.text) to RWM_READ_L,
-                        Register.getRegFromName(addressingMode.indexRegister.register.text) to if (addressingMode.indexRegister.isLongWidth) RWM_READ_L else RWM_READ_W
-                    )
-                } else {
-                    listOf(Register.getRegFromName(addressingMode.addressRegister.text) to RWM_READ_L)
-                }
-            }
-            is M68kWithIndexRegister -> listOf(Register.getRegFromName(addressingMode.indexRegister.register.text) to if (addressingMode.indexRegister.isLongWidth) RWM_READ_L else RWM_READ_W)
+            is M68kWithAddressRegisterIndirect -> listOf(Register.getRegFromName(addressingMode.addressRegister.text) to RWM_READ_L)
+            is M68kWithOptionalAddressRegisterIndirect -> if (addressingMode.addressRegister != null) listOf(Register.getRegFromName(addressingMode.addressRegister!!.text) to RWM_READ_L) else emptyList()
             is M68kDataRegisterDirectAddressingMode -> listOf(Register.getRegFromName(addressingMode.dataRegister.text) to rwm)
             is M68kAddressRegisterDirectAddressingMode -> listOf(Register.getRegFromName(addressingMode.addressRegister.text) to rwm)
             is M68kRegisterListAddressingMode -> addressingMode.registers.map { it to rwm }
             else -> throw IllegalArgumentException("Unknown addressing mode $addressingMode")
-        }
+        }.plus(
+            when (addressingMode) {
+                is M68kWithIndexRegister -> listOf(Register.getRegFromName(addressingMode.indexRegister.register.text) to if (addressingMode.indexRegister.isLongWidth) RWM_READ_L else RWM_READ_W)
+                is M68kWithOptionalIndexRegister -> if (addressingMode.indexRegister != null) listOf(Register.getRegFromName(addressingMode.indexRegister!!.register.text) to if (addressingMode.indexRegister!!.isLongWidth) RWM_READ_L else RWM_READ_W) else emptyList()
+                else -> emptyList()
+            }
+        )
     }
 }
