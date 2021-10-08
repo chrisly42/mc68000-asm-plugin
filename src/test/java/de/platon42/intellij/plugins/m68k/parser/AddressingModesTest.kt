@@ -128,6 +128,11 @@ internal class AddressingModesTest : AbstractParsingTest() {
     }
 
     @Test
+    internal fun memory_indirect_post_indexed_without_address_register(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([1234.l],a0),([-12],d0.l*8)\n")
+    }
+
+    @Test
     internal fun memory_indirect_post_indexed_minimal(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
         testGoodSyntax(testCase, " move.l ([a1],a0),([a0],d0)\n")
     }
@@ -145,6 +150,16 @@ internal class AddressingModesTest : AbstractParsingTest() {
     @Test
     internal fun memory_indirect_pre_indexed_without_outer_displacement(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
         testGoodSyntax(testCase, " move.l ([1234.l,a1,a0]),([-12,a0,d0.l*8])\n")
+    }
+
+    @Test
+    internal fun memory_indirect_pre_indexed_without_address_register(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([1234.l,a0*4]),([-12,d0.l*8])\n")
+    }
+
+    @Test
+    internal fun memory_indirect_pre_indexed_only_with_index(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        testGoodSyntax(testCase, " move.l ([a0*4]),([d0.l*8])\n")
     }
 
     @Test

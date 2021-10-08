@@ -60,6 +60,7 @@ patchPluginXml {
   <p>I still got zero feedback and zero <a href="https://plugins.jetbrains.com/plugin/17268-mc68000-assembly-language-support/reviews">ratings</a> :-(</p>
   <h4>V0.8 (unreleased)</h4>
     <ul>
+      <li>New: Support for MC68020+ addressing modes! However, MC68020+ specific instructions have not been added yet.
       <li>Enhancement: Label documentation now also works for local labels and includes end-of-line comment for label, too.
       <li>Enhancement: Symbol definition documentation now also includes comments in the same way as the label documentation does.
       <li>New: Macro definition / invocation documentation provider that even tries to expand macros.

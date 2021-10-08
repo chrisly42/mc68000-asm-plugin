@@ -8,15 +8,15 @@ import de.platon42.intellij.plugins.m68k.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class M68kMemoryIndirectPreIndexedAddressingModeImpl extends M68kAddressingModeImpl implements M68kMemoryIndirectPreIndexedAddressingMode {
+public class M68kAddressRegisterIndirectWithIndexBaseDisplacementAddressingModeImpl extends M68kAddressingModeImpl implements M68kAddressRegisterIndirectWithIndexBaseDisplacementAddressingMode {
 
-    public M68kMemoryIndirectPreIndexedAddressingModeImpl(@NotNull ASTNode node) {
+    public M68kAddressRegisterIndirectWithIndexBaseDisplacementAddressingModeImpl(@NotNull ASTNode node) {
         super(node);
     }
 
     @Override
     public void accept(@NotNull M68kVisitor visitor) {
-        visitor.visitMemoryIndirectPreIndexedAddressingMode(this);
+        visitor.visitAddressRegisterIndirectWithIndexBaseDisplacementAddressingMode(this);
     }
 
     @Override
@@ -32,21 +32,15 @@ public class M68kMemoryIndirectPreIndexedAddressingModeImpl extends M68kAddressi
     }
 
     @Override
-    @NotNull
+    @Nullable
     public M68kIndexRegister getIndexRegister() {
-        return notNullChild(PsiTreeUtil.getChildOfType(this, M68kIndexRegister.class));
+        return PsiTreeUtil.getChildOfType(this, M68kIndexRegister.class);
     }
 
     @Override
     @Nullable
     public M68kBaseDisplacement getBaseDisplacement() {
         return PsiTreeUtil.getChildOfType(this, M68kBaseDisplacement.class);
-    }
-
-    @Override
-    @Nullable
-    public M68kOuterDisplacement getOuterDisplacement() {
-        return PsiTreeUtil.getChildOfType(this, M68kOuterDisplacement.class);
     }
 
 }

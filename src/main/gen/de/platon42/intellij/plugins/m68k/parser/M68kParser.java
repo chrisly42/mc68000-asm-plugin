@@ -916,7 +916,7 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // ROUND_L (SQUARE_L (BaseDisplacement SEPARATOR)? AddressRegister SQUARE_R SEPARATOR)? IndexRegister (SEPARATOR OuterDisplacement)? ROUND_R
+    // ROUND_L (SQUARE_L (internalMemoryIndirectPostIndexedOption1|internalMemoryIndirectPostIndexedOption2) SQUARE_R SEPARATOR)? IndexRegister (SEPARATOR OuterDisplacement)? ROUND_R
     public static boolean MemoryIndirectPostIndexedAddressingMode(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "MemoryIndirectPostIndexedAddressingMode")) return false;
         if (!nextTokenIsFast(b, ROUND_L)) return false;
@@ -931,41 +931,31 @@ public class M68kParser implements PsiParser, LightPsiParser {
         return r;
     }
 
-    // (SQUARE_L (BaseDisplacement SEPARATOR)? AddressRegister SQUARE_R SEPARATOR)?
+    // (SQUARE_L (internalMemoryIndirectPostIndexedOption1|internalMemoryIndirectPostIndexedOption2) SQUARE_R SEPARATOR)?
     private static boolean MemoryIndirectPostIndexedAddressingMode_1(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "MemoryIndirectPostIndexedAddressingMode_1")) return false;
         MemoryIndirectPostIndexedAddressingMode_1_0(b, l + 1);
         return true;
     }
 
-    // SQUARE_L (BaseDisplacement SEPARATOR)? AddressRegister SQUARE_R SEPARATOR
+    // SQUARE_L (internalMemoryIndirectPostIndexedOption1|internalMemoryIndirectPostIndexedOption2) SQUARE_R SEPARATOR
     private static boolean MemoryIndirectPostIndexedAddressingMode_1_0(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "MemoryIndirectPostIndexedAddressingMode_1_0")) return false;
         boolean r;
         Marker m = enter_section_(b);
         r = consumeTokenFast(b, SQUARE_L);
         r = r && MemoryIndirectPostIndexedAddressingMode_1_0_1(b, l + 1);
-        r = r && AddressRegister(b, l + 1);
         r = r && consumeTokens(b, 0, SQUARE_R, SEPARATOR);
         exit_section_(b, m, null, r);
         return r;
     }
 
-    // (BaseDisplacement SEPARATOR)?
+    // internalMemoryIndirectPostIndexedOption1|internalMemoryIndirectPostIndexedOption2
     private static boolean MemoryIndirectPostIndexedAddressingMode_1_0_1(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "MemoryIndirectPostIndexedAddressingMode_1_0_1")) return false;
-        MemoryIndirectPostIndexedAddressingMode_1_0_1_0(b, l + 1);
-        return true;
-    }
-
-    // BaseDisplacement SEPARATOR
-    private static boolean MemoryIndirectPostIndexedAddressingMode_1_0_1_0(PsiBuilder b, int l) {
-        if (!recursion_guard_(b, l, "MemoryIndirectPostIndexedAddressingMode_1_0_1_0")) return false;
         boolean r;
-        Marker m = enter_section_(b);
-        r = BaseDisplacement(b, l + 1);
-        r = r && consumeToken(b, SEPARATOR);
-        exit_section_(b, m, null, r);
+        r = internalMemoryIndirectPostIndexedOption1(b, l + 1);
+        if (!r) r = internalMemoryIndirectPostIndexedOption2(b, l + 1);
         return r;
     }
 
@@ -988,7 +978,7 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // ROUND_L SQUARE_L (BaseDisplacement SEPARATOR)? AddressRegister SEPARATOR IndexRegister SQUARE_R (SEPARATOR OuterDisplacement)? ROUND_R
+    // ROUND_L SQUARE_L (BaseDisplacement SEPARATOR)? (AddressRegister SEPARATOR)? IndexRegister SQUARE_R (SEPARATOR OuterDisplacement)? ROUND_R
     public static boolean MemoryIndirectPreIndexedAddressingMode(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "MemoryIndirectPreIndexedAddressingMode")) return false;
         if (!nextTokenIsFast(b, ROUND_L)) return false;
@@ -996,11 +986,10 @@ public class M68kParser implements PsiParser, LightPsiParser {
         Marker m = enter_section_(b, l, _NONE_, MEMORY_INDIRECT_PRE_INDEXED_ADDRESSING_MODE, "<AddressingMode>");
         r = consumeTokens(b, 0, ROUND_L, SQUARE_L);
         r = r && MemoryIndirectPreIndexedAddressingMode_2(b, l + 1);
-        r = r && AddressRegister(b, l + 1);
-        r = r && consumeToken(b, SEPARATOR);
+        r = r && MemoryIndirectPreIndexedAddressingMode_3(b, l + 1);
         r = r && IndexRegister(b, l + 1);
         r = r && consumeToken(b, SQUARE_R);
-        r = r && MemoryIndirectPreIndexedAddressingMode_7(b, l + 1);
+        r = r && MemoryIndirectPreIndexedAddressingMode_6(b, l + 1);
         r = r && consumeToken(b, ROUND_R);
         exit_section_(b, l, m, r, false, null);
         return r;
@@ -1024,16 +1013,34 @@ public class M68kParser implements PsiParser, LightPsiParser {
         return r;
     }
 
+    // (AddressRegister SEPARATOR)?
+    private static boolean MemoryIndirectPreIndexedAddressingMode_3(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "MemoryIndirectPreIndexedAddressingMode_3")) return false;
+        MemoryIndirectPreIndexedAddressingMode_3_0(b, l + 1);
+        return true;
+    }
+
+    // AddressRegister SEPARATOR
+    private static boolean MemoryIndirectPreIndexedAddressingMode_3_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "MemoryIndirectPreIndexedAddressingMode_3_0")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = AddressRegister(b, l + 1);
+        r = r && consumeToken(b, SEPARATOR);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
     // (SEPARATOR OuterDisplacement)?
-    private static boolean MemoryIndirectPreIndexedAddressingMode_7(PsiBuilder b, int l) {
-        if (!recursion_guard_(b, l, "MemoryIndirectPreIndexedAddressingMode_7")) return false;
-        MemoryIndirectPreIndexedAddressingMode_7_0(b, l + 1);
+    private static boolean MemoryIndirectPreIndexedAddressingMode_6(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "MemoryIndirectPreIndexedAddressingMode_6")) return false;
+        MemoryIndirectPreIndexedAddressingMode_6_0(b, l + 1);
         return true;
     }
 
     // SEPARATOR OuterDisplacement
-    private static boolean MemoryIndirectPreIndexedAddressingMode_7_0(PsiBuilder b, int l) {
-        if (!recursion_guard_(b, l, "MemoryIndirectPreIndexedAddressingMode_7_0")) return false;
+    private static boolean MemoryIndirectPreIndexedAddressingMode_6_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "MemoryIndirectPreIndexedAddressingMode_6_0")) return false;
         boolean r;
         Marker m = enter_section_(b);
         r = consumeTokenFast(b, SEPARATOR);
@@ -1848,6 +1855,66 @@ public class M68kParser implements PsiParser, LightPsiParser {
         Marker m = enter_section_(b);
         r = consumeToken(b, SEPARATOR);
         r = r && IndexRegister(b, l + 1);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
+    /* ********************************************************** */
+    // (BaseDisplacement SEPARATOR)? AddressRegister
+    static boolean internalMemoryIndirectPostIndexedOption1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalMemoryIndirectPostIndexedOption1")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = internalMemoryIndirectPostIndexedOption1_0(b, l + 1);
+        r = r && AddressRegister(b, l + 1);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
+    // (BaseDisplacement SEPARATOR)?
+    private static boolean internalMemoryIndirectPostIndexedOption1_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalMemoryIndirectPostIndexedOption1_0")) return false;
+        internalMemoryIndirectPostIndexedOption1_0_0(b, l + 1);
+        return true;
+    }
+
+    // BaseDisplacement SEPARATOR
+    private static boolean internalMemoryIndirectPostIndexedOption1_0_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalMemoryIndirectPostIndexedOption1_0_0")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = BaseDisplacement(b, l + 1);
+        r = r && consumeToken(b, SEPARATOR);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
+    /* ********************************************************** */
+    // BaseDisplacement (SEPARATOR AddressRegister)?
+    static boolean internalMemoryIndirectPostIndexedOption2(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalMemoryIndirectPostIndexedOption2")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = BaseDisplacement(b, l + 1);
+        r = r && internalMemoryIndirectPostIndexedOption2_1(b, l + 1);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
+    // (SEPARATOR AddressRegister)?
+    private static boolean internalMemoryIndirectPostIndexedOption2_1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalMemoryIndirectPostIndexedOption2_1")) return false;
+        internalMemoryIndirectPostIndexedOption2_1_0(b, l + 1);
+        return true;
+    }
+
+    // SEPARATOR AddressRegister
+    private static boolean internalMemoryIndirectPostIndexedOption2_1_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "internalMemoryIndirectPostIndexedOption2_1_0")) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeToken(b, SEPARATOR);
+        r = r && AddressRegister(b, l + 1);
         exit_section_(b, m, null, r);
         return r;
     }

@@ -48,12 +48,6 @@ object M68kAddressModeUtil {
     fun getReadWriteModifyRegisters(addressingMode: M68kAddressingMode?, rwm: Int): List<Pair<Register, Int>> {
         if (addressingMode == null) return emptyList()
         return when (addressingMode) {
-            is M68kImmediateData,
-            is M68kSpecialRegisterDirectAddressingMode,
-            is M68kProgramCounterIndirectWithDisplacementNewAddressingMode,
-            is M68kProgramCounterIndirectWithDisplacementOldAddressingMode,
-            is M68kAbsoluteAddressAddressingMode -> emptyList()
-
             is M68kAddressRegisterIndirectPostIncAddressingMode -> listOf(Register.getRegFromName(addressingMode.addressRegister.text) to (RWM_READ_L or RWM_MODIFY_L))
             is M68kAddressRegisterIndirectPreDecAddressingMode -> listOf(Register.getRegFromName(addressingMode.addressRegister.text) to (RWM_READ_L or RWM_MODIFY_L))
             is M68kWithAddressRegisterIndirect -> listOf(Register.getRegFromName(addressingMode.addressRegister.text) to RWM_READ_L)
@@ -61,7 +55,7 @@ object M68kAddressModeUtil {
             is M68kDataRegisterDirectAddressingMode -> listOf(Register.getRegFromName(addressingMode.dataRegister.text) to rwm)
             is M68kAddressRegisterDirectAddressingMode -> listOf(Register.getRegFromName(addressingMode.addressRegister.text) to rwm)
             is M68kRegisterListAddressingMode -> addressingMode.registers.map { it to rwm }
-            else -> throw IllegalArgumentException("Unknown addressing mode $addressingMode")
+            else -> emptyList()
         }.plus(
             when (addressingMode) {
                 is M68kWithIndexRegister -> listOf(Register.getRegFromName(addressingMode.indexRegister.register.text) to if (addressingMode.indexRegister.isLongWidth) RWM_READ_L else RWM_READ_W)

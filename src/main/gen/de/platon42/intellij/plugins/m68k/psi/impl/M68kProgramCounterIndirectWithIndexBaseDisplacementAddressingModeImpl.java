@@ -4,19 +4,22 @@ package de.platon42.intellij.plugins.m68k.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
-import de.platon42.intellij.plugins.m68k.psi.*;
+import de.platon42.intellij.plugins.m68k.psi.M68kBaseDisplacement;
+import de.platon42.intellij.plugins.m68k.psi.M68kIndexRegister;
+import de.platon42.intellij.plugins.m68k.psi.M68kProgramCounterIndirectWithIndexBaseDisplacementAddressingMode;
+import de.platon42.intellij.plugins.m68k.psi.M68kVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class M68kMemoryIndirectPreIndexedAddressingModeImpl extends M68kAddressingModeImpl implements M68kMemoryIndirectPreIndexedAddressingMode {
+public class M68kProgramCounterIndirectWithIndexBaseDisplacementAddressingModeImpl extends M68kAddressingModeImpl implements M68kProgramCounterIndirectWithIndexBaseDisplacementAddressingMode {
 
-    public M68kMemoryIndirectPreIndexedAddressingModeImpl(@NotNull ASTNode node) {
+    public M68kProgramCounterIndirectWithIndexBaseDisplacementAddressingModeImpl(@NotNull ASTNode node) {
         super(node);
     }
 
     @Override
     public void accept(@NotNull M68kVisitor visitor) {
-        visitor.visitMemoryIndirectPreIndexedAddressingMode(this);
+        visitor.visitProgramCounterIndirectWithIndexBaseDisplacementAddressingMode(this);
     }
 
     @Override
@@ -27,26 +30,14 @@ public class M68kMemoryIndirectPreIndexedAddressingModeImpl extends M68kAddressi
 
     @Override
     @Nullable
-    public M68kAddressRegister getAddressRegister() {
-        return PsiTreeUtil.getChildOfType(this, M68kAddressRegister.class);
-    }
-
-    @Override
-    @NotNull
     public M68kIndexRegister getIndexRegister() {
-        return notNullChild(PsiTreeUtil.getChildOfType(this, M68kIndexRegister.class));
+        return PsiTreeUtil.getChildOfType(this, M68kIndexRegister.class);
     }
 
     @Override
     @Nullable
     public M68kBaseDisplacement getBaseDisplacement() {
         return PsiTreeUtil.getChildOfType(this, M68kBaseDisplacement.class);
-    }
-
-    @Override
-    @Nullable
-    public M68kOuterDisplacement getOuterDisplacement() {
-        return PsiTreeUtil.getChildOfType(this, M68kOuterDisplacement.class);
     }
 
 }

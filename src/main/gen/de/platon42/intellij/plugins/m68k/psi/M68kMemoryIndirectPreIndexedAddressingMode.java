@@ -4,9 +4,9 @@ package de.platon42.intellij.plugins.m68k.psi;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface M68kMemoryIndirectPreIndexedAddressingMode extends M68kAddressingMode, M68kWithAddressRegisterIndirect, M68kWithBaseDisplacement, M68kWithIndexRegister, M68kWithOuterDisplacement {
+public interface M68kMemoryIndirectPreIndexedAddressingMode extends M68kAddressingMode, M68kWithOptionalAddressRegisterIndirect, M68kWithBaseDisplacement, M68kWithIndexRegister, M68kWithOuterDisplacement {
 
-    @NotNull
+    @Nullable
     M68kAddressRegister getAddressRegister();
 
     @NotNull

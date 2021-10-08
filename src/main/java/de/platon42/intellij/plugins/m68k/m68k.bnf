@@ -376,10 +376,13 @@ MemoryIndirectAddressingMode ::= ROUND_L SQUARE_L (BaseDisplacement SEPARATOR)? 
     ]
 }
 
-MemoryIndirectPostIndexedAddressingMode ::= ROUND_L (SQUARE_L (BaseDisplacement SEPARATOR)? AddressRegister SQUARE_R SEPARATOR)? IndexRegister (SEPARATOR OuterDisplacement)? ROUND_R
+private internalMemoryIndirectPostIndexedOption1 ::= (BaseDisplacement SEPARATOR)? AddressRegister
+private internalMemoryIndirectPostIndexedOption2 ::= BaseDisplacement (SEPARATOR AddressRegister)?
+
+MemoryIndirectPostIndexedAddressingMode ::= ROUND_L (SQUARE_L (internalMemoryIndirectPostIndexedOption1|internalMemoryIndirectPostIndexedOption2) SQUARE_R SEPARATOR)? IndexRegister (SEPARATOR OuterDisplacement)? ROUND_R
 {
     implements = [
-        "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithOptionalAddressRegisterIndirect"
         "de.platon42.intellij.plugins.m68k.psi.M68kWithBaseDisplacement"
         "de.platon42.intellij.plugins.m68k.psi.M68kWithIndexRegister"
         "de.platon42.intellij.plugins.m68k.psi.M68kWithOuterDisplacement"
@@ -390,10 +393,10 @@ MemoryIndirectPostIndexedAddressingMode ::= ROUND_L (SQUARE_L (BaseDisplacement 
     ]
 }
 
-MemoryIndirectPreIndexedAddressingMode ::= ROUND_L SQUARE_L (BaseDisplacement SEPARATOR)? AddressRegister SEPARATOR IndexRegister SQUARE_R (SEPARATOR OuterDisplacement)? ROUND_R
+MemoryIndirectPreIndexedAddressingMode ::= ROUND_L SQUARE_L (BaseDisplacement SEPARATOR)? (AddressRegister SEPARATOR)? IndexRegister SQUARE_R (SEPARATOR OuterDisplacement)? ROUND_R
 {
     implements = [
-        "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect"
+        "de.platon42.intellij.plugins.m68k.psi.M68kWithOptionalAddressRegisterIndirect"
         "de.platon42.intellij.plugins.m68k.psi.M68kWithBaseDisplacement"
         "de.platon42.intellij.plugins.m68k.psi.M68kWithIndexRegister"
         "de.platon42.intellij.plugins.m68k.psi.M68kWithOuterDisplacement"

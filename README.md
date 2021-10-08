@@ -6,7 +6,7 @@ _MC68000 Assembly Language Plugin_ is plugin for Jetbrains IDEs (CLion, IntelliJ
 
 ## Purpose
 
-This plugin delivers support for MC68000 assembly language files ([VAsm](http://sun.hasenbraten.de/vasm/) / DevPac-Style).
+This plugin delivers support for MC680xx assembly language files ([VAsm](http://sun.hasenbraten.de/vasm/) / DevPac-Style).
 
 It adds a language parser with syntax highlighting, referencing and refactoring support, and a few more features.
 
@@ -25,8 +25,8 @@ to get started, and I can return to demo coding with its current state.
 
 ## Features
 
-- Parser / Lexer for MC68000 (yes, only 68000 right now!) assembly language files in VAsm / DevPac style
-- Validates the assembly syntax against the 68000 ISA.
+- Parser / Lexer for MC680xx assembly language files in VAsm / DevPac style
+- Validates the assembly syntax against the 68000 ISA and 68020+ addressing modes (no complete >68020 support yet!)
 - Syntax highlighting and Color Settings Page (you should really modify the color settings to your likings!)
 - Mnemonics code completion
 - Symbols / labels / macros code completion
@@ -163,6 +163,7 @@ are appreciated. It really is keeping me motivated to continue development.
 
 ### V0.8 (unreleased)
 
+- New: Support for MC68020+ addressing modes! However, MC68020+ specific instructions have not been added yet.
 - Enhancement: Label documentation now also works for local labels and includes end-of-line comment for label, too.
 - Enhancement: Symbol definition documentation now also includes comments in the same way as the label documentation does.
 - New: Macro definition / invocation documentation provider that even tries to expand macros.
