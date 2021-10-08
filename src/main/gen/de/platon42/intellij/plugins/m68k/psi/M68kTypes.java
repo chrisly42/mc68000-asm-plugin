@@ -24,6 +24,7 @@ public interface M68kTypes {
     IElementType ASM_INSTRUCTION = new M68kElementType("ASM_INSTRUCTION");
     IElementType ASM_OP = new M68kElementType("ASM_OP");
     IElementType ASSIGNMENT = new M68kElementType("ASSIGNMENT");
+    IElementType BASE_DISPLACEMENT = new M68kElementType("BASE_DISPLACEMENT");
     IElementType BINARY_ADD_EXPR = new M68kElementType("BINARY_ADD_EXPR");
     IElementType BINARY_BITWISE_AND_EXPR = new M68kElementType("BINARY_BITWISE_AND_EXPR");
     IElementType BINARY_BITWISE_OR_EXPR = new M68kElementType("BINARY_BITWISE_OR_EXPR");
@@ -60,6 +61,7 @@ public interface M68kTypes {
     IElementType MEMORY_INDIRECT_POST_INDEXED_ADDRESSING_MODE = new M68kElementType("MEMORY_INDIRECT_POST_INDEXED_ADDRESSING_MODE");
     IElementType MEMORY_INDIRECT_PRE_INDEXED_ADDRESSING_MODE = new M68kElementType("MEMORY_INDIRECT_PRE_INDEXED_ADDRESSING_MODE");
     IElementType OPERAND_SIZE = new M68kElementType("OPERAND_SIZE");
+    IElementType OUTER_DISPLACEMENT = new M68kElementType("OUTER_DISPLACEMENT");
     IElementType PAREN_EXPR = new M68kElementType("PAREN_EXPR");
     IElementType PREPROCESSOR_DIRECTIVE = new M68kElementType("PREPROCESSOR_DIRECTIVE");
     IElementType PREPROCESSOR_KEYWORD = new M68kElementType("PREPROCESSOR_KEYWORD");
@@ -177,6 +179,8 @@ public interface M68kTypes {
                 return new M68kAsmOpImpl(node);
             } else if (type == ASSIGNMENT) {
                 return new M68kAssignmentImpl(node);
+            } else if (type == BASE_DISPLACEMENT) {
+                return new M68kBaseDisplacementImpl(node);
             } else if (type == BINARY_ADD_EXPR) {
                 return new M68kBinaryAddExprImpl(node);
             } else if (type == BINARY_BITWISE_AND_EXPR) {
@@ -247,6 +251,8 @@ public interface M68kTypes {
                 return new M68kMemoryIndirectPreIndexedAddressingModeImpl(node);
             } else if (type == OPERAND_SIZE) {
                 return new M68kOperandSizeImpl(node);
+            } else if (type == OUTER_DISPLACEMENT) {
+                return new M68kOuterDisplacementImpl(node);
             } else if (type == PAREN_EXPR) {
                 return new M68kParenExprImpl(node);
             } else if (type == PREPROCESSOR_DIRECTIVE) {

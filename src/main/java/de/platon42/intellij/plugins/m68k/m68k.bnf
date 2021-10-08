@@ -164,6 +164,7 @@ OperandSize ::= (OPSIZE_BS|OPSIZE_W|OPSIZE_L) {
     name = ".s|.b|.w|.l"
     methods = [getSize]
 }
+
 AddressSize ::= (OPSIZE_W|OPSIZE_L) { name = ".w|.l" }
 DataWidth ::= (OPSIZE_W|OPSIZE_L) { name = ".w|.l" }
 
@@ -235,6 +236,9 @@ SpecialRegister ::= REG_CCR | REG_SR | REG_USP | REG_VBR {
 Register ::= DataRegister | AddressRegister | SpecialRegister
 
 private DataOrAddressRegister ::= DataRegister | AddressRegister { name = "data or address register"}
+
+BaseDisplacement ::= expr DataWidth?
+OuterDisplacement ::= expr DataWidth?
 
 IndexRegister ::= DataOrAddressRegister DataWidth? (OP_AR_MUL IndexScale)?
 {
@@ -330,7 +334,7 @@ AddressRegisterIndirectWithIndexNewAddressingMode ::= ROUND_L (expr SEPARATOR)? 
     ]
 }
 
-MemoryIndirectAddressingMode ::= ROUND_L SQUARE_L (expr DataWidth? SEPARATOR)? AddressRegister SQUARE_R (SEPARATOR expr DataWidth?)? ROUND_R
+MemoryIndirectAddressingMode ::= ROUND_L SQUARE_L (BaseDisplacement SEPARATOR)? AddressRegister SQUARE_R (SEPARATOR OuterDisplacement)? ROUND_R
 {
     implements = [
         "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect"
@@ -338,14 +342,12 @@ MemoryIndirectAddressingMode ::= ROUND_L SQUARE_L (expr DataWidth? SEPARATOR)? A
         "de.platon42.intellij.plugins.m68k.psi.M68kWithOuterDisplacement"
     ]
     methods = [
-        baseDisplacement = "expr[0]"
-        outerDisplacement = "expr[1]"
-        baseDataWidth = "DataWidth[0]"
-        outerDataWidth = "DataWidth[1]"
+        baseDisplacement = "BaseDisplacement"
+        outerDisplacement = "OuterDisplacement"
     ]
 }
 
-MemoryIndirectPostIndexedAddressingMode ::= ROUND_L (SQUARE_L (expr DataWidth? SEPARATOR)? AddressRegister SQUARE_R SEPARATOR)? IndexRegister (SEPARATOR expr DataWidth?)? ROUND_R
+MemoryIndirectPostIndexedAddressingMode ::= ROUND_L (SQUARE_L (BaseDisplacement SEPARATOR)? AddressRegister SQUARE_R SEPARATOR)? IndexRegister (SEPARATOR OuterDisplacement)? ROUND_R
 {
     implements = [
         "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect"
@@ -354,14 +356,12 @@ MemoryIndirectPostIndexedAddressingMode ::= ROUND_L (SQUARE_L (expr DataWidth? S
         "de.platon42.intellij.plugins.m68k.psi.M68kWithOuterDisplacement"
     ]
     methods = [
-        baseDisplacement = "expr[0]"
-        outerDisplacement = "expr[1]"
-        baseDataWidth = "DataWidth[0]"
-        outerDataWidth = "DataWidth[1]"
+        baseDisplacement = "BaseDisplacement"
+        outerDisplacement = "OuterDisplacement"
     ]
 }
 
-MemoryIndirectPreIndexedAddressingMode ::= ROUND_L SQUARE_L (expr DataWidth? SEPARATOR)? AddressRegister SEPARATOR IndexRegister SQUARE_R (SEPARATOR expr DataWidth?)? ROUND_R
+MemoryIndirectPreIndexedAddressingMode ::= ROUND_L SQUARE_L (BaseDisplacement SEPARATOR)? AddressRegister SEPARATOR IndexRegister SQUARE_R (SEPARATOR OuterDisplacement)? ROUND_R
 {
     implements = [
         "de.platon42.intellij.plugins.m68k.psi.M68kWithAddressRegisterIndirect"
@@ -370,10 +370,8 @@ MemoryIndirectPreIndexedAddressingMode ::= ROUND_L SQUARE_L (expr DataWidth? SEP
         "de.platon42.intellij.plugins.m68k.psi.M68kWithOuterDisplacement"
     ]
     methods = [
-        baseDisplacement = "expr[0]"
-        outerDisplacement = "expr[1]"
-        baseDataWidth = "DataWidth[0]"
-        outerDataWidth = "DataWidth[1]"
+        baseDisplacement = "BaseDisplacement"
+        outerDisplacement = "OuterDisplacement"
     ]
 }
 
@@ -415,21 +413,19 @@ ProgramCounterIndirectWithIndexNewAddressingMode ::= ROUND_L (expr SEPARATOR)? P
     ]
 }
 
-ProgramCounterMemoryIndirectAddressingMode ::= ROUND_L SQUARE_L (expr DataWidth? SEPARATOR)? PC SQUARE_R (SEPARATOR expr DataWidth?)? ROUND_R
+ProgramCounterMemoryIndirectAddressingMode ::= ROUND_L SQUARE_L (BaseDisplacement SEPARATOR)? PC SQUARE_R (SEPARATOR OuterDisplacement)? ROUND_R
 {
     implements = [
         "de.platon42.intellij.plugins.m68k.psi.M68kWithBaseDisplacement"
         "de.platon42.intellij.plugins.m68k.psi.M68kWithOuterDisplacement"
     ]
     methods = [
-        baseDisplacement = "expr[0]"
-        outerDisplacement = "expr[1]"
-        baseDataWidth = "DataWidth[0]"
-        outerDataWidth = "DataWidth[1]"
+        baseDisplacement = "BaseDisplacement"
+        outerDisplacement = "OuterDisplacement"
     ]
 }
 
-ProgramCounterMemoryIndirectPostIndexedAddressingMode ::= ROUND_L (SQUARE_L (expr DataWidth? SEPARATOR)? PC SQUARE_R SEPARATOR)? IndexRegister (SEPARATOR expr DataWidth?)? ROUND_R
+ProgramCounterMemoryIndirectPostIndexedAddressingMode ::= ROUND_L (SQUARE_L (BaseDisplacement SEPARATOR)? PC SQUARE_R SEPARATOR)? IndexRegister (SEPARATOR OuterDisplacement)? ROUND_R
 {
     implements = [
         "de.platon42.intellij.plugins.m68k.psi.M68kWithBaseDisplacement"
@@ -437,14 +433,12 @@ ProgramCounterMemoryIndirectPostIndexedAddressingMode ::= ROUND_L (SQUARE_L (exp
         "de.platon42.intellij.plugins.m68k.psi.M68kWithOuterDisplacement"
     ]
     methods = [
-        baseDisplacement = "expr[0]"
-        outerDisplacement = "expr[1]"
-        baseDataWidth = "DataWidth[0]"
-        outerDataWidth = "DataWidth[1]"
+        baseDisplacement = "BaseDisplacement"
+        outerDisplacement = "OuterDisplacement"
     ]
 }
 
-ProgramCounterMemoryIndirectPreIndexedAddressingMode ::= ROUND_L SQUARE_L (expr DataWidth? SEPARATOR)? PC SEPARATOR IndexRegister SQUARE_R (SEPARATOR expr DataWidth?)? ROUND_R
+ProgramCounterMemoryIndirectPreIndexedAddressingMode ::= ROUND_L SQUARE_L (BaseDisplacement SEPARATOR)? PC SEPARATOR IndexRegister SQUARE_R (SEPARATOR OuterDisplacement)? ROUND_R
 {
     implements = [
         "de.platon42.intellij.plugins.m68k.psi.M68kWithBaseDisplacement"
@@ -452,10 +446,8 @@ ProgramCounterMemoryIndirectPreIndexedAddressingMode ::= ROUND_L SQUARE_L (expr 
         "de.platon42.intellij.plugins.m68k.psi.M68kWithOuterDisplacement"
     ]
     methods = [
-        baseDisplacement = "expr[0]"
-        outerDisplacement = "expr[1]"
-        baseDataWidth = "DataWidth[0]"
-        outerDataWidth = "DataWidth[1]"
+        baseDisplacement = "BaseDisplacement"
+        outerDisplacement = "OuterDisplacement"
     ]
 }
 

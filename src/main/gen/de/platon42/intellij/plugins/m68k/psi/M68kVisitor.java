@@ -79,6 +79,10 @@ public class M68kVisitor extends PsiElementVisitor {
         visitPsiElement(o);
     }
 
+    public void visitBaseDisplacement(@NotNull M68kBaseDisplacement o) {
+        visitPsiElement(o);
+    }
+
     public void visitDataRegister(@NotNull M68kDataRegister o) {
         visitRegister(o);
     }
@@ -151,6 +155,10 @@ public class M68kVisitor extends PsiElementVisitor {
     }
 
     public void visitOperandSize(@NotNull M68kOperandSize o) {
+        visitPsiElement(o);
+    }
+
+    public void visitOuterDisplacement(@NotNull M68kOuterDisplacement o) {
         visitPsiElement(o);
     }
 
