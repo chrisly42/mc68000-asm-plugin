@@ -68,6 +68,12 @@
         <localInspection implementationClass="de.platon42.intellij.plugins.m68k.inspections.M68kUnresolvedReferenceInspection"
                          displayName="Unresolved label/symbol/macro reference" groupName="M68k"
                          enabledByDefault="true" level="WARNING"/>
+
+        <projectService serviceImplementation="de.platon42.intellij.plugins.m68k.settings.M68kProjectSettings"/>
+
+        <projectConfigurable parentId="language" instance="de.platon42.intellij.plugins.m68k.settings.M68kProjectSettingsConfigurable"
+                             id="de.platon42.intellij.plugins.m68k.settings.M68kProjectSettingsConfigurable" displayName="M68k"
+                             nonDefaultProject="true"/>
     </extensions>
 
     <actions>

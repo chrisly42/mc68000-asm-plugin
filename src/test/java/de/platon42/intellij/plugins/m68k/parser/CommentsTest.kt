@@ -3,6 +3,7 @@ package de.platon42.intellij.plugins.m68k.parser
 import de.platon42.intellij.jupiter.MyTestCase
 import de.platon42.intellij.jupiter.ParsingTestExtension
 import de.platon42.intellij.jupiter.TestDataSubPath
+import de.platon42.intellij.plugins.m68k.settings.M68kProjectSettings
 import org.junit.jupiter.api.Test
 
 @TestDataSubPath("comments")
@@ -50,37 +51,51 @@ internal class CommentsTest : AbstractParsingTest() {
 
     @Test
     internal fun comment_after_instruction_with_space_introduces_comment_option(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        (testCase.parserDefinition as M68kParserDefinition).lexerPrefs.spaceIntroducesComment = true
+        setSpacesSetting(testCase, true)
         testGoodSyntax(testCase, " add.w d0,d0 hey comment\n")
     }
 
     @Test
     internal fun comment_after_assignment_with_space_introduces_comment_option(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        (testCase.parserDefinition as M68kParserDefinition).lexerPrefs.spaceIntroducesComment = true
+        setSpacesSetting(testCase, true)
+
         testGoodSyntax(testCase, "FOO = 123+23 hey comment\n")
     }
 
     @Test
+    internal fun comment_after_data_directive_with_space_introduces_comment_option(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
+        setSpacesSetting(testCase, true)
+
+        testGoodSyntax(testCase, " dc.w $1234,$2345 hey comment\n")
+    }
+
+    @Test
     internal fun comment_after_macro_call_with_space_introduces_comment_option(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        (testCase.parserDefinition as M68kParserDefinition).lexerPrefs.spaceIntroducesComment = true
+        setSpacesSetting(testCase, true)
         testGoodSyntax(testCase, " PUSHM d0,d0 hey comment\n")
     }
 
     @Test
     internal fun space_does_not_start_comment_within_instruction_without_space_introduces_comment_option(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        (testCase.parserDefinition as M68kParserDefinition).lexerPrefs.spaceIntroducesComment = false
+        setSpacesSetting(testCase, false)
         testGoodSyntax(testCase, " add.w # 234, d0 ; hey comment\n")
     }
 
     @Test
     internal fun space_does_not_start_comment_within_assignment_without_space_introduces_comment_option(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        (testCase.parserDefinition as M68kParserDefinition).lexerPrefs.spaceIntroducesComment = false
+        setSpacesSetting(testCase, false)
         testGoodSyntax(testCase, "FOO = 123 + 23 ; hey comment\n")
     }
 
     @Test
     internal fun space_does_not_start_comment_within_macro_call_without_space_introduces_comment_option(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        (testCase.parserDefinition as M68kParserDefinition).lexerPrefs.spaceIntroducesComment = false
+        setSpacesSetting(testCase, false)
         testGoodSyntax(testCase, " PUSHM d0, d0 ; hey comment\n")
+    }
+
+    private fun setSpacesSetting(testCase: ParsingTestExtension.IParsingTestCase, spacesOption: Boolean) {
+        val settings = M68kProjectSettings()
+        settings.settings.spaceIntroducesComment = spacesOption
+        testCase.project.registerService(M68kProjectSettings::class.java, settings)
     }
 }

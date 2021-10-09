@@ -11,15 +11,13 @@ import com.intellij.psi.tree.IElementType
 import de.platon42.intellij.plugins.m68k.lexer.M68kLexer
 import de.platon42.intellij.plugins.m68k.lexer.M68kLexerPrefs
 import de.platon42.intellij.plugins.m68k.psi.M68kTypes
+import de.platon42.intellij.plugins.m68k.settings.M68kProjectSettings
 
 class M68kSyntaxHighlighter(val project: Project?) : SyntaxHighlighterBase() {
+    private val settings = project?.getService(M68kProjectSettings::class.java)
+
     override fun getHighlightingLexer(): Lexer {
-        if (project == null) {
-            return M68kLexer(M68kLexerPrefs()) // Use some defaults
-        } else {
-            // FIXME Where do we get the prefs from?
-            return M68kLexer(M68kLexerPrefs())
-        }
+        return M68kLexer(settings?.settings ?: M68kLexerPrefs()) // Use some defaults
     }
 
     override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {

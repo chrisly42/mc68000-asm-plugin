@@ -10,15 +10,14 @@ import de.platon42.intellij.plugins.m68k.lexer.M68kLexer
 import de.platon42.intellij.plugins.m68k.lexer.M68kLexerPrefs
 import de.platon42.intellij.plugins.m68k.psi.M68kFile
 import de.platon42.intellij.plugins.m68k.psi.M68kTypes
+import de.platon42.intellij.plugins.m68k.settings.M68kProjectSettings
 import de.platon42.intellij.plugins.m68k.stubs.M68kElementTypes
 
 class M68kParserDefinition : ParserDefinition {
 
-    val lexerPrefs = M68kLexerPrefs() // TODO make this configurable
-
     override fun createLexer(project: Project): Lexer {
-        // TODO take prefs from project somehow
-        return M68kLexer(lexerPrefs)
+        val settings = project.getService(M68kProjectSettings::class.java)
+        return M68kLexer(settings?.settings ?: M68kLexerPrefs())
     }
 
     override fun createParser(project: Project) = M68kParser()

@@ -2,6 +2,7 @@ package de.platon42.intellij.jupiter;
 
 
 import com.intellij.lang.ParserDefinition;
+import com.intellij.mock.MockProjectEx;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.psi.PsiFile;
@@ -112,6 +113,8 @@ public class ParsingTestExtension implements ParameterResolver, AfterTestExecuti
     }
 
     public interface IParsingTestCase {
+
+        MockProjectEx getProject();
 
         ParserDefinition getParserDefinition();
 

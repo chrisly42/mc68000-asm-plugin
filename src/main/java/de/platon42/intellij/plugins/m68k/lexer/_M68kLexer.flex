@@ -118,9 +118,9 @@ PLAIN_MACRO_LINE=[^;\r\n]+
                         if(isAsmMnemonicWithSize(yytext())) { yybegin(ASMINSTR); yypushback(2); return MNEMONIC; }
                         if(isAsmMnemonic(yytext())) { yybegin(ASMINSTR); return MNEMONIC; }
                         //if(isEndDirective(yytext())) { yybegin(YYINITIAL); zzAtEOF = true; return null; }
-                        if(isDataDirective(yytext())) { startExpr(EXPR, EXPR_OP); return DATA_DIRECTIVE; }
-                        if(isPlainDirective(yytext())) { yybegin(PLAINPARAMS); return OTHER_DIRECTIVE; }
-                        if(isOtherDirective(yytext())) { startExpr(EXPR, EXPR_OP); return OTHER_DIRECTIVE; }
+                        if(isDataDirective(yytext())) { eatOneWhitespace = true; startExpr(EXPR, EXPR_OP); return DATA_DIRECTIVE; }
+                        if(isPlainDirective(yytext())) { eatOneWhitespace = true; yybegin(PLAINPARAMS); return OTHER_DIRECTIVE; }
+                        if(isOtherDirective(yytext())) { eatOneWhitespace = true; startExpr(EXPR, EXPR_OP); return OTHER_DIRECTIVE; }
                         return handleMacroMode(this);
                       }
   {MACRONAME}         { return handleMacroMode(this); }

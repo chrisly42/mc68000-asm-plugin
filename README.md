@@ -126,9 +126,12 @@ If the current statement has no valid syntax, the instruction details of all mat
 - Macro invocations are not yet evaluated, thus no referencing to symbols defined via macros (e.g. `STRUCT`).
 - Scoping for global symbols, labels and macros is currently the whole project.
 - No support for register replacement (e.g. registers replaced by `EQUR` or `EQURL` will cause syntax errors)
-- While the lexer supports the -spaces option (where a space does *NOT* introduce a comment), this cannot be configured yet (default is ON).
-- No support for other processor instructions and FPU.
+- No support for other processor instructions and FPU. Yet.
 - The pretty esoteric use of `ZPC`, `ZA0-ZA7` or `ZSP` for zero (omitted) address in 68020 addressing modes is unsupported.
+- Devpac allowed shuffling of (base) displacement and other parameters inside the new syntax (68020+) brackets. Well, I don't. Only strict `(bd,An,Xn*s)` or
+  `([bd,An],Xn*s,od)` order allowed.
+- Switching the spaces option usually needs the caches to be invalidated. Find Usages word scanner always uses default settings, as it is not configurable per
+  project :-/
 - Unit Test coverage is not as good as it could be (ahem).
 - Missing but planned features:
     - Macro evaluation on invocation
@@ -167,6 +170,7 @@ are appreciated. It really is keeping me motivated to continue development.
 - Enhancement: Label documentation now also works for local labels and includes end-of-line comment for label, too.
 - Enhancement: Symbol definition documentation now also includes comments in the same way as the label documentation does.
 - New: Macro definition / invocation documentation provider that even tries to expand macros.
+- New: Added Language settings page with one option so far (-spaces option).
 
 ### V0.7 (26-Sep-21)
 

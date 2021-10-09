@@ -64,6 +64,7 @@ patchPluginXml {
       <li>Enhancement: Label documentation now also works for local labels and includes end-of-line comment for label, too.
       <li>Enhancement: Symbol definition documentation now also includes comments in the same way as the label documentation does.
       <li>New: Macro definition / invocation documentation provider that even tries to expand macros.
+      <li>New: Added Language settings page with one option so far (-spaces option).
     </ul>
   <p>Full changelog available at <a href="https://github.com/chrisly42/mc68000-asm-plugin#changelog">Github project site</a>.</p>
 """)
