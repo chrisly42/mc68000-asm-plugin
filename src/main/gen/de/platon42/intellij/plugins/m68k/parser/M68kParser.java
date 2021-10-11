@@ -1664,7 +1664,7 @@ public class M68kParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // REG_CCR | REG_SR | REG_USP | REG_VBR
+    // REG_CCR | REG_SR | REG_USP | REG_VBR | REG_SFC | REG_DFC
     public static boolean SpecialRegister(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "SpecialRegister")) return false;
         boolean r;
@@ -1673,6 +1673,8 @@ public class M68kParser implements PsiParser, LightPsiParser {
         if (!r) r = consumeToken(b, REG_SR);
         if (!r) r = consumeToken(b, REG_USP);
         if (!r) r = consumeToken(b, REG_VBR);
+        if (!r) r = consumeToken(b, REG_SFC);
+        if (!r) r = consumeToken(b, REG_DFC);
         exit_section_(b, l, m, r, false, null);
         return r;
     }

@@ -42,7 +42,7 @@ class M68kSyntaxHighlighter(val project: Project?) : SyntaxHighlighterBase() {
             M68kTypes.AREG -> arrayOf(AREG)
             M68kTypes.REG_SP -> arrayOf(STACK_POINTER)
             M68kTypes.DREG -> arrayOf(DREG)
-            M68kTypes.REG_USP, M68kTypes.REG_SR, M68kTypes.REG_CCR, M68kTypes.REG_VBR -> arrayOf(SPECIAL_REG)
+            M68kTypes.REG_USP, M68kTypes.REG_SR, M68kTypes.REG_CCR, M68kTypes.REG_VBR, M68kTypes.REG_SFC, M68kTypes.REG_DFC -> arrayOf(SPECIAL_REG)
             M68kTypes.COMMENT -> arrayOf(COMMENT)
             M68kTypes.DECIMAL, M68kTypes.HEXADECIMAL, M68kTypes.OCTAL -> arrayOf(NUMBER)
             M68kTypes.STRINGLIT -> arrayOf(STRING)

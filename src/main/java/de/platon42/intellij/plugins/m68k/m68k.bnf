@@ -228,7 +228,7 @@ AddressRegister ::= AREG | REG_SP {
     extends = Register
 }
 
-SpecialRegister ::= REG_CCR | REG_SR | REG_USP | REG_VBR {
+SpecialRegister ::= REG_CCR | REG_SR | REG_USP | REG_VBR | REG_SFC | REG_DFC {
     name = "special register"
     extends = Register
 }

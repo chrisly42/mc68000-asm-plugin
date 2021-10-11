@@ -137,6 +137,8 @@ public interface M68kTypes {
     IElementType OTHER_DIRECTIVE = new M68kTokenType("OTHER_DIRECTIVE");
     IElementType PC = new M68kTokenType("PC");
     IElementType REG_CCR = new M68kTokenType("REG_CCR");
+    IElementType REG_DFC = new M68kTokenType("REG_DFC");
+    IElementType REG_SFC = new M68kTokenType("REG_SFC");
     IElementType REG_SP = new M68kTokenType("REG_SP");
     IElementType REG_SR = new M68kTokenType("REG_SR");
     IElementType REG_USP = new M68kTokenType("REG_USP");

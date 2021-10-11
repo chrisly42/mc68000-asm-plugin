@@ -13,27 +13,33 @@ internal class M68kMnemonicCompletionContributorTest : AbstractM68kTest() {
 
     @Test
     internal fun completion_shows_all_move_mnemonics_after_first_letters(@MyFixture myFixture: CodeInsightTestFixture) {
-        myFixture.configureByText("completeme.asm", """
+        myFixture.configureByText(
+            "completeme.asm", """
  mo<caret>
-        """)
+        """
+        )
         myFixture.completeBasic()
-        assertThat(myFixture.lookupElementStrings).containsExactlyInAnyOrder("move", "moveq", "movea", "movem", "movep")
+        assertThat(myFixture.lookupElementStrings).containsExactlyInAnyOrder("move", "moveq", "movea", "movem", "movep", "movec", "moves")
     }
 
     @Test
     internal fun completion_shows_all_mnemonics_after_label(@MyFixture myFixture: CodeInsightTestFixture) {
-        myFixture.configureByText("completeme.asm", """
+        myFixture.configureByText(
+            "completeme.asm", """
 label: <caret>
-        """)
+        """
+        )
         myFixture.completeBasic()
         assertThat(myFixture.lookupElementStrings).hasSameElementsAs(M68kIsa.mnemonics)
     }
 
     @Test
     internal fun completion_shows_all_mnemonics_after_space(@MyFixture myFixture: CodeInsightTestFixture) {
-        myFixture.configureByText("completeme.asm", """
+        myFixture.configureByText(
+            "completeme.asm", """
  <caret>
-        """)
+        """
+        )
         myFixture.completeBasic()
         assertThat(myFixture.lookupElementStrings).hasSameElementsAs(M68kIsa.mnemonics)
     }

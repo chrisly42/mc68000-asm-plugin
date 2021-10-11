@@ -266,6 +266,7 @@ object M68kIsa {
 
     private val AREG_ONLY = setOf(AddressMode.ADDRESS_REGISTER_DIRECT)
     private val DREG_ONLY = setOf(AddressMode.DATA_REGISTER_DIRECT)
+    private val DREG_AREG = setOf(AddressMode.ADDRESS_REGISTER_DIRECT, AddressMode.DATA_REGISTER_DIRECT)
 
     private val ADD_SUB_MODES = listOf(
         AllowedAdrMode(
@@ -994,6 +995,21 @@ object M68kIsa {
             )
         ),
 
+        IsaData(
+            "move", "Move from Status Register", id = "move from SR", isPrivileged = true,
+            machine = EnumSet.range(Machine.MC68010, Machine.MC68060),
+            modes = listOf(
+                AllowedAdrMode(
+                    setOf(AddressMode.SPECIAL_REGISTER_DIRECT),
+                    ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL,
+                    OP_SIZE_W,
+                    "sr",
+                    modInfo = RWM_SET_OP2_W,
+                    testedCc = cc("?????")
+                )
+            )
+        ),
+
         *autoExpandForOtherCpus(
             MC68020_PLUS,
 
@@ -1014,6 +1030,38 @@ object M68kIsa {
             modes = listOf(
                 AllowedAdrMode(setOf(AddressMode.SPECIAL_REGISTER_DIRECT), AREG_ONLY, OP_SIZE_L, "usp", modInfo = RWM_SET_OP2_L),
                 AllowedAdrMode(AREG_ONLY, setOf(AddressMode.SPECIAL_REGISTER_DIRECT), OP_SIZE_L, "usp", modInfo = RWM_READ_OP1_L),
+            )
+        ),
+
+        IsaData(
+            "movec", "Move Control Register", isPrivileged = true,
+            machine = EnumSet.range(Machine.MC68010, Machine.MC68060),
+            modes = listOf(
+                AllowedAdrMode(setOf(AddressMode.SPECIAL_REGISTER_DIRECT), DREG_AREG, OP_SIZE_L, "sfc|dfc|usp|vbr", modInfo = RWM_SET_OP2_L),
+                AllowedAdrMode(DREG_AREG, setOf(AddressMode.SPECIAL_REGISTER_DIRECT), OP_SIZE_L, "sfc|dfc|usp|vbr", modInfo = RWM_READ_OP1_L),
+            )
+        ),
+
+        IsaData(
+            "moves", "Move Address Space", isPrivileged = true,
+            machine = EnumSet.range(Machine.MC68010, Machine.MC68060),
+            modes = listOf(
+                AllowedAdrMode(
+                    ALL_68020_MODES_EXCEPT_IMMEDIATE_AND_PC_REL.minus(
+                        listOf(
+                            AddressMode.DATA_REGISTER_DIRECT,
+                            AddressMode.ADDRESS_REGISTER_DIRECT
+                        )
+                    ), DREG_AREG, modInfo = RWM_SET_OP2_OPSIZE
+                ),
+                AllowedAdrMode(
+                    DREG_AREG, ALL_68020_MODES_EXCEPT_IMMEDIATE_AND_PC_REL.minus(
+                        listOf(
+                            AddressMode.DATA_REGISTER_DIRECT,
+                            AddressMode.ADDRESS_REGISTER_DIRECT
+                        )
+                    ), modInfo = RWM_READ_OP1_OPSIZE
+                )
             )
         ),
 
@@ -1120,10 +1168,7 @@ object M68kIsa {
     private fun autoExpandForOtherCpus(machines: Set<Machine>, vararg isaDatas: IsaData): Array<out IsaData> {
         val allIsaData = ArrayList<IsaData>()
         for (isaData in isaDatas) {
-            val newModes = ArrayList<AllowedAdrMode>()
-            for (mode in isaData.modes) {
-                newModes.add(mode.copy(op1 = add68020Modes(mode.op1), op2 = add68020Modes(mode.op2)))
-            }
+            val newModes = isaData.modes.map { it.copy(op1 = add68020Modes(it.op1), op2 = add68020Modes(it.op2)) }
             allIsaData.add(isaData.copy(machine = machines, modes = newModes))
         }
         return allIsaData.toTypedArray()
@@ -1199,5 +1244,5 @@ object M68kIsa {
     private fun isAddressModeMatching(am: AllowedAdrMode, op1: AddressMode?, op2: AddressMode?, specialReg: String?) =
         ((((op1 == null) && (am.op1 == null)) || am.op1?.contains(op1) ?: false)
                 && (((op2 == null) && (am.op2 == null)) || am.op2?.contains(op2) ?: false)
-                && ((specialReg == null) || (specialReg.equals(am.specialReg, true))))
+                && ((specialReg == null) || (am.specialReg?.split('|')?.any { it.equals(specialReg, true) } ?: false)))
 }

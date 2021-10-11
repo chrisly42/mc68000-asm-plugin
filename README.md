@@ -167,6 +167,7 @@ are appreciated. It really is keeping me motivated to continue development.
 ### V0.8 (unreleased)
 
 - New: Support for MC68020+ addressing modes! However, MC68020+ specific instructions have not been added yet.
+- New: Full support for MC68010 ISA (`movec`, `moves` and new special registers `SFC` and `DFC`).
 - Enhancement: Label documentation now also works for local labels and includes end-of-line comment for label, too.
 - Enhancement: Symbol definition documentation now also includes comments in the same way as the label documentation does.
 - New: Macro definition / invocation documentation provider that even tries to expand macros.

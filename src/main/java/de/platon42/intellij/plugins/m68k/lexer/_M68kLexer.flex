@@ -215,6 +215,8 @@ PLAIN_MACRO_LINE=[^;\r\n]+
   "sr"                { yybegin(exprOpState); return REG_SR; }
   "usp"               { yybegin(exprOpState); return REG_USP; }
   "vbr"               { yybegin(exprOpState); return REG_VBR; }
+  "dfc"               { yybegin(exprOpState); return REG_DFC; }
+  "sfc"               { yybegin(exprOpState); return REG_SFC; }
 
   "#"                 { return HASH; }
   "\["                { return SQUARE_L; }

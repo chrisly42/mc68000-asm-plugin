@@ -61,6 +61,7 @@ patchPluginXml {
   <h4>V0.8 (unreleased)</h4>
     <ul>
       <li>New: Support for MC68020+ addressing modes! However, MC68020+ specific instructions have not been added yet.
+      <li>New: Full support for MC68010 ISA ('movec', 'moves' and new special registers 'SFC' and 'DFC').
       <li>Enhancement: Label documentation now also works for local labels and includes end-of-line comment for label, too.
       <li>Enhancement: Symbol definition documentation now also includes comments in the same way as the label documentation does.
       <li>New: Macro definition / invocation documentation provider that even tries to expand macros.
