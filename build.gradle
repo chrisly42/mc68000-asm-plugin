@@ -48,7 +48,7 @@ intellij {
 }
 
 runPluginVerifier {
-    ideVersions = ["IC-203.6682.168", "IC-212.5284.40", // 2020.3 - 2021.2.2
+    ideVersions = ["IC-203.6682.168", "IC-212.5457.46", // 2020.3 - 2021.2.3
                    "CL-203.5981.166", "CL-203.8084.11", // 2020.3
                    "CL-211.6693.114", "CL-211.7628.27", // 2021.1
                    "CL-212.4746.93", "CL-212.5284.51"] // 2021.2 - 2021.2.2
@@ -58,7 +58,7 @@ runPluginVerifier {
 patchPluginXml {
     setChangeNotes("""
   <p>I still got zero feedback and zero <a href="https://plugins.jetbrains.com/plugin/17268-mc68000-assembly-language-support/reviews">ratings</a> :-(</p>
-  <h4>V0.8 (unreleased)</h4>
+  <h4>V0.8 (15-Oct-21)</h4>
     <ul>
       <li>New: Support for MC68020+ addressing modes! However, MC68020+ specific instructions have not been added yet.
       <li>New: Full support for MC68010 ISA ('movec', 'moves' and new special registers 'SFC' and 'DFC').
@@ -66,6 +66,7 @@ patchPluginXml {
       <li>Enhancement: Symbol definition documentation now also includes comments in the same way as the label documentation does.
       <li>New: Macro definition / invocation documentation provider that even tries to expand macros.
       <li>New: Added Language settings page with one option so far (-spaces option).
+      <li>New: Added some more settings for maximum parsed lines inside a macro and maximum displayed lines of code for documentation.
     </ul>
   <p>Full changelog available at <a href="https://github.com/chrisly42/mc68000-asm-plugin#changelog">Github project site</a>.</p>
 """)

@@ -15,11 +15,11 @@ class M68kMacroDefinitionDocumentationProvider : AbstractM68kDocumentationProvid
     }
 
     override fun generateDoc(element: PsiElement, originalElement: PsiElement?): String? {
-        return if (element is M68kMacroDefinition) createDoc(element, originalElement, 100) else null // TODO make this configurable
+        return if (element is M68kMacroDefinition) createDoc(element, originalElement, getSettings(element).maxLongDocumentationLines) else null
     }
 
     override fun generateHoverDoc(element: PsiElement, originalElement: PsiElement?): String? {
-        return if (element is M68kMacroDefinition) createDoc(element, originalElement, 4) else null // TODO make this configurable
+        return if (element is M68kMacroDefinition) createDoc(element, originalElement, getSettings(element).maxShortDocumentationLines) else null
     }
 
     private fun createDoc(macrodef: M68kMacroDefinition, originalElement: PsiElement?, linesLimit: Int): String {

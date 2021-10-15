@@ -5,10 +5,14 @@ import com.intellij.lang.documentation.DocumentationMarkup
 import com.intellij.openapi.util.text.HtmlBuilder
 import com.intellij.openapi.util.text.HtmlChunk
 import com.intellij.psi.PsiElement
+import de.platon42.intellij.plugins.m68k.lexer.M68kLexerPrefs
 import de.platon42.intellij.plugins.m68k.psi.M68kNamedElement
 import de.platon42.intellij.plugins.m68k.psi.utils.M68kPsiWalkUtil
+import de.platon42.intellij.plugins.m68k.settings.M68kProjectSettings
 
 abstract class AbstractM68kDocumentationProvider : AbstractDocumentationProvider() {
+
+    fun getSettings(element: PsiElement): M68kLexerPrefs = element.project.getService(M68kProjectSettings::class.java).settings
 
     fun getComments(element: PsiElement): HtmlChunk {
         val builder = HtmlBuilder()

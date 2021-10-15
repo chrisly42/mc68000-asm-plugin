@@ -22,14 +22,14 @@ class M68kRegisterFlowDocumentationProvider : AbstractM68kDocumentationProvider(
 
     override fun generateDoc(element: PsiElement, originalElement: PsiElement?): String? {
         if (element is M68kDataRegister || element is M68kAddressRegister) {
-            return createDoc(element as M68kRegister, 100) // TODO make this configurable
+            return createDoc(element as M68kRegister, getSettings(element).maxLongDocumentationLines)
         }
         return null
     }
 
     override fun generateHoverDoc(element: PsiElement, originalElement: PsiElement?): String? {
         if (element is M68kDataRegister || element is M68kAddressRegister) {
-            return createDoc(element as M68kRegister, 4) // TODO make this configurable
+            return createDoc(element as M68kRegister, getSettings(element).maxShortDocumentationLines)
         }
         return null
     }
@@ -81,8 +81,9 @@ class M68kRegisterFlowDocumentationProvider : AbstractM68kDocumentationProvider(
             PsiTreeUtil.getPrevSiblingOfType(it, M68kStatement::class.java)
         })
         backtrace.reverse()
+        val remLines = linesLimit - backtrace.size.coerceAtLeast(1)
         val traceBits = (cursorRwm or (cursorRwm ushr RWM_MODIFY_SHIFT) or (cursorRwm ushr RWM_READ_SHIFT)) and RWM_SIZE_MASK
-        backtrace.addAll(analyseFlow(register, traceBits, false, initialStatement, linesLimit) {
+        backtrace.addAll(analyseFlow(register, traceBits, false, initialStatement, remLines) {
             PsiTreeUtil.getNextSiblingOfType(it, M68kStatement::class.java)
         })
 

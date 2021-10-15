@@ -26,7 +26,7 @@ to get started, and I can return to demo coding with its current state.
 ## Features
 
 - Parser / Lexer for MC680xx assembly language files in VAsm / DevPac style
-- Validates the assembly syntax against the 68000 ISA and 68020+ addressing modes (no complete >68020 support yet!)
+- Validates the assembly syntax against the 68000/68010 ISA and 68020+ addressing modes (no complete >68020 support yet!)
 - Syntax highlighting and Color Settings Page (you should really modify the color settings to your likings!)
 - Mnemonics code completion
 - Symbols / labels / macros code completion
@@ -164,7 +164,7 @@ are appreciated. It really is keeping me motivated to continue development.
 
 ## Changelog
 
-### V0.8 (unreleased)
+### V0.8 (15-Oct-21)
 
 - New: Support for MC68020+ addressing modes! However, MC68020+ specific instructions have not been added yet.
 - New: Full support for MC68010 ISA (`movec`, `moves` and new special registers `SFC` and `DFC`).
@@ -172,6 +172,7 @@ are appreciated. It really is keeping me motivated to continue development.
 - Enhancement: Symbol definition documentation now also includes comments in the same way as the label documentation does.
 - New: Macro definition / invocation documentation provider that even tries to expand macros.
 - New: Added Language settings page with one option so far (-spaces option).
+- New: Added some more settings for maximum parsed lines inside a macro and maximum displayed lines of code for documentation.
 
 ### V0.7 (26-Sep-21)
 
