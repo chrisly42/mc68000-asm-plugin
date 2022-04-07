@@ -1,13 +1,13 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.intellij' version '1.1.6'
-    id 'org.jetbrains.kotlin.jvm' version '1.5.21'
+    id 'org.jetbrains.intellij' version '1.4.0'
+    id 'org.jetbrains.kotlin.jvm' version '1.6.20'
     id 'jacoco'
     id 'com.github.kt3k.coveralls' version '2.12.0'
 }
 
 group = 'de.platon42'
-version = '0.8'
+version = '0.9'
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
@@ -22,9 +22,9 @@ repositories {
 
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-    testImplementation "org.assertj:assertj-core:3.21.0"
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation "org.assertj:assertj-core:3.22.0"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
     testImplementation "org.jetbrains.kotlin:kotlin-test"
     testImplementation "org.jetbrains.kotlin:kotlin-reflect"
 //    testImplementation "org.jetbrains.kotlin:kotlin-test-junit"
@@ -42,31 +42,26 @@ compileTestKotlin {
 }
 
 intellij {
-    setVersion("2021.2.2") // LATEST-EAP-SNAPSHOT
+    setVersion("2021.3.3") // LATEST-EAP-SNAPSHOT
     setUpdateSinceUntilBuild(false)
 //    setPlugins(["com.intellij.java"])
 }
 
 runPluginVerifier {
-    ideVersions = ["IC-203.6682.168", "IC-212.5457.46", // 2020.3 - 2021.2.3
-                   "CL-203.5981.166", "CL-203.8084.11", // 2020.3
-                   "CL-211.6693.114", "CL-211.7628.27", // 2021.1
-                   "CL-212.4746.93", "CL-212.5284.51"] // 2021.2 - 2021.2.2
+    ideVersions = ["IC-203.6682.168", "IC-213.7172.25", // 2020.3 - 2021.3.3
+                   "CL-203.8084.11", // 2020.3
+                   "CL-211.7628.27", // 2021.1
+                   "CL-212.5712.21", // 2021.2
+                   "CL-213.7172.20"] // 2021.3.4
     downloadDir = System.getProperty("user.home") + "/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/verifier"
 }
 
 patchPluginXml {
     setChangeNotes("""
-  <p>I still got zero feedback and zero <a href="https://plugins.jetbrains.com/plugin/17268-mc68000-assembly-language-support/reviews">ratings</a> :-(</p>
-  <h4>V0.8 (15-Oct-21)</h4>
+  <h4>V0.9 (07-Apr-22)</h4>
     <ul>
-      <li>New: Support for MC68020+ addressing modes! However, MC68020+ specific instructions have not been added yet.
-      <li>New: Full support for MC68010 ISA ('movec', 'moves' and new special registers 'SFC' and 'DFC').
-      <li>Enhancement: Label documentation now also works for local labels and includes end-of-line comment for label, too.
-      <li>Enhancement: Symbol definition documentation now also includes comments in the same way as the label documentation does.
-      <li>New: Macro definition / invocation documentation provider that even tries to expand macros.
-      <li>New: Added Language settings page with one option so far (-spaces option).
-      <li>New: Added some more settings for maximum parsed lines inside a macro and maximum displayed lines of code for documentation.
+    <li>Maintenance. Updated all dependencies to the latest versions.
+    <li>Bugfix: Fixed condition code for asr/lsr/lsl, which is has a different behaviour for V flag than asl.
     </ul>
   <p>Full changelog available at <a href="https://github.com/chrisly42/mc68000-asm-plugin#changelog">Github project site</a>.</p>
 """)

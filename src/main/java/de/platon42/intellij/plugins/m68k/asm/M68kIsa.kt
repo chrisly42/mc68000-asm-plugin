@@ -307,12 +307,20 @@ object M68kIsa {
         )
     )
 
-    private val ASD_LSD_MODES = listOf(
+    private val ASL_MODES = listOf(
         AllowedAdrMode(DREG_ONLY, DREG_ONLY, modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("*****")),
         AllowedAdrMode(setOf(AddressMode.IMMEDIATE_DATA), DREG_ONLY, modInfo = RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("*****")),
         AllowedAdrMode(INDIRECT_MODES, null, size = OP_SIZE_W, modInfo = RWM_MODIFY_OP1_OPSIZE, affectedCc = cc("*****")),
         // not an official address mode, but supported by assembler (implicit #1)
         AllowedAdrMode(DREG_ONLY, null, modInfo = RWM_MODIFY_OP1_OPSIZE, affectedCc = cc("*****"))
+    )
+
+    private val ASR_LSD_MODES = listOf(
+        AllowedAdrMode(DREG_ONLY, DREG_ONLY, modInfo = RWM_READ_OP1_OPSIZE or RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("***0*")),
+        AllowedAdrMode(setOf(AddressMode.IMMEDIATE_DATA), DREG_ONLY, modInfo = RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("***0*")),
+        AllowedAdrMode(INDIRECT_MODES, null, size = OP_SIZE_W, modInfo = RWM_MODIFY_OP1_OPSIZE, affectedCc = cc("***0*")),
+        // not an official address mode, but supported by assembler (implicit #1)
+        AllowedAdrMode(DREG_ONLY, null, modInfo = RWM_MODIFY_OP1_OPSIZE, affectedCc = cc("***0*"))
     )
 
     private val ROD_MODES = listOf(
@@ -761,10 +769,10 @@ object M68kIsa {
             ),
 
             // Shift and Rotate Instructions
-            IsaData("asl", "Arithmetic Shift Left", modes = ASD_LSD_MODES),
-            IsaData("asr", "Arithmetic Shift Right", modes = ASD_LSD_MODES),
-            IsaData("lsl", "Logical Shift Left", modes = ASD_LSD_MODES),
-            IsaData("lsr", "Logical Shift Right", modes = ASD_LSD_MODES),
+            IsaData("asl", "Arithmetic Shift Left", modes = ASL_MODES),
+            IsaData("asr", "Arithmetic Shift Right", modes = ASR_LSD_MODES),
+            IsaData("lsl", "Logical Shift Left", modes = ASR_LSD_MODES),
+            IsaData("lsr", "Logical Shift Right", modes = ASR_LSD_MODES),
             IsaData("rol", "Rotate Left", modes = ROD_MODES),
             IsaData("ror", "Rotate Right", modes = ROD_MODES),
             IsaData("roxl", "Rotate with Extend Left", modes = ROXD_MODES),

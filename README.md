@@ -164,6 +164,11 @@ are appreciated. It really is keeping me motivated to continue development.
 
 ## Changelog
 
+### V0.9 (unreleased)
+
+- Maintenance. Updated all dependencies to the latest versions.
+- Bugfix: Fixed condition code for `asr/lsr/lsl`, which is has a different behaviour for V flag than `asl`.
+
 ### V0.8 (15-Oct-21)
 
 - New: Support for MC68020+ addressing modes! However, MC68020+ specific instructions have not been added yet.
