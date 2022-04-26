@@ -168,6 +168,7 @@ are appreciated. It really is keeping me motivated to continue development.
 
 - Maintenance. Updated all dependencies to the latest versions.
 - Bugfix: Fixed condition code for `asr/lsr/lsl`, which is has a different behaviour for V flag than `asl`.
+- Bugfix: Fixed 'Unknown op size' exception when uppercase sizes were used.
 
 ### V0.8 (15-Oct-21)
 

@@ -62,6 +62,7 @@ patchPluginXml {
     <ul>
     <li>Maintenance. Updated all dependencies to the latest versions.
     <li>Bugfix: Fixed condition code for asr/lsr/lsl, which is has a different behaviour for V flag than asl.
+    <li>Bugfix: Fixed 'Unknown op size' exception when uppercase sizes were used.
     </ul>
   <p>Full changelog available at <a href="https://github.com/chrisly42/mc68000-asm-plugin#changelog">Github project site</a>.</p>
 """)

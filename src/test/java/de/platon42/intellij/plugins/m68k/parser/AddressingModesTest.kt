@@ -14,7 +14,7 @@ internal class AddressingModesTest : AbstractParsingTest() {
 
     @Test
     internal fun register_direct(@MyTestCase testCase: ParsingTestExtension.IParsingTestCase) {
-        testGoodSyntax(testCase, " move.l d0,a7\n")
+        testGoodSyntax(testCase, " MOVE.L d0,a7\n")
     }
 
     @Test

@@ -105,7 +105,7 @@ object M68kPsiImplUtil {
     // OperandSize
     @JvmStatic
     fun getSize(element: M68kOperandSize): Int =
-        when (element.text) {
+        when (element.text?.lowercase()) {
             null -> OP_UNSIZED
             ".w" -> OP_SIZE_W
             ".l" -> OP_SIZE_L
