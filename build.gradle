@@ -1,7 +1,7 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.intellij' version '1.4.0'
-    id 'org.jetbrains.kotlin.jvm' version '1.6.20'
+    id 'org.jetbrains.intellij' version '1.8.0'
+    id 'org.jetbrains.kotlin.jvm' version '1.7.10'
     id 'jacoco'
     id 'com.github.kt3k.coveralls' version '2.12.0'
 }
@@ -22,11 +22,12 @@ repositories {
 
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-    testImplementation "org.assertj:assertj-core:3.22.0"
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testImplementation 'org.assertj:assertj-core:3.23.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
     testImplementation "org.jetbrains.kotlin:kotlin-test"
     testImplementation "org.jetbrains.kotlin:kotlin-reflect"
+    testImplementation 'org.junit.platform:junit-platform-launcher:1.9.0'
 //    testImplementation "org.jetbrains.kotlin:kotlin-test-junit"
 }
 
@@ -42,27 +43,30 @@ compileTestKotlin {
 }
 
 intellij {
-    setVersion("2021.3.3") // LATEST-EAP-SNAPSHOT
+    setVersion("2022.2") // LATEST-EAP-SNAPSHOT
     setUpdateSinceUntilBuild(false)
 //    setPlugins(["com.intellij.java"])
 }
 
 runPluginVerifier {
-    ideVersions = ["IC-203.6682.168", "IC-213.7172.25", // 2020.3 - 2021.3.3
+    ideVersions = ["IC-203.6682.168", "IC-222.3345.118", // 2020.3 - 2022.2
                    "CL-203.8084.11", // 2020.3
                    "CL-211.7628.27", // 2021.1
                    "CL-212.5712.21", // 2021.2
-                   "CL-213.7172.20"] // 2021.3.4
+                   "CL-213.7172.20", // 2021.3.4
+                   "CL-221.5080.224", // 2022.1
+                   "CL-222.3345.126"] // 2022.2
     downloadDir = System.getProperty("user.home") + "/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/verifier"
 }
 
 patchPluginXml {
     setChangeNotes("""
-  <h4>V0.9 (07-Apr-22)</h4>
+  <h4>V0.9 (16-Aug-22)</h4>
     <ul>
     <li>Maintenance. Updated all dependencies to the latest versions.
     <li>Bugfix: Fixed condition code for asr/lsr/lsl, which is has a different behaviour for V flag than asl.
     <li>Bugfix: Fixed 'Unknown op size' exception when uppercase sizes were used.
+    <li>Bugfix: Refactoring was broken for newer IDE versions, at least for me, this now works again by unknown magic.
     </ul>
   <p>Full changelog available at <a href="https://github.com/chrisly42/mc68000-asm-plugin#changelog">Github project site</a>.</p>
 """)
@@ -75,10 +79,17 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
     }
+    runIde {
+        jvmArgs '--add-exports', 'java.base/jdk.internal.vm=ALL-UNNAMED'
+    }
+}
+
+tasks.coveralls {
+    dependsOn jacocoTestReport
 }
 
 jacoco {
-    toolVersion = '0.8.7'
+    toolVersion = '0.8.8'
 }
 
 jacocoTestReport {

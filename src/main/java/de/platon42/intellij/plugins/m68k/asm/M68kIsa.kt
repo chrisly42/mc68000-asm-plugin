@@ -1074,12 +1074,14 @@ object M68kIsa {
         ),
 
         IsaData("reset", "Reset External Devices", machine = ALL_MACHINES, isPrivileged = true, hasOps = false, modes = NO_OPS_UNSIZED),
+
         IsaData(
             "rte", "Return from Exception",
             machine = ALL_MACHINES, isPrivileged = true, hasOps = false,
             modes = listOf(AllowedAdrMode(size = OP_UNSIZED, modInfo = RWM_MODIFY_STACK)),
             changesControlFlow = true
         ),
+
         IsaData(
             "stop", "Stop",
             machine = ALL_MACHINES, isPrivileged = true,
@@ -1095,6 +1097,7 @@ object M68kIsa {
         ),
 
         IsaData("illegal", "Take Illegal Instruction Trap", machine = ALL_MACHINES, hasOps = false, modes = NO_OPS_UNSIZED, changesControlFlow = true),
+
         IsaData(
             "trap",
             "Trap",
@@ -1203,8 +1206,7 @@ object M68kIsa {
         null
     }
 
-    private
-    val mnemonicLookupMap = isaData.asSequence()
+    private val mnemonicLookupMap = isaData.asSequence()
         .flatMap {
             (if (it.conditionCodes.isEmpty()) it.altMnemonics.plus(it.mnemonic) else it.altMnemonics.plus(it.conditionCodes
                 .map { cc ->

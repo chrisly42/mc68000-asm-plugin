@@ -1,4 +1,4 @@
-# MC68000 Assembly Language Plugin [![Build Status](https://travis-ci.com/chrisly42/mc68000-asm-plugin.svg?branch=main)](https://travis-ci.com/chrisly42/mc68000-asm-plugin) [![Coverage Status](https://coveralls.io/repos/github/chrisly42/mc68000-asm-plugin/badge.svg?branch=main&kill_cache=1)](https://coveralls.io/github/chrisly42/mc68000-asm-plugin?branch=main)
+# MC68000 Assembly Language Plugin [![Build Status](https://app.travis-ci.com/chrisly42/mc68000-asm-plugin.svg?branch=master)](https://app.travis-ci.com/chrisly42/mc68000-asm-plugin)
 
 _MC68000 Assembly Language Plugin_ is plugin for Jetbrains IDEs (CLion, IntelliJ, etc.).
 
@@ -164,11 +164,12 @@ are appreciated. It really is keeping me motivated to continue development.
 
 ## Changelog
 
-### V0.9 (unreleased)
+### V0.9 (16-Aug-22)
 
 - Maintenance. Updated all dependencies to the latest versions.
 - Bugfix: Fixed condition code for `asr/lsr/lsl`, which is has a different behaviour for V flag than `asl`.
 - Bugfix: Fixed 'Unknown op size' exception when uppercase sizes were used.
+- Bugfix: Refactoring was broken for newer IDE versions, at least for me, this now works again by unknown magic.
 
 ### V0.8 (15-Oct-21)
 

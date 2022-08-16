@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 abstract class AbstractDocumentationProviderTest : AbstractM68kTest() {
 
     fun generateDocumentation(myFixture: CodeInsightTestFixture): String? {
+        // FIXME migrate to DocumentationTarget
         val docElement = DocumentationManager.getInstance(myFixture.project).findTargetElement(myFixture.editor, myFixture.file)
         val provider = DocumentationManager.getProviderFromElement(docElement)
 

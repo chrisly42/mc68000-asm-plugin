@@ -29,7 +29,7 @@ class M68kUnresolvedReferenceInspection : AbstractBaseM68kLocalInspectionTool() 
             }
 
             override fun visitSymbolReference(symbolReference: M68kSymbolReference) {
-                val references = symbolReference.references ?: return
+                val references = symbolReference.references
                 if (references.isEmpty()) return
                 val resolve = references.mapNotNull { it as? PsiPolyVariantReference }
                     .firstNotNullOfOrNull { it.multiResolve(false).ifEmpty { null } }

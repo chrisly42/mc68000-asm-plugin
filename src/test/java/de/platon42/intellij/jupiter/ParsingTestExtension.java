@@ -6,14 +6,13 @@ import com.intellij.mock.MockProjectEx;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.psi.PsiFile;
-import com.intellij.testFramework.EdtTestUtilKt;
 import com.intellij.testFramework.ParsingTestCase;
 import com.intellij.testFramework.TestLoggerFactory;
-import com.intellij.testFramework.fixtures.IdeaTestExecutionPolicy;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.extension.*;
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
 import org.junit.jupiter.api.extension.ExtensionContext.Store;
+import org.junit.runner.Description;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -81,34 +80,19 @@ public class ParsingTestExtension implements ParameterResolver, AfterTestExecuti
     @Override
     public void interceptTestMethod(Invocation<Void> invocation, ReflectiveInvocationContext<Method> invocationContext, ExtensionContext extensionContext) throws Throwable {
         Throwable[] throwables = new Throwable[1];
+        Description testDescription = Description.createTestDescription(extensionContext.getRequiredTestClass(), getWrapper(extensionContext).getName());
 
-        Runnable runnable = () -> {
-            try {
-                TestLoggerFactory.onTestStarted();
-                invocation.proceed();
-                TestLoggerFactory.onTestFinished(true);
-            } catch (Throwable e) {
-                TestLoggerFactory.onTestFinished(false);
-                throwables[0] = e;
-            }
-        };
-
-        invokeTestRunnable(runnable);
+        try {
+            TestLoggerFactory.onTestStarted();
+            invocation.proceed();
+            TestLoggerFactory.onTestFinished(true, testDescription);
+        } catch (Throwable e) {
+            TestLoggerFactory.onTestFinished(false, testDescription);
+            throwables[0] = e;
+        }
 
         if (throwables[0] != null) {
             throw throwables[0];
-        }
-    }
-
-    private static void invokeTestRunnable(@NotNull Runnable runnable) {
-        IdeaTestExecutionPolicy policy = IdeaTestExecutionPolicy.current();
-        if (policy != null && !policy.runInDispatchThread()) {
-            runnable.run();
-        } else {
-            EdtTestUtilKt.runInEdtAndWait(() -> {
-                runnable.run();
-                return null;
-            });
         }
     }
 

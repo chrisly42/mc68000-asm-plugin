@@ -63,7 +63,7 @@ internal class M68kInspectionSuppressorTest : AbstractInspectionTest() {
         val quickFixPair = highlightInfos[0].quickFixActionRanges[0]
         val intentionActionDescriptor = quickFixPair.first
         val element = myFixture.file.findElementAt(quickFixPair.second.startOffset)!!
-        val suppressQuickFix = intentionActionDescriptor.getOptions(element, myFixture.editor)!!
+        val suppressQuickFix = intentionActionDescriptor.getOptions(element, myFixture.editor)
             .first { it.text == suppressAction }
         myFixture.launchAction(suppressQuickFix)
     }

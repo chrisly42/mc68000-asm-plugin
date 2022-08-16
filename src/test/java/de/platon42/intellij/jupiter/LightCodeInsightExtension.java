@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.extension.*;
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
 import org.junit.jupiter.api.extension.ExtensionContext.Store;
+import org.junit.runner.Description;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -34,8 +35,11 @@ public class LightCodeInsightExtension implements ParameterResolver, AfterTestEx
     public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
         LightCodeInsightFixtureTestCaseWrapper testCase = getWrapper(extensionContext);
         Parameter parameter = parameterContext.getParameter();
-        if (parameter.isAnnotationPresent(MyFixture.class)) return testCase.getMyFixture();
-        else if (parameter.isAnnotationPresent(MyTestCase.class)) return testCase;
+        if (parameter.isAnnotationPresent(MyFixture.class)) {
+            return testCase.getMyFixture();
+        } else if (parameter.isAnnotationPresent(MyTestCase.class)) {
+            return testCase;
+        }
         return null;
     }
 
@@ -68,14 +72,15 @@ public class LightCodeInsightExtension implements ParameterResolver, AfterTestEx
     @Override
     public void interceptTestMethod(Invocation<Void> invocation, ReflectiveInvocationContext<Method> invocationContext, ExtensionContext extensionContext) throws Throwable {
         Throwable[] throwables = new Throwable[1];
+        Description testDescription = Description.createTestDescription(extensionContext.getRequiredTestClass(), getWrapper(extensionContext).getName());
 
         Runnable runnable = () -> {
             try {
                 TestLoggerFactory.onTestStarted();
                 invocation.proceed();
-                TestLoggerFactory.onTestFinished(true);
+                TestLoggerFactory.onTestFinished(true, testDescription);
             } catch (Throwable e) {
-                TestLoggerFactory.onTestFinished(false);
+                TestLoggerFactory.onTestFinished(false, testDescription);
                 throwables[0] = e;
             }
         };

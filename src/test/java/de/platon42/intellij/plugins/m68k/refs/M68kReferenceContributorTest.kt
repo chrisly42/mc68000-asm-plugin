@@ -103,7 +103,7 @@ internal class M68kReferenceContributorTest : AbstractM68kTest() {
         assertThat(otherfile.text).isEqualTo("; oh no!")
 
         myFixture.renameElementAtCaret("foobar.asm")
-        val files = FilenameIndex.getFilesByName(myFixture.project, "foobar.asm", GlobalSearchScope.allScope(myFixture.project))
+        val files = FilenameIndex.getVirtualFilesByName("foobar.asm", GlobalSearchScope.allScope(myFixture.project))
         assertThat(files).hasSize(1)
 
         assertThat(file.text).isEqualToIgnoringWhitespace("include \"foobar.asm\"")
@@ -123,7 +123,7 @@ internal class M68kReferenceContributorTest : AbstractM68kTest() {
         assertThat(otherfile.text).isEqualTo("; oh no!")
 
         myFixture.renameElementAtCaret("foobar.asm")
-        val files = FilenameIndex.getFilesByName(myFixture.project, "foobar.asm", GlobalSearchScope.allScope(myFixture.project))
+        val files = FilenameIndex.getVirtualFilesByName("foobar.asm", GlobalSearchScope.allScope(myFixture.project))
         assertThat(files).hasSize(1)
 
         assertThat(file.text).isEqualToIgnoringWhitespace("include \"foobar/foobar.asm\"")
