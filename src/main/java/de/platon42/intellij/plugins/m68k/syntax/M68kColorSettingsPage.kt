@@ -1,11 +1,13 @@
 package de.platon42.intellij.plugins.m68k.syntax
 
+import com.intellij.codeHighlighting.RainbowHighlighter
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.fileTypes.SyntaxHighlighter
 import com.intellij.openapi.options.colors.AttributesDescriptor
 import com.intellij.openapi.options.colors.ColorDescriptor
-import com.intellij.openapi.options.colors.ColorSettingsPage
+import com.intellij.openapi.options.colors.RainbowColorSettingsPage
 import de.platon42.intellij.plugins.m68k.M68kIcons.FILE
+import de.platon42.intellij.plugins.m68k.MC68000Language
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.AREG
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.BAD_CHARACTER
 import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.COLON
@@ -34,7 +36,9 @@ import de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighter.Companion.
 import org.jetbrains.annotations.NonNls
 import javax.swing.Icon
 
-class M68kColorSettingsPage : ColorSettingsPage {
+class M68kColorSettingsPage : RainbowColorSettingsPage {
+
+    override fun getLanguage() = MC68000Language.INSTANCE
 
     override fun getIcon(): Icon {
         return FILE
@@ -48,6 +52,8 @@ class M68kColorSettingsPage : ColorSettingsPage {
     override fun getDemoText(): String {
         return """; This is an example assembly language program
 PIC_HEIGHT = 256
+
+* Semantic highlighting is available for registers and local labels
 
         include "../includes/hardware/custom.i"
 
@@ -80,23 +86,21 @@ hello:  dc.b   'Hello World!',10,0
 """
     }
 
-    override fun getAdditionalHighlightingTagToDescriptorMap(): Map<String, TextAttributesKey>? {
-        return null
+    override fun getAdditionalHighlightingTagToDescriptorMap(): Map<String, TextAttributesKey> {
+        return RainbowHighlighter.createRainbowHLM()
     }
 
-    override fun getAttributeDescriptors(): Array<AttributesDescriptor> {
-        return DESCRIPTORS
-    }
+    override fun isRainbowType(type: TextAttributesKey) = RAINBOW_TYPES.contains(type)
 
-    override fun getColorDescriptors(): Array<ColorDescriptor> {
-        return ColorDescriptor.EMPTY_ARRAY
-    }
+    override fun getAttributeDescriptors() = DESCRIPTORS
 
-    override fun getDisplayName(): String {
-        return "M68k Assembly"
-    }
+    override fun getColorDescriptors() = ColorDescriptor.EMPTY_ARRAY
+
+    override fun getDisplayName() = "M68k Assembly"
 
     companion object {
+        private val RAINBOW_TYPES = setOf(AREG, DREG, LOCAL_LABEL)
+
         private val DESCRIPTORS = arrayOf(
             AttributesDescriptor("Global labels", GLOBAL_LABEL),
             AttributesDescriptor("Local labels", LOCAL_LABEL),

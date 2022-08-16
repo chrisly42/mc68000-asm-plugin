@@ -1,4 +1,4 @@
-# MC68000 Assembly Language Plugin [![Build Status](https://app.travis-ci.com/chrisly42/mc68000-asm-plugin.svg?branch=master)](https://app.travis-ci.com/chrisly42/mc68000-asm-plugin)
+# MC68000 Assembly Language Plugin [![Build Status](https://app.travis-ci.com/chrisly42/mc68000-asm-plugin.svg?branch=master)](https://app.travis-ci.com/chrisly42/mc68000-asm-plugin) [![Coverage Status](https://coveralls.io/repos/github/chrisly42/mc68000-asm-plugin/badge.svg?branch=main)](https://coveralls.io/github/chrisly42/mc68000-asm-plugin?branch=main)
 
 _MC68000 Assembly Language Plugin_ is plugin for Jetbrains IDEs (CLion, IntelliJ, etc.).
 

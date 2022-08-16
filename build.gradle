@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'de.platon42'
-version = '0.9'
+version = '0.10'
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
@@ -61,12 +61,9 @@ runPluginVerifier {
 
 patchPluginXml {
     setChangeNotes("""
-  <h4>V0.9 (16-Aug-22)</h4>
+  <h4>V0.10 (undefined)</h4>
     <ul>
-    <li>Maintenance. Updated all dependencies to the latest versions.
-    <li>Bugfix: Fixed condition code for asr/lsr/lsl, which is has a different behaviour for V flag than asl.
-    <li>Bugfix: Fixed 'Unknown op size' exception when uppercase sizes were used.
-    <li>Bugfix: Refactoring was broken for newer IDE versions, at least for me, this now works again by unknown magic.
+    <li>New: Added semantic highlighting. Currently available for data and address registers and local labels.
     </ul>
   <p>Full changelog available at <a href="https://github.com/chrisly42/mc68000-asm-plugin#changelog">Github project site</a>.</p>
 """)
