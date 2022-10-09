@@ -64,6 +64,7 @@ patchPluginXml {
   <h4>V0.10 (undefined)</h4>
     <ul>
     <li>New: Added semantic highlighting. Currently available for data and address registers and local labels.
+    <li>Bugfix: addq/subq for address register stated it would affect the condition codes, which it in fact doesn't.
     </ul>
   <p>Full changelog available at <a href="https://github.com/chrisly42/mc68000-asm-plugin#changelog">Github project site</a>.</p>
 """)

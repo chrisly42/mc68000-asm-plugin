@@ -294,7 +294,7 @@ object M68kIsa {
         AllowedAdrMode(
             setOf(AddressMode.IMMEDIATE_DATA), ALL_EXCEPT_AREG_IMMEDIATE_AND_PC_REL, modInfo = RWM_MODIFY_OP2_OPSIZE, affectedCc = cc("C****")
         ),
-        AllowedAdrMode(setOf(AddressMode.IMMEDIATE_DATA), AREG_ONLY, size = OP_SIZE_WL, modInfo = RWM_MODIFY_OP2_L, affectedCc = cc("C****"))
+        AllowedAdrMode(setOf(AddressMode.IMMEDIATE_DATA), AREG_ONLY, size = OP_SIZE_WL, modInfo = RWM_MODIFY_OP2_L)
     )
 
     private val ADDX_SUBX_MODES = listOf(
