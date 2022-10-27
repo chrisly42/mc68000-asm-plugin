@@ -5,7 +5,9 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.SmartList
 import com.intellij.util.containers.addIfNotNull
+import de.platon42.intellij.plugins.m68k.psi.M68kFile
 import de.platon42.intellij.plugins.m68k.psi.M68kMacroDefinition
+import de.platon42.intellij.plugins.m68k.psi.M68kStatement
 
 object M68kPsiWalkUtil {
 
@@ -27,5 +29,13 @@ object M68kPsiWalkUtil {
         } while (true)
 
         return comments.reversed()
+    }
+
+    fun findStatementForElement(psiElement: PsiElement): M68kStatement? {
+        if (psiElement is M68kStatement) return psiElement
+        if (psiElement.parent is M68kFile) {
+            return PsiTreeUtil.getPrevSiblingOfType(psiElement, M68kStatement::class.java)
+        }
+        return PsiTreeUtil.getParentOfType(psiElement, M68kStatement::class.java);
     }
 }
