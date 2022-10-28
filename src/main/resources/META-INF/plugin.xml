@@ -21,6 +21,9 @@
                                implementationClass="de.platon42.intellij.plugins.m68k.parser.M68kParserDefinition"/>
         <lang.syntaxHighlighterFactory language="MC68000"
                                        implementationClass="de.platon42.intellij.plugins.m68k.syntax.M68kSyntaxHighlighterFactory"/>
+        <lang.foldingBuilder
+                language="MC68000"
+                implementationClass="de.platon42.intellij.plugins.m68k.folding.M68kFoldingBuilder"/>
         <navbar implementation="de.platon42.intellij.plugins.m68k.navigation.M68kStructureAwareNavbar"/>
         <highlightVisitor implementation="de.platon42.intellij.plugins.m68k.syntax.M68kRainbowVisitor"/>
         <colorSettingsPage implementation="de.platon42.intellij.plugins.m68k.syntax.M68kColorSettingsPage"/>

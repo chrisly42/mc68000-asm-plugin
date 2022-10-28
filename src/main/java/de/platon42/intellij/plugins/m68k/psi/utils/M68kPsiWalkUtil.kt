@@ -2,6 +2,7 @@ package de.platon42.intellij.plugins.m68k.psi.utils
 
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.SmartList
 import com.intellij.util.containers.addIfNotNull
@@ -29,6 +30,31 @@ object M68kPsiWalkUtil {
         } while (true)
 
         return comments.reversed()
+    }
+
+    fun getBeginningOfRelatedComment(lineElement: PsiElement): PsiElement {
+        // go back to catch comments that are not more than one empty line away
+        var relStart = lineElement
+        var prevLine = relStart.prevSibling ?: return lineElement
+        var eolCount = 2
+        do {
+            if (prevLine is PsiComment) {
+                relStart = prevLine
+                eolCount = 1
+            } else if (prevLine is PsiWhiteSpace) {
+                if (--eolCount < 0) break
+            } else {
+                break
+            }
+            prevLine = prevLine.prevSibling ?: break
+        } while (true)
+        return relStart
+    }
+
+    fun isSignificantLine(element: PsiElement) = when (element) {
+        is M68kStatement -> (element.assignment != null) || (element.globalLabel != null)
+        is M68kMacroDefinition -> true
+        else -> false
     }
 
     fun findStatementForElement(psiElement: PsiElement): M68kStatement? {
