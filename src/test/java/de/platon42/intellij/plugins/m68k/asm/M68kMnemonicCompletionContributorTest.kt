@@ -30,7 +30,7 @@ label: <caret>
         """
         )
         myFixture.completeBasic()
-        assertThat(myFixture.lookupElementStrings).hasSameElementsAs(M68kIsa.mnemonics)
+        assertThat(myFixture.lookupElementStrings).containsAnyElementsOf(M68kIsa.mnemonics)
     }
 
     @Test
@@ -41,6 +41,6 @@ label: <caret>
         """
         )
         myFixture.completeBasic()
-        assertThat(myFixture.lookupElementStrings).hasSameElementsAs(M68kIsa.mnemonics)
+        assertThat(myFixture.lookupElementStrings).containsAnyElementsOf(M68kIsa.mnemonics)
     }
 }

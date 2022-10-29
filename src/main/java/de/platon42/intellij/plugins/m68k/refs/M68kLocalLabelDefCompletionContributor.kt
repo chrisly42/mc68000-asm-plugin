@@ -32,7 +32,7 @@ class M68kLocalLabelDefCompletionContributor : CompletionContributor() {
                     }
                     referencedLocalLabels.removeAll(definedLocalLabels)
                     resultSet.addAllElements(
-                        if (parameters.originalPosition?.text == ".") {
+                        if (parameters.originalPosition?.text?.startsWith(".") == true) {
                             referencedLocalLabels.map { LookupElementBuilder.create(it.removePrefix(".")) }
                         } else {
                             referencedLocalLabels.map(LookupElementBuilder::create)

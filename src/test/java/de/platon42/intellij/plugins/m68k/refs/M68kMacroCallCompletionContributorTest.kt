@@ -27,6 +27,6 @@ noppy   MACRO
         """
         )
         myFixture.completeBasic()
-        assertThat(myFixture.lookupElementStrings).containsExactlyInAnyOrder("nop", "not", "noppy")
+        assertThat(myFixture.lookupElementStrings).containsExactlyInAnyOrder("nop", "not", "noppy", "cnop")
     }
 }

@@ -28,6 +28,7 @@
         <highlightVisitor implementation="de.platon42.intellij.plugins.m68k.syntax.M68kRainbowVisitor"/>
         <colorSettingsPage implementation="de.platon42.intellij.plugins.m68k.syntax.M68kColorSettingsPage"/>
         <completion.contributor language="MC68000" implementationClass="de.platon42.intellij.plugins.m68k.asm.M68kMnemonicCompletionContributor"/>
+        <completion.contributor language="MC68000" implementationClass="de.platon42.intellij.plugins.m68k.asm.M68kDirectiveCompletionContributor"/>
         <completion.contributor language="MC68000" implementationClass="de.platon42.intellij.plugins.m68k.refs.M68kGlobalLabelSymbolCompletionContributor"/>
         <completion.contributor language="MC68000" implementationClass="de.platon42.intellij.plugins.m68k.refs.M68kLocalLabelDefCompletionContributor"/>
         <completion.contributor language="MC68000" implementationClass="de.platon42.intellij.plugins.m68k.refs.M68kMacroCallCompletionContributor"/>

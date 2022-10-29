@@ -67,6 +67,8 @@ patchPluginXml {
     <li>Bugfix: addq/subq for address register stated it would affect the condition codes, which it in fact doesn't.
     <li>New: Added simple custom navigation bar.
     <li>New: Added folding support for functions and macro definitions.
+    <li>New: Added assembler directives to code completion (only lower-case except for other directives like IF
+        and MACRO, which are only suggested for upper-case).
     </ul>
   <p>Full changelog available at <a href="https://github.com/chrisly42/mc68000-asm-plugin#changelog">Github project site</a>.</p>
 """)
