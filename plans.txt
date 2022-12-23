@@ -1,0 +1,17 @@
+
+Formatting:
+- dc.w statements: Pressing return will automatically add dc.w in next line (plus tabs)
+
+Showing of used registers in selection
+
+Actions:
+- Replace constant by symbol (with suggestion)
+- Converting of hex values into decimal values and vice versa
+- convert new style to old style
+- convert old style to new style
+- simplify explicit mnemonics (e.g. movea)
+
+Marker:
+- go to source register setter
+- go to target register setter
+- Can we add "find declaration to go for registers"

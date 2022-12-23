@@ -136,11 +136,10 @@ SymbolDefinition ::= SYMBOLDEF {
 
 Assignment ::= SymbolDefinition COLON? (OP_ASSIGN|EQU) expr
 
-private LabelInsts ::= LabelWithInstruction | LabelOnly | InstructionOnly
+private LabelInsts ::= LabelWithInstruction | LabelOnly | Instruction
 
 private LabelOnly ::= Label
-private LabelWithInstruction ::= Label (Instruction|PreprocessorDirective)
-private InstructionOnly ::= (Instruction|PreprocessorDirective)
+private LabelWithInstruction ::= Label Instruction
 
 LocalLabel ::= LOCAL_LABEL_DEF COLON? {
     name = "local label"
@@ -199,7 +198,7 @@ MacroCall ::= MACRO_INVOCATION PlainOperands? {
 }
 
 AsmInstruction ::= AsmOp AsmOperands?
-private Instruction ::= AsmInstruction | MacroCall
+private Instruction ::= AsmInstruction | MacroCall | PreprocessorDirective
 //external Instruction ::= parseMacroCallOrAsmInstruction
 
 private AsmOperands ::= AddressingMode (SEPARATOR AddressingMode)?
