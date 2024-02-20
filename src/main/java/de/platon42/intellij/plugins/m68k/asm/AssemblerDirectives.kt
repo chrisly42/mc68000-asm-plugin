@@ -19,7 +19,9 @@ object AssemblerDirectives {
         "align", "even", "odd", "cnop", "long", "dphrase", "phrase", "qphrase",
 
         "cargs", "comm", "comment",
-        "rsset", "clrfo", "clrso", "setfo", "setso"
+        "rsset", "clrfo", "clrso", "setfo", "setso",
+
+        "rsreset", "rs.b", "rs.w", "rs.l"
     )
 
     val plainDirectives: Set<String> = setOf(

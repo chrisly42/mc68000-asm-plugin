@@ -8,7 +8,7 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.formatter.common.AbstractBlock
 
-class M68kAsmLabelBlock(
+class M68kAsmAssignmentBlock(
     node: ASTNode, wrap: Wrap?, alignment: Alignment?,
     private val codeStyleSettings: CodeStyleSettings
 ) : AbstractBlock(node, wrap, alignment) {

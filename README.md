@@ -133,6 +133,7 @@ If the current statement has no valid syntax, the instruction details of all mat
 - Switching the spaces option usually needs the caches to be invalidated. Find Usages word scanner always uses default settings, as it is not configurable per
   project :-/
 - Unit Test coverage is not as good as it could be (ahem).
+- Code flow sometimes outputs "uhm?"
 - Missing but planned features:
     - Macro evaluation on invocation
     - Folding
@@ -163,6 +164,19 @@ Feedback and [rating](https://plugins.jetbrains.com/plugin/17268-mc68000-assembl
 are appreciated. It really is keeping me motivated to continue development.
 
 ## Changelog
+
+### V0.10 (20-Feb-24)
+
+- Decided to release some features that have been sitting on my harddrive for almost two years, but never got released,
+  because I was unable to get that damn formatter working in a way that was acceptable (the API and the docs are easily one
+  the worst abominations I've come across).
+- Maintenance. Updated all dependencies to the latest versions.
+- New: Added semantic highlighting. Currently available for data and address registers and local labels.
+- Bugfix: addq/subq for address register stated it would affect the condition codes, which it in fact doesn't.
+- New: Added simple custom navigation bar.
+- New: Added folding support for functions and macro definitions.
+- New: Added assembler directives to code completion (only lower-case except for other directives like IF
+  and MACRO, which are only suggested for upper-case).
 
 ### V0.9 (16-Aug-22)
 
